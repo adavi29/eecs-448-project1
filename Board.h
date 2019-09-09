@@ -4,9 +4,12 @@
 
 Class Board{
 private:
-  String gameBoard[][];
+  String m_board[][];
 
 public:
   gameBoard();
   ~gameBoard();
+  String getEntryAtPosition();
+  void setEntryAtPosition(String entry, String coordinate);
+  printBoard();
 }
