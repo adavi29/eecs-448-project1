@@ -16,11 +16,11 @@ Board::~Board(){
   }
   delete m_board;
 }
-String Board::getEntryAtPosition(){
-
+String Board::getEntryAtPosition(int column, int row){
+  return(m_board[column][row]);
 }
 void Board::setEntryAtPosition(String entry, int column, int row){
-
+  m_board[column][row] = entry;
 }
 void Board::printBoard(){
 
