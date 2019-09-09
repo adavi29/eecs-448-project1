@@ -1,7 +1,7 @@
 /**
 * @file Board.h
 */
-
+using namespace std;
 Class Board{
 private:
   String m_board[][];
