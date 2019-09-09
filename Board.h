@@ -11,5 +11,5 @@ public:
   ~Board();
   String getEntryAtPosition();
   void setEntryAtPosition(String entry, int column, int row);
-  printBoard();
+  void printBoard();
 }
