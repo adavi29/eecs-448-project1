@@ -10,6 +10,6 @@ public:
   gameBoard();
   ~gameBoard();
   String getEntryAtPosition();
-  void setEntryAtPosition(String entry, String coordinate);
+  void setEntryAtPosition(String entry, int column, int row);
   printBoard();
 }
