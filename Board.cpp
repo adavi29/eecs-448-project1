@@ -11,18 +11,22 @@ Board::Board(){
     }
   }
 }
+
 Board::~Board(){
   for(int i=0;i<8;i++){
     delete[] m_board[i];
   }
   delete[] m_board;
 }
+
 string Board::getEntryAtPosition(int column, int row){
   return(m_board[column][row]);
 }
+
 void Board::setEntryAtPosition(string entry, int column, int row){
   m_board[column][row] = entry;
 }
+
 void Board::printBoard(){
   int character = 0;
   char letter = 'A';
