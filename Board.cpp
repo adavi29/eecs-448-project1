@@ -12,7 +12,10 @@ Board::Board(){
   }
 }
 Board::~Board(){
-  delete m_board;
+  for(int i=0;i<8;i++){
+    delete[] m_board[i];
+  }
+  delete[] m_board;
 }
 string Board::getEntryAtPosition(int column, int row){
   return(m_board[column][row]);
