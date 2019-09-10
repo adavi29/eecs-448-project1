@@ -52,5 +52,8 @@ void Board::printBoard(){
   }
 }
 bool Board::isHit(int column, int row){
-  
+  if(m_board[column][row] == "H"){
+    return true;
+  }
+  return false;
 }
