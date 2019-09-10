@@ -1,16 +1,18 @@
 /**
 * @file Board.h
 */
+#include<string>
+#include<iostream>
 using namespace std;
-Class Board{
+class Board{
 private:
-  String** m_board;
+  string** m_board;
 
 public:
   Board();
   ~Board();
-  String getEntryAtPosition(int column, int row);
-  void setEntryAtPosition(String entry, int column, int row);
+  string getEntryAtPosition(int column, int row);
+  void setEntryAtPosition(string entry, int column, int row);
   void printBoard();
   bool isHit(int column, int row);
-}
+};
