@@ -42,7 +42,7 @@ void Board::printBoard(){
     cout<<"  |     |     |     |     |     |     |     |     |\n";
     for(int j=0;j<8;j++){
       if(j==0){
-        cout<<i<<" ";
+        cout<<i+1<<" ";
       }
       cout<<"|  "<<m_board[i][j]<<"  ";
       if(j==7){
