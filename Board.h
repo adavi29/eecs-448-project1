@@ -14,5 +14,4 @@ public:
   string getEntryAtPosition(int column, int row);
   void setEntryAtPosition(string entry, int column, int row);
   void printBoard();
-  bool isHit(int column, int row);
 };
