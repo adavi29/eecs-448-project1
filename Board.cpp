@@ -12,9 +12,6 @@ Board::Board(){
   }
 }
 Board::~Board(){
-  for(int i=0;i<8;i++){
-    delete m_board[i];
-  }
   delete m_board;
 }
 string Board::getEntryAtPosition(int column, int row){
