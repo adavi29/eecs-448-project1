@@ -1,10 +1,16 @@
 //Game.h
+
+#ifndef GAME_H
+#define GAME_H
+
+#include "Board.h"
 #include "Player.h"
 #include <string>
 #include <iostream>
 using namespace std;
 
 class Game{
+    
   private:
     int m_numShips;
 
@@ -16,11 +22,15 @@ class Game{
 
     Player p1;
     Player p2;
+
   public:
 
     Game();
 
     ~Game();
+
+    Player getP1();
+    Player getP2();
 
 
 
@@ -36,7 +46,7 @@ class Game{
 
     void updateBoard();
 
-    void printPlayerBoards();
+    void printPlayerBoards(Player player);
 
     void printWinner();
 
@@ -46,7 +56,7 @@ class Game{
 
     void p2Turn();
 
-
+    int convertCol(string c);
 
 
 
@@ -61,3 +71,4 @@ class Game{
 
 
 };
+#endif
