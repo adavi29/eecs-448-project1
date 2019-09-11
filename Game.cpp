@@ -1,5 +1,7 @@
 //Game.cpp
 #include "Game.h"
+#include "Player.h"
+#include "Board.h"
 
 using namespace std;
 Game::Game() {
@@ -13,12 +15,72 @@ Game::Game() {
 
 }
 
-Game::Setup(){
-  do{
-    cout << "Enter the amount of ships both player want to use: (Max: 5) ";
-    cin >> m_numShips;
-  }while(m_numShips < 0 || m_numShips > 5);
+Game::~Game()
+{
 
+}
+
+Player Game::getP1()
+{
+    return(p1);
+}
+
+Player Game::getP2()
+{
+    return(p2);
+}
+
+int Game::convertCol(string c){
+
+  if(c=="A" || c == "a")
+  {
+    return(0);
+  }
+  else if(c=="B"|| c == "b")
+  {
+    return(1);
+  }
+  else if(c=="C"|| c == "c")
+  {
+    return(2);
+  }
+  else if(c=="D"|| c == "d")
+  {
+    return(3);
+  }
+  else if(c=="E"|| c == "e")
+  {
+    return(4);
+  }
+  else if(c=="F"|| c == "f")
+  {
+    return(5);
+  }
+  else if(c=="G"|| c == "g")
+  {
+    return(6);
+  }
+  else if(c=="H" || c== "h")
+  {
+    return(7);
+  }
+  else
+  {
+    throw(std::runtime_error("Invalid entry: use A-H only"));
+  }
+
+}
+
+void Game::setup(){
+
+  //gets number of ships
+  do{
+    cout << "Enter the amount of ships both players want to use: (Max: 5) ";
+    cin >> m_numShips;
+  }while(m_numShips<1 || m_numShips>5);
+
+
+  //get number ships coordinates
   switch (m_numShips) {
     case 1:
       cout << "Enter the coordinates for ship 1: (1x1)";
@@ -27,65 +89,51 @@ Game::Setup(){
         cout << "Row: (1-8) ";
         cin >> userRow;
         arrRow = userRow - 1;
-      }while(arrRow < 0 || arrRow > 7)
+      }while(arrRow < 0 || arrRow > 7);
 
       do{
 
         cout << "Col: (A-H)";
         cin >> userCol;
+        arrCol = convertCol(userCol);
+
+      }while(arrCol < 0 || arrCol > 7);
 
 
-        switch (userCol) {
-          case "A":
-            arrCol = 0;
+    //case 2:
 
-          case "B":
-            arrCol = 1;
+    //case 3:
 
-          case "C":
-              arrCol = 2;
+    //case 4:
 
-          case "D":
-            arrCol = 3;
-
-          case "E":
-            arrCol = 4;
-
-          case "F":
-            arrCol = 5;
-
-          case "G":
-            arrCol = 6;
-
-          case "H":
-            arrCol = 7;
-
-        }
-
-      }while(arrCol < 0 || userCol > 7)
-
-
-    case 2:
-
-    case 3:
-
-    case 4:
-
-    case 5:
+    //case 5:
   }
 
-  cout << "Player 1,
+  //cout << "Player 1,
 
 
 
 }
 
 
-Game::Run(){
+void Game::run(){
 
 }
 
 
-Game::getCoordinates(){
+/*void Game::getCoordinates(){
+
+}*/
+
+
+
+
+
+void Game::printPlayerBoards(Player player){
+
+  player.getOwnBoard().printBoard();
+  cout<<"\n-----------------------------------------------------\n";
+  player.getOppBoard().printBoard();
+
 
 }
