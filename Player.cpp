@@ -1,10 +1,28 @@
-	Board& getOwnBoard(){
-		return m_ownBoard;
-	};
 
-	Board& getOppBoard(){
-		return m_oppBoard;
-	};
+#include "Player.h"
+#include "Board.h"
+//#include "Game.h"
+
+
+	Player::Player()
+	{
+
+	}
+
+
+
+	Board& Player::getOwnBoard(){
+		return(m_ownBoard);
+	}
+
+	Board& Player::getOppBoard(){
+		return(m_oppBoard);
+	}
+
+	Player::~Player()
+	{
+
+	}
 
 
 
