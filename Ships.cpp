@@ -22,18 +22,33 @@ Ship(int numShips){
 void decreaseSize(int ship){
 		  if((ship == 1)&&(isSunk(ship) != true)) {
 		    m_ship1--;
+				if(isSunk(ship)){
+					announce(ship);
+				}
 		  }
 			if((ship == 2)&&(isSunk(ship) != true)){
 				m_ship2--;
+				if(isSunk(ship)){
+					announce(ship);
+				}
 			}
 			if((ship == 3)&&(isSunk(ship) != true)){
 				m_ship3--;
+				if(isSunk(ship)){
+					announce(ship);
+				}
 			}
 			if((ship == 1)&&(isSunk(ship) != true)){
 				m_ship4--;
+				if(isSunk(ship)){
+					announce(ship);
+				}
 			}
 			if((ship == 1)&&(isSunk(ship) != true)){
 				m_ship5--;
+				if(isSunk(ship)){
+					announce(ship);
+				}
 			}
 		}
 
@@ -64,3 +79,7 @@ Bool isSunk(int ship){
 				 }
 			 }
 		 }
+
+void announce(int ship){
+	cout << "You've sunk ship " + ship + "!";
+}
