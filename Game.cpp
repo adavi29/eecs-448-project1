@@ -2,6 +2,7 @@
 #include "Game.h"
 //#include "Player.h"
 #include "Board.h"
+#include <stdexcept>
 
 using namespace std;
 Game::Game() {
@@ -79,7 +80,7 @@ void Game::setup(){
   }while(m_numShips<1 || m_numShips>5);
 
     //test code
-    printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
+    //printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
     //test code above
 
   //get number ships coordinates
@@ -137,5 +138,6 @@ void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
   cout<<"\n-----------------------------------------------------\n";
     oppBoard->printBoard();
 
-
 }
+
+

@@ -57,20 +57,27 @@ class Game{
 
     void gameEnd();
 
-    void p1Turn();
+    //void p1Turn();
 
-    void p2Turn();
+    //void p2Turn();
 
     int convertCol(string c);
 
 
+//functions below will be used for adding ships to the board in setup()
+    bool isAvailable(int row, int col);//check if position is empty
 
-    bool isValidPosition(int row, int col);//check if position is open
+    bool checkUpDownLeftRight(int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
 
-    bool checkUpDownLeftRight(int row, int col, int shipNum);//checks if up, down, left, right is available
+    void addShiptoArray(int ship, string direction);//throws runtime error when orientation runs off the board or is full
 
-
-
+    // use isAvailable() --will tell if position is open
+    //if position is open, ask if user wants to place it up/down/left/right
+    //then call checkUpDownLeftRight--checks if it will run off the board and if so, is false
+    //if checkUpDownLeftRight returns false then tell user that direction is not possible
+    //if true, addShiptoArray
+    
+    //if cant put in any direction: what do you do???
 
 
 
