@@ -1,8 +1,7 @@
 #ifndef SHIPS_H
 #define SHIPS_H
 
-#include "Board.h"
-#include "Ships.cpp"
+#include <stdexcept>
 
 using namespace std;
 
@@ -17,11 +16,11 @@ public:
 	void announce(int ship);
 
 private:
-	  int m_ship1=0;
-	  int m_ship2=0;
-	  int m_ship3=0;
-	  int m_ship4=0;
-	  int m_ship5=0;
+	  int m_ship1=-1;
+	  int m_ship2=-1;
+	  int m_ship3=-1;
+	  int m_ship4=-1;
+	  int m_ship5=-1;
 };
 
 #endif

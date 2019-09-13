@@ -1,3 +1,6 @@
+#include "Ships.h"
+
+
 Ship(int numShips){
 	if(numShips <6) {
 		if(numShips>0) {
@@ -19,64 +22,50 @@ Ship(int numShips){
 }
 
 
-void decreaseSize(int ship){
-		  if((ship == 1)&&(isSunk(ship) != true)) {
+void decreaseSize(int ship) {
+	if(isSunk(ship) != true) {
+		  if(ship == 1) {
 		    m_ship1--;
-				if(isSunk(ship)){
-					announce(ship);
-				}
 		  }
-			if((ship == 2)&&(isSunk(ship) != true)){
+			if(ship == 2) {
 				m_ship2--;
-				if(isSunk(ship)){
-					announce(ship);
-				}
 			}
-			if((ship == 3)&&(isSunk(ship) != true)){
+			if(ship == 3) {
 				m_ship3--;
-				if(isSunk(ship)){
-					announce(ship);
-				}
 			}
-			if((ship == 1)&&(isSunk(ship) != true)){
+			if(ship == 4) {
 				m_ship4--;
-				if(isSunk(ship)){
-					announce(ship);
-				}
 			}
-			if((ship == 1)&&(isSunk(ship) != true)){
+			if(ship == 5) {
 				m_ship5--;
-				if(isSunk(ship)){
-					announce(ship);
-				}
+			}
+
+			if(isSunk(ship)){
+				announce(ship);
 			}
 		}
+		else throw(std::runtime_error("this ship is already sunk");
+	}
 
 Bool isSunk(int ship){
 		   if(ship ==1){
-		     if(m_ship1 == 0){
-		       return true
-		     }
+		     return (m_ship2 <= 0)
 		   }
+
 			 if(ship ==2){
-				 if(m_ship1 == 0){
-					 return true
-				 }
+				 return (m_ship2 <= 0)
 			 }
-			 if(ship ==2){
-				 if(m_ship1 == 0){
-					 return true
-				 }
+
+			 if(ship ==3){
+				 return(m_ship2 <= 0)
 			 }
-			 if(ship ==1){
-				 if(m_ship1 == 0){
-					 return true
-				 }
+
+			 if(ship ==4){
+				 return(m_ship2 <= 0)
 			 }
-			 if(ship ==1){
-				 if(m_ship1 == 0){
-					 return true
-				 }
+
+			 if(ship ==5){
+				 return(m_ship2 <= 0)
 			 }
 		 }
 
