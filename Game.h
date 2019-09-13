@@ -20,10 +20,10 @@ class Game{
     int arrCol;
     int arrRow;
     
-    Board m_p1ownBoard;
-    Board m_p1oppBoard;
-    Board m_p2ownBoard;
-    Board m_p2oppBoard;
+    Board* m_p1ownBoard;
+    Board* m_p1oppBoard;
+    Board* m_p2ownBoard;
+    Board* m_p2oppBoard;
     
     //Player p1;
     //Player p2;
@@ -51,7 +51,7 @@ class Game{
 
     void updateBoard();
 
-    void printPlayerBoards(Board ownBoard, Board oppBoard);
+    void printPlayerBoards(Board* ownBoard, Board* oppBoard);
 
     void printWinner();
 

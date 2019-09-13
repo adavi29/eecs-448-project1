@@ -13,12 +13,19 @@ Game::Game() {
   arrCol = 0;
   arrRow = 0;
     
+  m_p1oppBoard=new Board();
+  m_p1ownBoard=new Board();
+  m_p2oppBoard=new Board();
+  m_p2ownBoard=new Board();
 
 }
 
 Game::~Game()
 {
-
+    delete m_p2ownBoard;
+    delete m_p2oppBoard;
+    delete m_p1ownBoard;
+    delete m_p2oppBoard;
 }
 
 
@@ -72,22 +79,23 @@ void Game::setup(){
   }while(m_numShips<1 || m_numShips>5);
 
     //test code
- printPlayerBoards(p1ownBoard, p1oppBoard);
+    printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
+    //test code above
 
   //get number ships coordinates
   switch (m_numShips) {
     case 1:
-      cout << "Enter the coordinates for ship 1 (1x1): ";
+      cout << "Enter the coordinates for ship 1 (1x1): \n";
 
       do{
-        cout << "Row: (1-8) ";
+        cout << "Row (1-8):  ";
         cin >> userRow;
         arrRow = userRow - 1;
       }while(arrRow < 0 || arrRow > 7);
 
       do{
 
-        cout << "Col: (A-H)";
+        cout << "Col (A-H): ";
         cin >> userCol;
         arrCol = convertCol(userCol);
 
@@ -123,11 +131,11 @@ void Game::run(){
 
 
 
-void Game::printPlayerBoards(Board ownBoard, Board oppBoard){
+void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
 
-    ownBoard.printBoard();
+    ownBoard->printBoard();
   cout<<"\n-----------------------------------------------------\n";
-    oppBoard.printBoard();
+    oppBoard->printBoard();
 
 
 }
