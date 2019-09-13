@@ -1,8 +1,12 @@
 /**
 * @file Board.h
 */
+#ifndef BOARD_H
+#define BOARD_H
+
 #include<string>
 #include<iostream>
+
 using namespace std;
 class Board{
 private:
@@ -15,3 +19,5 @@ public:
   void setEntryAtPosition(string entry, int column, int row);
   void printBoard();
 };
+
+#endif
