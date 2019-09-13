@@ -4,7 +4,7 @@
 #define GAME_H
 
 #include "Board.h"
-#include "Player.h"
+//#include "Player.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -19,9 +19,14 @@ class Game{
 
     int arrCol;
     int arrRow;
-
-    Player p1;
-    Player p2;
+    
+    Board p1ownBoard;
+    Board p1oppBoard;
+    Board p2ownBoard;
+    Board p2oppBoard;
+    
+    //Player p1;
+    //Player p2;
 
   public:
 
@@ -29,8 +34,8 @@ class Game{
 
     ~Game();
 
-    Player getP1();
-    Player getP2();
+    //Player getP1();
+    //Player getP2();
 
 
 
@@ -46,7 +51,7 @@ class Game{
 
     void updateBoard();
 
-    void printPlayerBoards(Player player);
+    void printPlayerBoards(Board ownBoard, Board oppBoard);
 
     void printWinner();
 

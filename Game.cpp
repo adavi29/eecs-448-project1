@@ -1,6 +1,6 @@
 //Game.cpp
 #include "Game.h"
-#include "Player.h"
+//#include "Player.h"
 #include "Board.h"
 
 using namespace std;
@@ -20,15 +20,6 @@ Game::~Game()
 
 }
 
-Player Game::getP1()
-{
-    return(p1);
-}
-
-Player Game::getP2()
-{
-    return(p2);
-}
 
 int Game::convertCol(string c){
 
@@ -129,11 +120,11 @@ void Game::run(){
 
 
 
-void Game::printPlayerBoards(Player player){
+void Game::printPlayerBoards(Board ownBoard, Board oppBoard){
 
-  player.getOwnBoard().printBoard();
+    ownBoard.printBoard();
   cout<<"\n-----------------------------------------------------\n";
-  player.getOppBoard().printBoard();
+    oppBoard.printBoard();
 
 
 }
