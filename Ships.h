@@ -11,7 +11,10 @@ class Ships
 
 public:
 
-
+	Ship(int numShips);
+	void decreaseSize(int ship);
+	Bool isSunk(int ship);
+	//void announce(int ship);
 
 private:
 	  int m_ship1=0;
