@@ -1,3 +1,0 @@
-/*
-@file Executive.h
-*/
