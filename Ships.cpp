@@ -44,28 +44,28 @@ void decreaseSize(int ship) {
 				announce(ship);
 			}
 		}
-		else throw(std::runtime_error("this ship is already sunk");
+		else throw(std::runtime_error("cannot decrease length; ship is already sunk");
 	}
 
 Bool isSunk(int ship){
 		   if(ship ==1){
-		     return (m_ship2 <= 0)
+		     return (m_ship2 <= 0);
 		   }
 
 			 if(ship ==2){
-				 return (m_ship2 <= 0)
+				 return (m_ship2 <= 0);
 			 }
 
 			 if(ship ==3){
-				 return(m_ship2 <= 0)
+				 return(m_ship2 <= 0);
 			 }
 
 			 if(ship ==4){
-				 return(m_ship2 <= 0)
+				 return(m_ship2 <= 0);
 			 }
 
 			 if(ship ==5){
-				 return(m_ship2 <= 0)
+				 return(m_ship2 <= 0);
 			 }
 		 }
 
