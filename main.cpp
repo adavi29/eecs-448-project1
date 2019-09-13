@@ -18,6 +18,7 @@ int main (){
   {
       std::cout<<rte.what()<<std::endl;
   }
+    
 
   //game1.printPlayerBoards(game1.getP1());
 

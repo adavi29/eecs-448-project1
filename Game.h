@@ -20,10 +20,10 @@ class Game{
     int arrCol;
     int arrRow;
     
-    Board p1ownBoard;
-    Board p1oppBoard;
-    Board p2ownBoard;
-    Board p2oppBoard;
+    Board m_p1ownBoard;
+    Board m_p1oppBoard;
+    Board m_p2ownBoard;
+    Board m_p2oppBoard;
     
     //Player p1;
     //Player p2;

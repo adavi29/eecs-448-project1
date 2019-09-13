@@ -12,6 +12,7 @@ Game::Game() {
 
   arrCol = 0;
   arrRow = 0;
+    
 
 }
 
@@ -57,7 +58,7 @@ int Game::convertCol(string c){
   }
   else
   {
-    throw(std::runtime_error("Invalid entry: use A-H only"));
+    throw(std::runtime_error("Invalid entry (use A-H only): "));
   }
 
 }
@@ -66,15 +67,17 @@ void Game::setup(){
 
   //gets number of ships
   do{
-    cout << "Enter the amount of ships both players want to use: (Max: 5) ";
+    cout << "Enter the amount of ships both players want to use (Max: 5):  ";
     cin >> m_numShips;
   }while(m_numShips<1 || m_numShips>5);
 
+    //test code
+ printPlayerBoards(p1ownBoard, p1oppBoard);
 
   //get number ships coordinates
   switch (m_numShips) {
     case 1:
-      cout << "Enter the coordinates for ship 1: (1x1)";
+      cout << "Enter the coordinates for ship 1 (1x1): ";
 
       do{
         cout << "Row: (1-8) ";
