@@ -70,5 +70,5 @@ Bool isSunk(int ship){
 		 }
 
 void announce(int ship){
-	cout << "You've sunk ship " + ship + "!";
+	cout << "You've sunk ship "<<ship<<" !\n";
 }
