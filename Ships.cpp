@@ -55,7 +55,7 @@ void decreaseSize(int ship) {
 
 bool isSunk(int ship){
 		   if(ship ==1){
-		     return (m_ship2 <= 0);
+		     return (m_ship1 <= 0);
 		   }
 
 			 if(ship ==2){
@@ -63,15 +63,15 @@ bool isSunk(int ship){
 			 }
 
 			 if(ship ==3){
-				 return(m_ship2 <= 0);
+				 return(m_ship3 <= 0);
 			 }
 
 			 if(ship ==4){
-				 return(m_ship2 <= 0);
+				 return(m_ship4 <= 0);
 			 }
 
 			 if(ship ==5){
-				 return(m_ship2 <= 0);
+				 return(m_ship5 <= 0);
 			 }
 		 }
 
