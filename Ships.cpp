@@ -2,6 +2,12 @@
 
 
 Ship(int numShips){
+	m_ship1=0;//initialize ship variables in case they are not assigned a value below
+	m_ship2=0;
+	m_ship3=0;
+	m_ship4=0;
+	m_ship5=0;
+
 	if(numShips <6) {
 		if(numShips>0) {
 			m_ship1 = 1;
