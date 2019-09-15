@@ -12,7 +12,7 @@ int main (){
   Game game1;
   try
   {
-    game1.setup();
+    //game1.setup();
     game1.run();
   }
   catch(std::runtime_error& rte)
