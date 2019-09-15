@@ -250,32 +250,104 @@ void Game::setup(){
 
 
 void Game::run(){
+  system("clear");
 
   //lets Begin
   string letsPlay = "\n  _          _         _____  _             _ \n | |        | |       |  __ \\| |           | |\n | |     ___| |_ ___  | |__) | | __ _ _   _| |\n | |    / _ \\ __/ __| |  ___/| |/ _` | | | | |\n | |___|  __/ |_\\__ \\ | |    | | (_| | |_| |_|\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)\n                                       __/ |  \n                                      |___/   \n";
   string p1Text = "\n  _____  _                          ____             \n |  __ \\| |                        / __ \\            \n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___ \n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\\n | |    | | (_| | |_| |  __/ |    | |__| | | | |  __/\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|\n                  __/ |                              \n                 |___/                               \n";
   string p2Text = "\n  _____  _                         _______            \n |  __ \\| |                       |__   __|           \n | |__) | | __ _ _   _  ___ _ __     | |_      _____  \n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\ \n | |    | | (_| | |_| |  __/ |       | |\\ V  V / (_) |\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/ \n                  __/ |                               \n                 |___/                                \n";
-  //string p2Text =
-
-
+  string wait = "";
 
   cout << letsPlay << endl;
-  cout << p1Text << endl;
-  cout << p2Text << endl;
+
+  //loop section
 
 
-  //p1Turn();
-  //p2Turn();
+
+  while(1){
+    //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
+    for(int i = 0; i < 200; i ++){
+      cout << endl;
+    }
+    system("clear");
+
+
+    //players 1 turn
+    cout << p1Text << endl;
+    p1Turn();
+    cout << "Next Players Turn. Press any key to continue...";
+    cin>> wait;
+
+    //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
+    for(int i = 0; i < 200; i ++){
+      cout << endl;
+    }
+    system("clear");
+
+
+    //playes 2 turn
+    cout << p2Text << endl;
+    p2Turn();
+    cout << "Next Players Turn. Press any key to continue...";
+    cin>> wait;
+  }
+
+
 
 }
 
 void Game::p1Turn(){
+
+  int p1_attack_row = 0;
+  int p1_attack_col = 0;
+  string p1_attack_col_string;
+
   //print Board
   printPlayerBoards(m_p1ownBoard, m_p2oppBoard);
+
+  cout << "It time to attack!" << endl;
+  cout << "Enter Row(1-8): ";
+  cin >> p1_attack_row;
+  cout << "Enter Col(A-H): ";
+  cin >> p1_attack_col_string;
+  p1_attack_col = convertCol(p1_attack_col_string);
+
+  //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
+  if(m_p1oppBoard->getEntryAtPosition(p1_attack_col,p1_attack_row) == "Ship"){
+    cout << "Tha's a HIT!" << endl;
+
+  }else{
+    cout << "That's a MISS! Better luck next time." << endl;
+  }
+
+
+
 
 }
 
 void Game::p2Turn(){
+
+  int p2_attack_row = 0;
+  int p2_attack_col = 0;
+  string p2_attack_col_string;
+
+  //print Board
+  printPlayerBoards(m_p2ownBoard, m_p1oppBoard);
+
+  cout << "It time to attack!" << endl;
+  cout << "Enter Row(1-8): ";
+  cin >> p2_attack_row;
+  cout << "Enter Col(A-H): ";
+  cin >> p2_attack_col_string;
+  p2_attack_col = convertCol(p2_attack_col_string);
+
+  //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
+  if(m_p2oppBoard->getEntryAtPosition(p2_attack_col,p2_attack_row) == "Ship"){
+    cout << "Tha's a HIT!" << endl;
+
+  }else{
+    cout << "That's a MISS! Better luck next time." << endl;
+  }
 
 }
 
