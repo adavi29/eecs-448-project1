@@ -14,12 +14,12 @@ Game::Game() {
 
   arrCol = 0;
   arrRow = 0;
-    
+
   m_p1oppBoard=new Board();
   m_p1ownBoard=new Board();
   m_p2oppBoard=new Board();
   m_p2ownBoard=new Board();
-    
+
     m_currentPlayer=1;
 
 }
@@ -44,7 +44,7 @@ int Game::convertCol(string col){
     {
         return(int(charCol)-97);
     }
-    
+
 }
 
 void Game::setup(){
@@ -69,7 +69,7 @@ void Game::setup(){
         switch (m_numShips) {
             case 1:
                 cout << "Enter the coordinates for player "<<j<<"'s ship 1 (1x1): \n";
-                
+
                 do{
                     cout << "Row (1-8):  ";
                     cin >> userRow;
@@ -79,9 +79,9 @@ void Game::setup(){
                         std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                     }
                 }while(arrRow < 0 || arrRow > 7);
-                
+
                 do{
-                    
+
                     cout << "Col (A-H): ";
                     cin >> userCol;
                     arrCol = convertCol(userCol);
@@ -89,11 +89,11 @@ void Game::setup(){
                     {
                         std::cout<<"Invalid column. Must be A to H. Try again.\n";
                     }
-                    
+
                 }while(arrCol < 0 || arrCol > 7);
-                
+
                 userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
-                
+
                 if (isAvailable(arrRow, arrCol))
                 {
                     if(m_currentPlayer==1)
@@ -105,20 +105,20 @@ void Game::setup(){
                         addShiptoArray("1", arrRow, arrCol, userDirection, 2);
                     }
                 }
-                
+
                 //test code NOTE: WHEN TESTED B 5, PUTS IT IN 4 E
                 printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
                 printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
                 //test code above
-                
+
                 break;
-                
+
             case 2:
-                
+
                 for(int i=1; i<3; i++)
                 {
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                    
+
                     do{
                         cout << "Row (1-8): ";
                         cin>>userRow;
@@ -128,9 +128,9 @@ void Game::setup(){
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
                     }while(arrRow < 0 || arrRow > 7);
-                    
+
                     do{
-                        
+
                         cout << "Col (A-H): ";
                         cin >> userCol;
                         arrCol = convertCol(userCol);
@@ -138,18 +138,18 @@ void Game::setup(){
                         {
                             std::cout<<"Invalid column. Must be A to H. Try again.\n";
                         }
-                        
+
                     }while(arrCol < 0 || arrCol > 7);
-                    
+
                 }
                 break;
-                
+
             case 3:
-                
+
                 for(int i=1; i<4; i++)
                 {
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                    
+
                     do{
                         cout << "Row (1-8): ";
                         cin>>userRow;
@@ -158,11 +158,11 @@ void Game::setup(){
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
-                        
+
                     }while(arrRow < 0 || arrRow > 7);
-                    
+
                     do{
-                        
+
                         cout << "Col (A-H): ";
                         cin >> userCol;
                         arrCol = convertCol(userCol);
@@ -171,17 +171,17 @@ void Game::setup(){
                             std::cout<<"Invalid column. Must be A to H. Try again.\n";
                         }
                     }while(arrCol < 0 || arrCol > 7);
-                    
+
                 }
-                
+
                 break;
-                
+
             case 4:
-                
+
                 for(int i=1; i<5; i++)
                 {
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                    
+
                     do{
                         cout << "Row (1-8): ";
                         cin>>userRow;
@@ -191,9 +191,9 @@ void Game::setup(){
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
                     }while(arrRow < 0 || arrRow > 7);
-                    
+
                     do{
-                        
+
                         cout << "Col (A-H): ";
                         cin >> userCol;
                         arrCol = convertCol(userCol);
@@ -202,17 +202,17 @@ void Game::setup(){
                             std::cout<<"Invalid column. Must be A to H. Try again.\n";
                         }
                     }while(arrCol < 0 || arrCol > 7);
-                    
+
                 }
-                
+
                 break;
-                
+
             case 5:
-                
+
                 for(int i=1; i<6; i++)
                 {
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                    
+
                     do{
                         cout << "Row (1-8): ";
                         cin>>userRow;
@@ -222,9 +222,9 @@ void Game::setup(){
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
                     }while(arrRow < 0 || arrRow > 7);
-                    
+
                     do{
-                        
+
                         cout << "Col (A-H): ";
                         cin >> userCol;
                         arrCol = convertCol(userCol);
@@ -233,9 +233,9 @@ void Game::setup(){
                             std::cout<<"Invalid column. Must be A to H. Try again.\n";
                         }
                     }while(arrCol < 0 || arrCol > 7);
-                    
+
                 }
-                
+
                 break;
         }
         m_currentPlayer=2;//change value of current player to 2 for second round of for loop
@@ -251,6 +251,32 @@ void Game::setup(){
 
 void Game::run(){
 
+  //lets Begin
+  string letsPlay = "\n  _          _         _____  _             _ \n | |        | |       |  __ \\| |           | |\n | |     ___| |_ ___  | |__) | | __ _ _   _| |\n | |    / _ \\ __/ __| |  ___/| |/ _` | | | | |\n | |___|  __/ |_\\__ \\ | |    | | (_| | |_| |_|\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)\n                                       __/ |  \n                                      |___/   \n";
+  string p1Text = "\n  _____  _                          ____             \n |  __ \\| |                        / __ \\            \n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___ \n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\\n | |    | | (_| | |_| |  __/ |    | |__| | | | |  __/\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|\n                  __/ |                              \n                 |___/                               \n";
+  string p2Text = "\n  _____  _                         _______            \n |  __ \\| |                       |__   __|           \n | |__) | | __ _ _   _  ___ _ __     | |_      _____  \n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\ \n | |    | | (_| | |_| |  __/ |       | |\\ V  V / (_) |\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/ \n                  __/ |                               \n                 |___/                                \n";
+  //string p2Text =
+
+
+
+  cout << letsPlay << endl;
+  cout << p1Text << endl;
+  cout << p2Text << endl;
+
+
+  //p1Turn();
+  //p2Turn();
+
+}
+
+void Game::p1Turn(){
+  //print Board
+  printPlayerBoards(m_p1ownBoard, m_p2oppBoard);
+
+}
+
+void Game::p2Turn(){
+
 }
 
 
@@ -263,7 +289,7 @@ void Game::run(){
 
 
 void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
-    
+
     cout<<"Opponent's Board:\n";
     oppBoard->printBoard();
   cout<<"-----------------------------------------------------\n";
@@ -288,19 +314,19 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
     }
     else if(direction=="up")
     {
-        
+
     }
     else if(direction=="down")
     {
-        
+
     }
     else if(direction=="left")
     {
-        
+
     }
     else//happens if direction is "right"
     {
-        
+
     }
 }
 

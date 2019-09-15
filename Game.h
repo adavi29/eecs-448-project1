@@ -10,7 +10,7 @@
 using namespace std;
 
 class Game{
-    
+
   private:
     int m_numShips;
 
@@ -20,14 +20,14 @@ class Game{
 
     int arrCol;
     int arrRow;
-    
+
     Board* m_p1ownBoard;
     Board* m_p1oppBoard;
     Board* m_p2ownBoard;
     Board* m_p2oppBoard;
-    
+
     int m_currentPlayer;
-    
+
     //Player p1;
     //Player p2;
 
@@ -79,8 +79,15 @@ class Game{
     //then call checkUpDownLeftRight--checks if it will run off the board and if so, is false
     //if checkUpDownLeftRight returns false then tell user that direction is not possible
     //if true, addShiptoArray
-    
+
     //if cant put in any direction: what do you do???
+
+
+
+
+    //helper method for run()
+    void p1Turn();
+    void p2Turn();
 
 
 
