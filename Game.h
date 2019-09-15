@@ -16,6 +16,7 @@ class Game{
 
     int userRow;
     string userCol;
+    string userDirection;
 
     int arrCol;
     int arrRow;
@@ -24,6 +25,8 @@ class Game{
     Board* m_p1oppBoard;
     Board* m_p2ownBoard;
     Board* m_p2oppBoard;
+    
+    int m_currentPlayer;
     
     //Player p1;
     //Player p2;
@@ -69,7 +72,7 @@ class Game{
 
     bool checkUpDownLeftRight(int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
 
-    void addShiptoArray(int ship, string direction);//throws runtime error when orientation runs off the board or is full
+    void addShiptoArray(string ship, int row, int col, std::string direction, int player);//throws runtime error when orientation runs off the board or is full
 
     // use isAvailable() --will tell if position is open
     //if position is open, ask if user wants to place it up/down/left/right
