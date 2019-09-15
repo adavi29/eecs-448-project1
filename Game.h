@@ -89,6 +89,8 @@ class Game{
     void p1Turn();
     void p2Turn();
     void clearConsole();
+    int getUserRow();
+    int getUserCol();
 
 
 

@@ -266,6 +266,7 @@ void Game::run(){
   cin >> wait;
 
 
+
   //loop section
   bool endGame = true;
 
@@ -302,7 +303,7 @@ void Game::p1Turn(){
 
   int p1_attack_row = 0;
   int p1_attack_col = 0;
-  string p1_attack_col_string;
+  //string p1_attack_col_string;
   string wait = "";
 
 
@@ -311,16 +312,8 @@ void Game::p1Turn(){
   printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
   cout << "It time to attack!" << endl;
-  cout << "Enter Row(1-8): ";
-  cin >> p1_attack_row;
-  p1_attack_row--;
-  cout << "Enter Col(A-H): ";
-  cin >> p1_attack_col_string;
-  p1_attack_col = convertCol(p1_attack_col_string);
-
-
-
-
+  p1_attack_row = getUserRow();
+  p1_attack_col = getUserCol();
 
 
   //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
@@ -348,7 +341,7 @@ void Game::p2Turn(){
 
     int p2_attack_row = 0;
     int p2_attack_col = 0;
-    string p2_attack_col_string;
+    //string p2_attack_col_string;
     string wait = "";
 
 
@@ -356,13 +349,8 @@ void Game::p2Turn(){
     //print Board
     printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
-    cout << "It time to attack!" << endl;
-    cout << "Enter Row(1-8): ";
-    cin >> p2_attack_row;
-    p2_attack_row--;
-    cout << "Enter Col(A-H): ";
-    cin >> p2_attack_col_string;
-    p2_attack_col = convertCol(p2_attack_col_string);
+    p2_attack_row = getUserRow();
+    p2_attack_col = getUserCol();
 
 
 
@@ -396,7 +384,6 @@ void Game::clearConsole(){
   system("clear");
 }
 
-
 void Game::printWinner(int player){
   if(player == 1){
     cout << "PLAYER 1 WINS!" << endl;
@@ -405,6 +392,37 @@ void Game::printWinner(int player){
   }
 
 }
+
+int Game::getUserRow(){
+  string input;
+  while(1){
+    cout << "Enter Row(1-8): ";
+    cin >> input;
+
+    if(input == "1" || input == "2" || input == "3" || input == "4" || input == "5" || input == "6" || input == "7" || input == "8"){
+      return (stoi(input) - 1);
+    }
+
+  }
+
+}
+
+int Game::getUserCol(){
+  string input;
+  int input_num = 0;
+  while(1){
+    cout << "Enter Column(A-H): ";
+    cin >> input;
+    input_num = convertCol(input);
+    if(input_num == 0 || input_num == 1 || input_num == 2 || input_num == 3 || input_num == 4 || input_num == 5 || input_num == 6 || input_num == 7){
+      return input_num;
+    }
+
+  }
+}
+
+
+
 /*void Game::getCoordinates(){
 
 }*/
