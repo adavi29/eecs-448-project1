@@ -88,6 +88,7 @@ class Game{
     //helper method for run()
     void p1Turn();
     void p2Turn();
+    void clearConsole();
 
 
 

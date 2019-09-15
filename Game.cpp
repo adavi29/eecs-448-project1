@@ -259,7 +259,8 @@ void Game::run(){
   string wait = "";
 
   cout << letsPlay << endl;
-
+  cout << "Press any key to continue...";
+  cin >> wait;
   //loop section
 
 
@@ -268,11 +269,7 @@ void Game::run(){
 
   while(endGame){
 
-    //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
-    for(int i = 0; i < 200; i ++){
-      cout << endl;
-    }
-    system("clear");
+    clearConsole();
 
 
     //players 1 turn
@@ -281,12 +278,12 @@ void Game::run(){
     cout << "Next Players Turn. Press any key to continue...";
     cin>> wait;
 
-    //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
-    for(int i = 0; i < 200; i ++){
-      cout << endl;
-    }
-    system("clear");
-
+    // //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
+    // for(int i = 0; i < 200; i ++){
+    //   cout << endl;
+    // }
+    // system("clear");
+    clearConsole();
 
     //playes 2 turn
     cout << p2Text << endl;
@@ -298,7 +295,7 @@ void Game::run(){
 
 
 }
-
+//run() helper methods
 void Game::p1Turn(){
 
   int p1_attack_row = 0;
@@ -354,6 +351,13 @@ void Game::p2Turn(){
 
 }
 
+void Game::clearConsole(){
+  //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
+  for(int i = 0; i < 200; i ++){
+    cout << endl;
+  }
+  system("clear");
+}
 
 /*void Game::getCoordinates(){
 
