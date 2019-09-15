@@ -56,7 +56,7 @@ class Game{
 
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
 
-    void printWinner(int player);
+    
 
     void gameEnd();
 
@@ -92,8 +92,8 @@ class Game{
     int getUserRow();
     int getUserCol(); 
     bool isHit(Board* playerBoard, int row, int col); 
-
-
+    void printWinner(int player);
+    string getFileContents(ifstream& File);
 
 
 };

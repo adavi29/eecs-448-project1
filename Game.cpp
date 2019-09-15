@@ -4,6 +4,8 @@
 #include "Board.h"
 #include <stdexcept>
 #include <cctype> //included for isUpper function
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 Game::Game() {
@@ -360,7 +362,7 @@ void Game::p2Turn(){
 
 
     //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
-    if(m_p1ownBoard->getEntryAtPosition(p2_attack_col,p2_attack_row) == "Ship"){
+    if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
       cout << "That's a HIT!" << endl;
       m_p2oppBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row);
 
@@ -390,10 +392,13 @@ void Game::clearConsole(){
 }
 
 void Game::printWinner(int player){
+  ifstream file_p1_wins ("player1wins.txt"); 
+  ifstream file_p2_wins ("player2wins.txt");
+  
   if(player == 1){
-    cout << "PLAYER 1 WINS!" << endl;
+    cout << getFileContents (file_p1_wins) << endl;
   }else if(player == 2){
-    cout << "PLAYER 2 WINS!" << endl;
+    cout << getFileContents(file_p2_wins) << endl;
   }
 
 }
@@ -430,6 +435,28 @@ bool Game::isHit(Board* playerBoard, int row, int col){
   //This is temporary, will add code later
   return false;
 }
+
+string Game::getFileContents (std::ifstream& File){
+    std::string Lines = "";        //All lines
+    
+    if (File)                      //Check if everything is good
+    {
+	while (File.good ())
+	{
+	    std::string TempLine;                  //Temp line
+	    std::getline (File , TempLine);        //Get temp line
+	    TempLine += "\n";                      //Add newline character
+	    
+	    Lines += TempLine;                     //Add newline
+	}
+	return Lines;
+    }
+    else                           //Return error
+    {
+	return "ERROR File does not exist.";
+    }
+}
+
 
 
 
