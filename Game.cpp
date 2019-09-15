@@ -263,8 +263,11 @@ void Game::run(){
   //loop section
 
 
+  bool endGame = true;
 
-  while(1){
+
+  while(endGame){
+
     //A FUCK load of end lines to clear the console screen inbetween player turns so they can't cheat
     for(int i = 0; i < 200; i ++){
       cout << endl;
