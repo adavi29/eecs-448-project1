@@ -312,8 +312,13 @@ void Game::p1Turn(){
   printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
   cout << "It time to attack!" << endl;
+
+  //gets good input from the user 
   p1_attack_row = getUserRow();
   p1_attack_col = getUserCol();
+
+  //checks if isHit() or not 
+
 
 
   //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
@@ -419,6 +424,10 @@ int Game::getUserCol(){
     }
 
   }
+}
+
+bool Game::isHit(){
+  
 }
 
 
