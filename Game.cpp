@@ -346,30 +346,45 @@ void Game::p1Turn(){
 
 void Game::p2Turn(){
 
-  int p2_attack_row = 0;
-  int p2_attack_col = 0;
-  string p2_attack_col_string;
-  string wait = "";
-  //print Board
-  printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
+    int p2_attack_row = 0;
+    int p2_attack_col = 0;
+    string p2_attack_col_string;
+    string wait = "";
 
-  cout << "It time to attack!" << endl;
-  cout << "Enter Row(1-8): ";
-  cin >> p2_attack_row;
-  cout << "Enter Col(A-H): ";
-  cin >> p2_attack_col_string;
-  p2_attack_col = convertCol(p2_attack_col_string);
 
-  //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
-  if(m_p2oppBoard->getEntryAtPosition(p2_attack_col,p2_attack_row) == "Ship"){
-    cout << "Tha's a HIT!" << endl;
 
-  }else{
-    cout << "That's a MISS! Better luck next time." << endl;
-  }
+    //print Board
+    printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
-  cout << "Next Players Turn. Press any key to continue...";
-  cin>> wait;
+    cout << "It time to attack!" << endl;
+    cout << "Enter Row(1-8): ";
+    cin >> p2_attack_row;
+    p2_attack_row--;
+    cout << "Enter Col(A-H): ";
+    cin >> p2_attack_col_string;
+    p2_attack_col = convertCol(p2_attack_col_string);
+
+
+
+    //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
+    if(m_p1ownBoard->getEntryAtPosition(p2_attack_col,p2_attack_row) == "Ship"){
+      cout << "That's a HIT!" << endl;
+      m_p2oppBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row);
+
+    }else{
+      cout << "That's a MISS! Better luck next time." << endl;
+      m_p2oppBoard->setEntryAtPosition("O", p2_attack_col, p2_attack_row);
+    }
+
+
+
+
+    cout << "Next Players Turn. Press any key to continue...";
+    cin>> wait;
+
+
+
+
 
 }
 
@@ -381,6 +396,15 @@ void Game::clearConsole(){
   system("clear");
 }
 
+
+void Game::printWinner(int player){
+  if(player == 1){
+    cout << "PLAYER 1 WINS!" << endl;
+  }else if(player == 2){
+    cout << "PLAYER 2 WINS!" << endl;
+  }
+
+}
 /*void Game::getCoordinates(){
 
 }*/

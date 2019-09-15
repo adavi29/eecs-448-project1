@@ -56,7 +56,7 @@ class Game{
 
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
 
-    void printWinner();
+    void printWinner(int player);
 
     void gameEnd();
 
