@@ -12,7 +12,7 @@ Game::Game() {
 
   arrCol = 0;
   arrRow = 0;
-    
+
 
 }
 

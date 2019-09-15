@@ -10,7 +10,7 @@
 using namespace std;
 
 class Game{
-    
+
   private:
     int m_numShips;
 
@@ -19,12 +19,12 @@ class Game{
 
     int arrCol;
     int arrRow;
-    
-    Board m_p1ownBoard;
-    Board m_p1oppBoard;
-    Board m_p2ownBoard;
-    Board m_p2oppBoard;
-    
+
+    Board* m_p1ownBoard;
+    Board* m_p1oppBoard;
+    Board* m_p2ownBoard;
+    Board* m_p2oppBoard;
+
     //Player p1;
     //Player p2;
 

@@ -10,15 +10,16 @@
 int main (){
 
   Game game1;
-  try
-  {
-    game1.setup();
-  }
-  catch(std::runtime_error& rte)
-  {
-      std::cout<<rte.what()<<std::endl;
-  }
-    
+  std::cout<<"did it";
+  // try
+  // {
+  //   game1.setup();
+  // }
+  // catch(std::runtime_error& rte)
+  // {
+  //     std::cout<<rte.what()<<std::endl;
+  // }
+
 
   //game1.printPlayerBoards(game1.getP1());
 
