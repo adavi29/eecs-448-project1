@@ -48,8 +48,8 @@ class Game{
 
 
 
-
-    bool isHit();
+    
+    
 
 
     void updateBoard();
@@ -90,7 +90,8 @@ class Game{
     void p2Turn();
     void clearConsole();
     int getUserRow();
-    int getUserCol();
+    int getUserCol(); 
+    bool isHit(); 
 
 
 
