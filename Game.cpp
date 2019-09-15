@@ -317,18 +317,18 @@ void Game::p1Turn(){
   p1_attack_row = getUserRow();
   p1_attack_col = getUserCol();
 
+
   //checks if isHit() or not 
+  if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
 
-
-
-  //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
-  if(m_p2ownBoard->getEntryAtPosition(p1_attack_col,p1_attack_row) == "Ship"){
     cout << "That's a HIT!" << endl;
     m_p1oppBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row);
 
   }else{
+
     cout << "That's a MISS! Better luck next time." << endl;
     m_p1oppBoard->setEntryAtPosition("O", p1_attack_col, p1_attack_row);
+
   }
 
 
@@ -426,8 +426,9 @@ int Game::getUserCol(){
   }
 }
 
-bool Game::isHit(){
-  
+bool Game::isHit(Board* playerBoard, int row, int col){
+  //This is temporary, will add code later
+  return false;
 }
 
 

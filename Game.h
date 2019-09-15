@@ -91,7 +91,7 @@ class Game{
     void clearConsole();
     int getUserRow();
     int getUserCol(); 
-    bool isHit(); 
+    bool isHit(Board* playerBoard, int row, int col); 
 
 
 
