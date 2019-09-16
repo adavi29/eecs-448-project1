@@ -2,7 +2,7 @@
 
 @file main.cpp
 */
-#include "Board.h"
+#include "Game.h"
 #include <iostream>
 #include <string>
 int main()

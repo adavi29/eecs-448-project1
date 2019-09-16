@@ -75,6 +75,17 @@ bool isSunk(int ship){
 			 }
 		 }
 
+bool allSunk()
+{
+	if ((m_ship1 <= 0) && (m_ship2 <= 0) && (m_ship3 <= 0) && (m_ship4 <= 0) && (m_ship5 <= 0))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 void announce(int ship){
 	cout << "You've sunk ship "<<ship<<" !\n";
 }
