@@ -550,9 +550,31 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
     }
 }
 
-bool Game::isAvailable(int row, int col)
+bool Game::isAvailable(Board* board, int row, int col)
 {
-    return(true);//THIS WON'T BE HERE LATER--CODE JUST TO LET IT COMPILE
+
+  if(board == m_p1ownBoard)
+  {
+      if(m_p1ownBoard[row][col] == " ")
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+  }
+  else if(board == m_p2ownBoard)
+  {
+    if(m_p2ownBoard[row][col] == " ")
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
 }
 
 bool Game::checkUpDownLeftRight(int row, int col, int shipNum, string direction)

@@ -43,7 +43,7 @@ class Game{
     int convertCol(string c);
 
 //functions below will be used for adding ships to the board in setup()
-    bool isAvailable(int row, int col);//check if position is empty
+    bool isAvailable(Board* board, int row, int col);//check if position is empty
 
     bool checkUpDownLeftRight(int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
 
