@@ -34,33 +34,13 @@ class Game{
   public:
 
     Game();
-
     ~Game();
-
     void run();
-
     void setup();
-
-
-
-
-
-
-
-    void updateBoard();
 
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
     void printOwnBoard(Board* ownBoard);
-
-
-    void gameEnd();
-
-    //void p1Turn();
-
-    //void p2Turn();
-
     int convertCol(string c);
-
 
 //functions below will be used for adding ships to the board in setup()
     bool isAvailable(int row, int col);//check if position is empty
@@ -77,9 +57,6 @@ class Game{
     //if cant put in any direction: what do you do???
 
     void printBattleship();
-
-
-
 
     //helper method for run()
     void p1Turn();
