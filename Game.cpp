@@ -1,5 +1,4 @@
 //Game.cpp
-<<<<<<< HEAD
 /*
 void Game::printPlayer1_Win()
 {
@@ -30,7 +29,7 @@ void Game::printPlayer2_Win(){
   cout<<"**            **  **         **      **      ************    **            ** *********           **         **        ******  **       *** **\n";
 }
 */
-=======
+
 #include "Game.h"
 //#include "Player.h"
 #include "Board.h"
@@ -128,17 +127,21 @@ void Game::setup(){
 
                 userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
 
-                if (isAvailable(arrRow, arrCol))
-                {
+
                     if(m_currentPlayer==1)
                     {
+                      if (isAvailable(m_p1ownBoard,arrRow, arrCol))
+                      {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 1);
+                      }
                     }
                     else
                     {
+                      if (isAvailable(m_p2ownBoard,arrRow, arrCol))
+                      {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 2);
+                      }
                     }
-                }
 
                 //test code
                 std::cout<<"Player 1 Board:\n";
@@ -555,7 +558,7 @@ bool Game::isAvailable(Board* board, int row, int col)
 
   if(board == m_p1ownBoard)
   {
-      if(m_p1ownBoard[row][col] == " ")
+      if(m_p1ownBoard->getEntryAtPosition(row,col) == " ")
       {
         return true;
       }
@@ -566,7 +569,7 @@ bool Game::isAvailable(Board* board, int row, int col)
   }
   else if(board == m_p2ownBoard)
   {
-    if(m_p2ownBoard[row][col] == " ")
+    if(m_p2ownBoard->getEntryAtPosition(row,col) == " ")
     {
       return true;
     }
@@ -595,4 +598,3 @@ void Game::printBattleship(){
   cout<<"**       **   **         **      **            **       **            **                       **   **          **       **       ** \n";
   cout<<"*********     **         **      **            **       ***********   ***********     *********     **          **  ***********   ** \n\n\n";
 }
->>>>>>> aa5d6fc302e3e6a18d8b9042b872d4d1678ced7f

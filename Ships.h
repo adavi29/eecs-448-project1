@@ -1,17 +1,13 @@
-<<<<<<< HEAD
-=======
+
 /*
 @file Ships.h
 */
->>>>>>> aa5d6fc302e3e6a18d8b9042b872d4d1678ced7f
+
 #ifndef SHIPS_H
 #define SHIPS_H
 
 #include <stdexcept>
-<<<<<<< HEAD
 #include<iostream>
-=======
->>>>>>> aa5d6fc302e3e6a18d8b9042b872d4d1678ced7f
 
 using namespace std;
 
@@ -23,10 +19,8 @@ public:
 	Ships(int numShips);
 	void decreaseSize(int ship);
 	bool isSunk(int ship);
-<<<<<<< HEAD
+
 	bool allSunk();
-=======
->>>>>>> aa5d6fc302e3e6a18d8b9042b872d4d1678ced7f
 	void announce(int ship);
 
 private:

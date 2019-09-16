@@ -58,7 +58,7 @@ bool Ships::isSunk(int ship){
 		   }
 
 			 else if(ship ==2){
-				 return (m_ship2 <= 0);Ships::
+				 return (m_ship2 <= 0);
 			 }
 
 			 else if(ship ==3){
