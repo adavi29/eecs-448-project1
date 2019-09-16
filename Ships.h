@@ -1,9 +1,11 @@
+/*
+@file Ships.h
+*/
 #ifndef SHIPS_H
 #define SHIPS_H
 
 #include <stdexcept>
 #include<iostream>
-
 using namespace std;
 
 class Ships

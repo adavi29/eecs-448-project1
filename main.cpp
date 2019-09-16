@@ -5,11 +5,23 @@
 #include "Game.h"
 #include <iostream>
 #include <string>
-int main()
+
+int main ()
 {
 
-  //Board run_tester;
-  //run_tester.setEntryAtPosition("H",2,3);
-  //run_tester.printBoard();
+  Game game1;
+  try
+  {
+    game1.setup();
+    game1.run();
+    //game1.printWinner(2);
+  }
+  catch(std::runtime_error& rte)
+  {
+      std::cout<<rte.what()<<std::endl;
+  }
+
+  //game1.printPlayerBoards(game1.getP1());
+
   return 0;
 }
