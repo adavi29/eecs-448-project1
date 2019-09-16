@@ -55,7 +55,7 @@ class Game{
     void updateBoard();
 
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
-
+    void printOwnBoard(Board* ownBoard);
 
 
     void gameEnd();
