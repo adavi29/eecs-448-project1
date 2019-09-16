@@ -4,7 +4,6 @@
 #define GAME_H
 
 #include "Board.h"
-//#include "Player.h"
 #include <string>
 #include <iostream>
 using namespace std;

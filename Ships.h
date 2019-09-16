@@ -1,14 +1,11 @@
-
 /*
 @file Ships.h
 */
-
 #ifndef SHIPS_H
 #define SHIPS_H
 
 #include <stdexcept>
 #include<iostream>
-
 using namespace std;
 
 class Ships
@@ -19,7 +16,6 @@ public:
 	Ships(int numShips);
 	void decreaseSize(int ship);
 	bool isSunk(int ship);
-
 	bool allSunk();
 	void announce(int ship);
 
