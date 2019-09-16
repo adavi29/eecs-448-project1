@@ -25,6 +25,9 @@ Ship(int numShips){
 			m_ship5 = 5;
 		}
 	}
+	else{
+		throw(std::runtime_error("cannot decrease length; ship is already sunk");
+	}
 }
 
 
