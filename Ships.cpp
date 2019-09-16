@@ -7,7 +7,7 @@ Ships::Ships(int numShips){
 	m_ship4=-1;
 	m_ship5=-1;
 
-	if(numShips <6) {
+	if((numShips <6)&&(numShips >0)){
 		if(numShips>0) {
 			m_ship1 = 1;
 		}
@@ -23,6 +23,9 @@ Ships::Ships(int numShips){
 		if(numShips>4){
 			m_ship5 = 5;
 		}
+	}
+	else{
+		throw(std::runtime_error("invalid number of ships, should be 1 through 5"));
 	}
 }
 
