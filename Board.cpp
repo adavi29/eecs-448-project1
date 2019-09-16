@@ -20,11 +20,11 @@ Board::~Board(){
 }
 
 string Board::getEntryAtPosition(int column, int row){
-  return(m_board[column][row]);
+  return(m_board[row][column]);
 }
 
 void Board::setEntryAtPosition(string entry, int column, int row){
-  m_board[column][row] = entry;
+  m_board[row][column] = entry;
 }
 
 void Board::printBoard(){
