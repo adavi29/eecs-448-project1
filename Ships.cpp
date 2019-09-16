@@ -18,14 +18,11 @@ Ships::Ships(int numShips){
 			m_ship3 = 3;
 		}
 		if(numShips>3) {
-			m_ship4 = 4;
+            m_ship4 = 4;
 		}
 		if(numShips>4){
 			m_ship5 = 5;
 		}
-	}
-	else{
-		throw(std::runtime_error("invalid number of ships, should be 1 through 5"));
 	}
 }
 
@@ -61,7 +58,7 @@ bool Ships::isSunk(int ship){
 		   }
 
 			 else if(ship ==2){
-				 return (m_ship2 <= 0);
+				 return (m_ship2 <= 0);Ships::
 			 }
 
 			 else if(ship ==3){
@@ -72,7 +69,7 @@ bool Ships::isSunk(int ship){
 				 return(m_ship4 <= 0);
 			 }
 
-			 else{
+			 else{//if ship = 5
 				 return(m_ship5 <= 0);
 			 }
 }
