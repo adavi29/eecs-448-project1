@@ -1,6 +1,6 @@
 #include "Ships.h"
 
-Ship(int numShips){
+Ships::Ships(int numShips){
 	m_ship1=0;//initialize ship variables in case they are not assigned a value below
 	m_ship2=0;
 	m_ship3=0;
@@ -18,7 +18,7 @@ Ship(int numShips){
 			m_ship3 = 3;
 		}
 		if(numShips>3) {
-			m_ship4 = 4
+			m_ship4 = 4;
 		}
 		if(numShips>4){
 			m_ship5 = 5;
@@ -26,7 +26,7 @@ Ship(int numShips){
 	}
 }
 
-void decreaseSize(int ship) {
+void Ships::decreaseSize(int ship) {
 	if(isSunk(ship) != true) {
 		  if(ship == 1) {
 		    m_ship1--;
@@ -52,7 +52,7 @@ void decreaseSize(int ship) {
 	}
 }
 
-bool isSunk(int ship){
+bool Ships::isSunk(int ship){
 		   if(ship ==1){
 		     return (m_ship1 <= 0);
 		   }
@@ -74,6 +74,6 @@ bool isSunk(int ship){
 			 }
 }
 
-void announce(int ship){
+void Ships::announce(int ship){
 	cout << "You've sunk ship "<<ship<<" !\n";
 }
