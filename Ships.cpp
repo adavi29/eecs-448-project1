@@ -48,7 +48,7 @@ void Ships::decreaseSize(int ship) {
 				announce(ship);
 			}
 	} else {
-     throw(std::runtime_error("cannot decrease length; ship is already sunk");
+     throw(std::runtime_error("cannot decrease length; ship is already sunk"));
 	}
 }
 
@@ -57,19 +57,19 @@ bool Ships::isSunk(int ship){
 		     return (m_ship1 <= 0);
 		   }
 
-			 if(ship ==2){
+			 else if(ship ==2){
 				 return (m_ship2 <= 0);
 			 }
 
-			 if(ship ==3){
+			 else if(ship ==3){
 				 return(m_ship3 <= 0);
 			 }
 
-			 if(ship ==4){
+			 else if(ship ==4){
 				 return(m_ship4 <= 0);
 			 }
 
-			 if(ship ==5){
+			 else{
 				 return(m_ship5 <= 0);
 			 }
 }
