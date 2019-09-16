@@ -69,7 +69,7 @@ class Game{
 
     bool checkUpDownLeftRight(int row, int col, int shipNum);//checks if up, down, left, right is available
 
-
+    void printBattleship();
 
 
 
