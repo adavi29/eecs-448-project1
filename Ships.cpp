@@ -1,6 +1,5 @@
 #include "Ships.h"
 
-
 Ship(int numShips){
 	m_ship1=0;//initialize ship variables in case they are not assigned a value below
 	m_ship2=0;
@@ -25,11 +24,7 @@ Ship(int numShips){
 			m_ship5 = 5;
 		}
 	}
-	else{
-		throw(std::runtime_error("cannot decrease length; ship is already sunk");
-	}
 }
-
 
 void decreaseSize(int ship) {
 	if(isSunk(ship) != true) {
@@ -52,9 +47,10 @@ void decreaseSize(int ship) {
 			if(isSunk(ship)){
 				announce(ship);
 			}
-		}
-		else throw(std::runtime_error("cannot decrease length; ship is already sunk");
+	} else {
+     throw(std::runtime_error("cannot decrease length; ship is already sunk");
 	}
+}
 
 bool isSunk(int ship){
 		   if(ship ==1){
@@ -76,7 +72,7 @@ bool isSunk(int ship){
 			 if(ship ==5){
 				 return(m_ship5 <= 0);
 			 }
-		 }
+}
 
 void announce(int ship){
 	cout << "You've sunk ship "<<ship<<" !\n";

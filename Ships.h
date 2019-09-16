@@ -10,17 +10,17 @@ class Ships
 
 public:
 
-	Ship(int numShips);
+	Ships(int numShips);
 	void decreaseSize(int ship);
 	bool isSunk(int ship);
 	void announce(int ship);
 
 private:
-	  int m_ship1=-1;
-	  int m_ship2=-1;
-	  int m_ship3=-1;
-	  int m_ship4=-1;
-	  int m_ship5=-1;
+	  int m_ship1;
+	  int m_ship2;
+	  int m_ship3;
+	  int m_ship4;
+	  int m_ship5;
 };
 
 #endif
