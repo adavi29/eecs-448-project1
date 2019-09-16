@@ -37,11 +37,6 @@ class Game{
 
     ~Game();
 
-    //Player getP1();
-    //Player getP2();
-
-
-
     void run();
 
     void setup();
