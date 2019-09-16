@@ -555,10 +555,7 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
 
 bool Game::isAvailable(Board* board, int row, int col)
 {
-
-  if(board == m_p1ownBoard)
-  {
-      if(m_p1ownBoard->getEntryAtPosition(row,col) == " ")
+      if(board->getEntryAtPosition(row,col) == " ")
       {
         return true;
       }
@@ -566,18 +563,6 @@ bool Game::isAvailable(Board* board, int row, int col)
       {
         return false;
       }
-  }
-  else
-  {
-    if(m_p2ownBoard->getEntryAtPosition(row,col) == " ")
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
 }
 
 bool Game::checkUpDownLeftRight(int row, int col, int shipNum, string direction)
