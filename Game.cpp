@@ -567,7 +567,7 @@ bool Game::isAvailable(Board* board, int row, int col)
         return false;
       }
   }
-  else if(board == m_p2ownBoard)
+  else
   {
     if(m_p2ownBoard->getEntryAtPosition(row,col) == " ")
     {
