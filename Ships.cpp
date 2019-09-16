@@ -2,7 +2,13 @@
 
 
 Ship(int numShips){
-	if((numShips <6)||(numShips > 0)) {
+	m_ship1=0;//initialize ship variables in case they are not assigned a value below
+	m_ship2=0;
+	m_ship3=0;
+	m_ship4=0;
+	m_ship5=0;
+
+	if(numShips <6) {
 		if(numShips>0) {
 			m_ship1 = 1;
 		}
@@ -50,9 +56,9 @@ void decreaseSize(int ship) {
 		else throw(std::runtime_error("cannot decrease length; ship is already sunk");
 	}
 
-Bool isSunk(int ship){
+bool isSunk(int ship){
 		   if(ship ==1){
-		     return (m_ship2 <= 0);
+		     return (m_ship1 <= 0);
 		   }
 
 			 if(ship ==2){
@@ -60,18 +66,18 @@ Bool isSunk(int ship){
 			 }
 
 			 if(ship ==3){
-				 return(m_ship2 <= 0);
+				 return(m_ship3 <= 0);
 			 }
 
 			 if(ship ==4){
-				 return(m_ship2 <= 0);
+				 return(m_ship4 <= 0);
 			 }
 
 			 if(ship ==5){
-				 return(m_ship2 <= 0);
+				 return(m_ship5 <= 0);
 			 }
 		 }
 
 void announce(int ship){
-	cout << "You've sunk ship " + ship + "!";
+	cout << "You've sunk ship "<<ship<<" !\n";
 }

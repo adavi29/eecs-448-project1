@@ -12,7 +12,7 @@ public:
 
 	Ship(int numShips);
 	void decreaseSize(int ship);
-	Bool isSunk(int ship);
+	bool isSunk(int ship);
 	void announce(int ship);
 
 private:
