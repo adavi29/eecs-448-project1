@@ -108,8 +108,10 @@ void Game::setup(){
                     }
                 }
 
-                //test code NOTE: WHEN TESTED B 5, PUTS IT IN 4 E
+                //test code
+                std::cout<<"Player 1 Board:\n";
                 printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
+                std::cout<<"Player 2 Board:\n";
                 printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
                 //test code above
 
@@ -476,6 +478,12 @@ void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
     cout<<"Own Board:\n";
     ownBoard->printBoard();
 
+}
+
+void Game::printOwnBoard(Board* ownBoard)
+{
+    cout<<"Own Board:\n";
+    ownBoard->printBoard();
 }
 
 
