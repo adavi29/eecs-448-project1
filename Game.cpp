@@ -51,8 +51,7 @@ int Game::convertCol(string col){
 
 }
 
-//INCOMPLETE
-void Game::convertStringToLower(string wordToConvert)
+std::string Game::convertStringToLower(string wordToConvert)
 {
     char charWordToConvert=wordToConvert.at(0);
     for(int i=0; i<wordToConvert.length(); i++)
@@ -60,10 +59,11 @@ void Game::convertStringToLower(string wordToConvert)
         charWordToConvert=wordToConvert.at(i);
         if(isupper(charWordToConvert))
         {
-            tolower(charWordToConvert);
+            charWordToConvert=(char)tolower(charWordToConvert);
         }
+        wordToConvert.at(i)=charWordToConvert;
     }
-    //string newWord=transform(wordToConvert.begin(), wordToConvert.end(), wordToConvert.begin(), ::toupper);
+    return(wordToConvert);
 }
 
 void Game::setup(){
@@ -161,12 +161,14 @@ void Game::setup(){
                         //ask in which direction want the thing to be stored; then convert all chars tolower
                     }while(arrRow < 0 || arrRow > 7);
 
-                    std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
-                    std::cin>>userDirection;
-                    convertStringToLower(userDirection);
-                    //TESTCODE
-                    std::cout<<userDirection<<std::endl;
-
+                    if(i>1)
+                    {
+                        std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
+                        std::cin>>userDirection;
+                        userDirection=convertStringToLower(userDirection);
+                        //TESTCODE
+                        std::cout<<userDirection<<std::endl;
+                    }
 
                     do{
 
