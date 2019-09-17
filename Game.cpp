@@ -298,7 +298,7 @@ void Game::run(){
   system("clear");
 
   cout << letsPlay << endl;
-  cout << "Press any key to continue...";
+  cout << "Press any key then hit Enter to continue...";
   cin >> wait;
 
 
@@ -312,7 +312,7 @@ void Game::run(){
 
     //players 1 turn
     cout << p1Text << endl;
-    cout << "Press any key to continue...";
+    cout << "Press any key then hit Enter to continue...";
     cin >> wait;
     p1Turn();
 
@@ -321,7 +321,7 @@ void Game::run(){
 
     //playes 2 turn
     cout << p2Text << endl;
-    cout << "Press any key to continue...";
+    cout << "Press any key then hit Enter to continue...";
     cin >> wait;
     p2Turn();
 
@@ -361,7 +361,7 @@ void Game::p1Turn(){
     m_p1oppBoard->setEntryAtPosition("O", p1_attack_col, p1_attack_row);
   }
 
-  cout << "Next Players Turn. Press any key to continue...";
+  cout << "Next Players Turn. Press any key then hit Enter to continue...";
   cin>> wait;
 }
 
@@ -395,7 +395,7 @@ void Game::p2Turn(){
 
 
 
-    cout << "Next Players Turn. Press any key to continue...";
+    cout << "Next Players Turn. Press any key then hit Enter to continue...";
     cin>> wait;
 }
 
