@@ -69,6 +69,7 @@ std::string Game::convertStringToLower(string wordToConvert)
 void Game::setup(){
     string numShipsString="";
     string userRowString="";
+    string openDirection="";
   //gets number of ships
   do{
     cout << "Enter the amount of ships both players want to use (Max: 5):  ";
@@ -152,7 +153,13 @@ void Game::setup(){
                 {
                     std::string shipString=to_string(i);
                     int shipNum=i;
-                    Board* currentPlayerBoard=nullptr;
+
+                do{
+                    if(openDirection=="none")
+                    {
+                        std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
+                    }
+                                        Board* currentPlayerBoard=nullptr;
                     if(m_currentPlayer==1)
                     {
                         currentPlayerBoard=m_p1ownBoard;
@@ -193,22 +200,28 @@ void Game::setup(){
                         if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
                         {
                             std::cout<<" up ";
+                            openDirection="";
                         }
                         if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
                         {
                             std::cout<<" down ";
+                            openDirection="";
                         }
                         if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
                         {
                             std::cout<<" left ";
+                            openDirection="";
                         }
                         if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
                         {
                             std::cout<<" right ";
+                            openDirection="";
                         }
-                        else
+                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
+                           checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
                         {
                             std::cout<<" none ";
+                            openDirection="none";
                         }
                            
                         do
@@ -216,16 +229,21 @@ void Game::setup(){
                             std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
                             std::cin>>userDirection;
                             userDirection=convertStringToLower(userDirection);
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
+                            {
+                                std::cout<<"The direction you chose is not open.\n";
+                            }
                             
-                        }while(userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right");
+                        }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
                     }else if(i<2)
                     {
                         userDirection="none";
                     }
+                }while(openDirection=="none");
                     
                     if(m_currentPlayer==1)
                     {
-                        if (isAvailable(m_p1ownBoard,arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
+                        if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
                         {
                             addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
                             std::cout<<"Player 1's current Board:\n";
@@ -234,7 +252,7 @@ void Game::setup(){
                     }
                     else
                     {
-                        if (isAvailable(m_p2ownBoard,arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
+                        if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
                         {
                             addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
                             std::cout<<"Player 2's current Board:\n";
@@ -251,32 +269,116 @@ void Game::setup(){
                 for(int i=1; i<4; i++)
                 {
                     std::string shipString=to_string(i);
-                    cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-
-                    do{
-                        cout << "Row (1-8):  ";
-                        cin>>userRowString;
-                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
-                        {
-                            std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
-                        }
-                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
-                    userRow=stoi(userRowString);
-                    arrRow=userRow-1;
+                    int shipNum=i;
                     
                     do{
-
-                        cout << "Col (A-H): ";
-                        cin >> userCol;
-                        arrCol = convertCol(userCol);
-                        if(arrCol < 0 || arrCol > 7)
+                        if(openDirection=="none")
                         {
-                            std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
                         }
-                    }while(arrCol < 0 || arrCol > 7);
-
+                        Board* currentPlayerBoard=nullptr;
+                        if(m_currentPlayer==1)
+                        {
+                            currentPlayerBoard=m_p1ownBoard;
+                        }
+                        else
+                        {
+                            currentPlayerBoard=m_p2ownBoard;
+                        }
+                        
+                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
+                        
+                        do{
+                            cout << "Row (1-8):  ";
+                            cin>>userRowString;
+                            if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
+                            {
+                                std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+                            }
+                        }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                        userRow=stoi(userRowString);
+                        arrRow=userRow-1;
+                        
+                        do{
+                            
+                            cout << "Col (A-H): ";
+                            cin >> userCol;
+                            arrCol = convertCol(userCol);
+                            if(arrCol < 0 || arrCol > 7)
+                            {
+                                std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            }
+                            
+                        }while(arrCol < 0 || arrCol > 7);
+                        
+                        if(i>1)
+                        {
+                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
+                            {
+                                std::cout<<" up ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
+                            {
+                                std::cout<<" down ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
+                            {
+                                std::cout<<" left ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
+                            {
+                                std::cout<<" right ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
+                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
+                            {
+                                std::cout<<" none ";
+                                openDirection="none";
+                            }
+                            
+                            do
+                            {
+                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
+                                std::cin>>userDirection;
+                                userDirection=convertStringToLower(userDirection);
+                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
+                                {
+                                    std::cout<<"The direction you chose is not open.\n";
+                                }
+                                
+                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
+                        }else if(i<2)
+                        {
+                            userDirection="none";
+                        }
+                    }while(openDirection=="none");
+                    
+                    if(m_currentPlayer==1)
+                    {
+                        if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
+                            std::cout<<"Player 1's current Board:\n";
+                            printOwnBoard(m_p1ownBoard);
+                        }
+                    }
+                    else
+                    {
+                        if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+                            std::cout<<"Player 2's current Board:\n";
+                            printOwnBoard(m_p2ownBoard);
+                        }
+                    }
+                    
+                    
                 }
-
                 break;
 
             case 4:
@@ -284,30 +386,115 @@ void Game::setup(){
                 for(int i=1; i<5; i++)
                 {
                     std::string shipString=to_string(i);
-                    cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-
-                    do{
-                        cout << "Row (1-8):  ";
-                        cin>>userRowString;
-                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
-                        {
-                            std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
-                        }
-                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
-                    userRow=stoi(userRowString);
-                    arrRow=userRow-1;
+                    int shipNum=i;
                     
                     do{
-
-                        cout << "Col (A-H): ";
-                        cin >> userCol;
-                        arrCol = convertCol(userCol);
-                        if(arrCol < 0 || arrCol > 7)
+                        if(openDirection=="none")
                         {
-                            std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
                         }
-                    }while(arrCol < 0 || arrCol > 7);
-
+                        Board* currentPlayerBoard=nullptr;
+                        if(m_currentPlayer==1)
+                        {
+                            currentPlayerBoard=m_p1ownBoard;
+                        }
+                        else
+                        {
+                            currentPlayerBoard=m_p2ownBoard;
+                        }
+                        
+                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
+                        
+                        do{
+                            cout << "Row (1-8):  ";
+                            cin>>userRowString;
+                            if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
+                            {
+                                std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+                            }
+                        }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                        userRow=stoi(userRowString);
+                        arrRow=userRow-1;
+                        
+                        do{
+                            
+                            cout << "Col (A-H): ";
+                            cin >> userCol;
+                            arrCol = convertCol(userCol);
+                            if(arrCol < 0 || arrCol > 7)
+                            {
+                                std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            }
+                            
+                        }while(arrCol < 0 || arrCol > 7);
+                        
+                        if(i>1)
+                        {
+                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
+                            {
+                                std::cout<<" up ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
+                            {
+                                std::cout<<" down ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
+                            {
+                                std::cout<<" left ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
+                            {
+                                std::cout<<" right ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
+                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
+                            {
+                                std::cout<<" none ";
+                                openDirection="none";
+                            }
+                            
+                            do
+                            {
+                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
+                                std::cin>>userDirection;
+                                userDirection=convertStringToLower(userDirection);
+                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
+                                {
+                                    std::cout<<"The direction you chose is not open.\n";
+                                }
+                                
+                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
+                        }else if(i<2)
+                        {
+                            userDirection="none";
+                        }
+                    }while(openDirection=="none");
+                    
+                    if(m_currentPlayer==1)
+                    {
+                        if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
+                            std::cout<<"Player 1's current Board:\n";
+                            printOwnBoard(m_p1ownBoard);
+                        }
+                    }
+                    else
+                    {
+                        if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+                            std::cout<<"Player 2's current Board:\n";
+                            printOwnBoard(m_p2ownBoard);
+                        }
+                    }
+                    
+                    
                 }
 
                 break;
@@ -317,30 +504,115 @@ void Game::setup(){
                 for(int i=1; i<6; i++)
                 {
                     std::string shipString=to_string(i);
-                    cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-
-                    do{
-                        cout << "Row (1-8):  ";
-                        cin>>userRowString;
-                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
-                        {
-                            std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
-                        }
-                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
-                    userRow=stoi(userRowString);
-                    arrRow=userRow-1;
+                    int shipNum=i;
                     
                     do{
-
-                        cout << "Col (A-H): ";
-                        cin >> userCol;
-                        arrCol = convertCol(userCol);
-                        if(arrCol < 0 || arrCol > 7)
+                        if(openDirection=="none")
                         {
-                            std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
                         }
-                    }while(arrCol < 0 || arrCol > 7);
-
+                        Board* currentPlayerBoard=nullptr;
+                        if(m_currentPlayer==1)
+                        {
+                            currentPlayerBoard=m_p1ownBoard;
+                        }
+                        else
+                        {
+                            currentPlayerBoard=m_p2ownBoard;
+                        }
+                        
+                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
+                        
+                        do{
+                            cout << "Row (1-8):  ";
+                            cin>>userRowString;
+                            if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
+                            {
+                                std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+                            }
+                        }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                        userRow=stoi(userRowString);
+                        arrRow=userRow-1;
+                        
+                        do{
+                            
+                            cout << "Col (A-H): ";
+                            cin >> userCol;
+                            arrCol = convertCol(userCol);
+                            if(arrCol < 0 || arrCol > 7)
+                            {
+                                std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                            }
+                            
+                        }while(arrCol < 0 || arrCol > 7);
+                        
+                        if(i>1)
+                        {
+                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
+                            {
+                                std::cout<<" up ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
+                            {
+                                std::cout<<" down ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
+                            {
+                                std::cout<<" left ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
+                            {
+                                std::cout<<" right ";
+                                openDirection="";
+                            }
+                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
+                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
+                            {
+                                std::cout<<" none ";
+                                openDirection="none";
+                            }
+                            
+                            do
+                            {
+                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
+                                std::cin>>userDirection;
+                                userDirection=convertStringToLower(userDirection);
+                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
+                                {
+                                    std::cout<<"The direction you chose is not open.\n";
+                                }
+                                
+                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
+                        }else if(i<2)
+                        {
+                            userDirection="none";
+                        }
+                    }while(openDirection=="none");
+                    
+                    if(m_currentPlayer==1)
+                    {
+                        if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
+                            std::cout<<"Player 1's current Board:\n";
+                            printOwnBoard(m_p1ownBoard);
+                        }
+                    }
+                    else
+                    {
+                        if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+                            std::cout<<"Player 2's current Board:\n";
+                            printOwnBoard(m_p2ownBoard);
+                        }
+                    }
+                    
+                    
                 }
 
                 break;
@@ -795,7 +1067,7 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
 
 bool Game::isAvailable(Board* board, int row, int col)
 {
-      if(board->getEntryAtPosition(row,col) == " ")
+      if(board->getEntryAtPosition(col,row) == " ")
       {
         return true;
       }
