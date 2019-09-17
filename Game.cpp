@@ -406,7 +406,7 @@ void Game::clearConsole(){
 }
 
 void Game::printWinner(int player){
-    
+
   ifstream file_p1_wins ("player1wins.txt");
   ifstream file_p2_wins ("player2wins.txt");
 
@@ -534,7 +534,56 @@ bool Game::isAvailable(Board* board, int row, int col)
 
 bool Game::checkUpDownLeftRight(int row, int col, int shipNum, string direction)
 {
-    return(false);//THIS WON'T BE HERE LATER--CODE JUST TO LET IT COMPILE
+	bool alwaysFits = true;
+		if(direction == "up") {
+			if(shipNum-row-1 >= 0) {
+				for(int i = 0; i < shipNum; i++) {
+					if(isAvailable(board, row-i, col) == false)
+						alwaysFits = false;
+					}
+				}
+			else{
+				alwaysFits = false;
+			}
+		}
+
+		else if(direction == "down") {
+			if(shipNum-1+row <= 7) {
+				for(int i = 0; i < shipNum; i++) {
+					if(isAvailable(board, row+i, col) == false)
+						alwaysFits = false;
+					}
+				}
+			else{
+				alwaysFits = false;
+			}
+		}
+
+		else if(direction == "left") {
+			if(shipNum-1-col >= 0) {
+				for(int i = 0; i < shipNum; i++) {
+					if(isAvailable(board, row, col-i) == false)
+						alwaysFits = false;
+					}
+				}
+			else{
+				alwaysFits = false;
+			}
+		}
+
+		else if(direction == "right") {
+			if(shipNum-1+col <= 7) {
+				for(int i = 0; i < shipNum; i++) {
+					if(isAvailable(board, row, col+i) == false)
+						alwaysFits = false;
+					}
+				}
+			else{
+				alwaysFits = false;
+			}
+		}
+
+		return(alwaysFits);
 }
 
 void Game::printBattleship(){
