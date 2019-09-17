@@ -148,6 +148,8 @@ void Game::setup(){
 
                 for(int i=1; i<3; i++)
                 {
+                    std::string shipString=to_string(i);
+                    int shipNum=i;
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
@@ -166,8 +168,10 @@ void Game::setup(){
                         std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
                         std::cin>>userDirection;
                         userDirection=convertStringToLower(userDirection);
-                        //TESTCODE
-                        std::cout<<userDirection<<std::endl;
+                    }
+                    else if(i<2)
+                    {
+                        userDirection="none";
                     }
 
                     do{
@@ -181,6 +185,26 @@ void Game::setup(){
                         }
 
                     }while(arrCol < 0 || arrCol > 7);
+                    
+                    if(m_currentPlayer==1)
+                    {
+                        if (isAvailable(m_p1ownBoard,arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
+                            std::cout<<"Player 1's current Board:\n";
+                            printOwnBoard(m_p1ownBoard);
+                        }
+                    }
+                    else
+                    {
+                        if (isAvailable(m_p2ownBoard,arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection))
+                        {
+                            addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+                            std::cout<<"Player 2's current Board:\n";
+                            printOwnBoard(m_p2ownBoard);
+                        }
+                    }
+                    
 
                 }
                 break;
@@ -189,6 +213,7 @@ void Game::setup(){
 
                 for(int i=1; i<4; i++)
                 {
+                    std::string shipString=to_string(i);
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
@@ -221,6 +246,7 @@ void Game::setup(){
 
                 for(int i=1; i<5; i++)
                 {
+                    std::string shipString=to_string(i);
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
@@ -252,6 +278,7 @@ void Game::setup(){
 
                 for(int i=1; i<6; i++)
                 {
+                    std::string shipString=to_string(i);
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
@@ -506,7 +533,40 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
     }
     else if(direction=="up")
     {
-
+        if(player==1 && ship=="2")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-1);
+        }
+        else if(player==2 && ship=="2")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-1);
+        }
+        else if(player==1 && ship=="3")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-2);
+        }
+        else if(player==2 && ship=="3")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-2);
+        }
+        else if(player==1 && ship=="4")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-2);
+        }
+        else if(player==2 && ship=="4")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-2);
+        }
     }
     else if(direction=="down")
     {
@@ -537,8 +597,12 @@ bool Game::isAvailable(Board* board, int row, int col)
 bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, string direction)
 {
 	bool alwaysFits = true;
-		if(direction == "up") {
-			if(shipNum-row-1 >= 0) {
+        if(direction=="none")
+        {
+            alwaysFits=true;
+        }
+		else if(direction == "up") {
+			if(row-(shipNum-1) >= 0) {
 				for(int i = 0; i < shipNum; i++) {
 					if(isAvailable(board, row-i, col) == false)
 						alwaysFits = false;
@@ -550,7 +614,7 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, str
 		}
 
 		else if(direction == "down") {
-			if(shipNum-1+row <= 7) {
+			if(row+(shipNum-1) <= 7) {
 				for(int i = 0; i < shipNum; i++) {
 					if(isAvailable(board, row+i, col) == false)
 						alwaysFits = false;
@@ -562,7 +626,7 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, str
 		}
 
 		else if(direction == "left") {
-			if(shipNum-1-col >= 0) {
+			if(col-(shipNum-1) >= 0) {
 				for(int i = 0; i < shipNum; i++) {
 					if(isAvailable(board, row, col-i) == false)
 						alwaysFits = false;
@@ -574,7 +638,7 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, str
 		}
 
 		else if(direction == "right") {
-			if(shipNum-1+col <= 7) {
+			if(col+(shipNum-1) <= 7) {
 				for(int i = 0; i < shipNum; i++) {
 					if(isAvailable(board, row, col+i) == false)
 						alwaysFits = false;
