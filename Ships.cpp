@@ -1,17 +1,13 @@
-/*
-@file Ships.cpp
-*/
 #include "Ships.h"
-#include<iostream>
 
 Ships::Ships(int numShips){
-	m_ship1=0;//initialize ship variables in case they are not assigned a value below
-	m_ship2=0;
-	m_ship3=0;
-	m_ship4=0;
-	m_ship5=0;
+	m_ship1=-1;//initialize ship variables in case they are not assigned a value below
+	m_ship2=-1;
+	m_ship3=-1;
+	m_ship4=-1;
+	m_ship5=-1;
 
-	if(numShips <6) {
+	if((numShips <6)&&(numShips >0)){
 		if(numShips>0) {
 			m_ship1 = 1;
 		}
@@ -78,6 +74,17 @@ bool Ships::isSunk(int ship){
 			 }
 }
 
+bool Ships::allSunk()
+{
+	if ((m_ship1 <= 0) && (m_ship2 <= 0) && (m_ship3 <= 0) && (m_ship4 <= 0) && (m_ship5 <= 0))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 void Ships::announce(int ship){
-    cout << "You've sunk ship "<<ship<<" !\n";
+	cout << "You've sunk ship "<<ship<<" !\n";
 }

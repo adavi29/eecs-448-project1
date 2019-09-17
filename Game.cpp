@@ -113,22 +113,24 @@ void Game::setup(){
 
                 userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
 
-                if (isAvailable(arrRow, arrCol))
-                {
+
                     if(m_currentPlayer==1)
                     {
+                      if (isAvailable(m_p1ownBoard,arrRow, arrCol))
+                      {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 1);
                         std::cout<<"Player 1's current Board:\n";
                         printOwnBoard(m_p1ownBoard);
                     }
                     else
                     {
+                      if (isAvailable(m_p2ownBoard,arrRow, arrCol))
+                      {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 2);
                         std::cout<<"Player 2's current Board:\n";
                         printOwnBoard(m_p2ownBoard);
-                        
+
                     }
-                }
 
                 //test code
 //                std::cout<<"Player 1 Board:\n";
@@ -157,13 +159,13 @@ void Game::setup(){
                         }
                         //ask in which direction want the thing to be stored; then convert all chars tolower
                     }while(arrRow < 0 || arrRow > 7);
-                    
+
                     std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
                     std::cin>>userDirection;
                     convertStringToLower(userDirection);
                     //TESTCODE
                     std::cout<<userDirection<<std::endl;
-                    
+
 
                     do{
 
@@ -550,9 +552,16 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
     }
 }
 
-bool Game::isAvailable(int row, int col)
+bool Game::isAvailable(Board* board, int row, int col)
 {
-    return(true);//THIS WON'T BE HERE LATER--CODE JUST TO LET IT COMPILE
+      if(board->getEntryAtPosition(row,col) == " ")
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
 }
 
 bool Game::checkUpDownLeftRight(int row, int col, int shipNum, string direction)

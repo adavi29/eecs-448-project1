@@ -3,11 +3,11 @@
 @file main.cpp
 */
 #include "Game.h"
-#include "Board.h"
-//#include "Player.h"
+#include <iostream>
+#include <string>
 
-
-int main (){
+int main ()
+{
 
   Game game1;
   try
@@ -22,8 +22,6 @@ int main (){
   }
 
   //game1.printPlayerBoards(game1.getP1());
-
-
 
   return 0;
 }

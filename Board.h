@@ -3,7 +3,6 @@
 */
 #ifndef BOARD_H
 #define BOARD_H
-
 #include<string>
 #include<iostream>
 
@@ -18,6 +17,6 @@ public:
   string getEntryAtPosition(int column, int row);
   void setEntryAtPosition(string entry, int column, int row);
   void printBoard();
-};
 
+};
 #endif
