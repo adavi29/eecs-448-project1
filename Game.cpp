@@ -285,6 +285,8 @@ void Game::setup(){
 
 
 }
+    }
+}
 
 
 void Game::run(){
@@ -337,14 +339,10 @@ void Game::run(){
 //run() helper methods
 void Game::p1Turn(){
 
-
-
   int p1_attack_row = 0;
   int p1_attack_col = 0;
   //string p1_attack_col_string;
   string wait = "";
-
-
 
   //print Board
   printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
@@ -354,7 +352,6 @@ void Game::p1Turn(){
   //gets good input from the user
   p1_attack_row = getUserRow();
   p1_attack_col = getUserCol();
-
 
   //checks if isHit() or not
   if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
@@ -366,18 +363,10 @@ void Game::p1Turn(){
 
     cout << "That's a MISS! Better luck next time." << endl;
     m_p1oppBoard->setEntryAtPosition("O", p1_attack_col, p1_attack_row);
-
   }
-
-
-
 
   cout << "Next Players Turn. Press any key to continue...";
   cin>> wait;
-
-
-
-
 }
 
 void Game::p2Turn(){
@@ -412,11 +401,6 @@ void Game::p2Turn(){
 
     cout << "Next Players Turn. Press any key to continue...";
     cin>> wait;
-
-
-
-
-
 }
 
 void Game::clearConsole(){
@@ -428,6 +412,7 @@ void Game::clearConsole(){
 }
 
 void Game::printWinner(int player){
+    
   ifstream file_p1_wins ("player1wins.txt");
   ifstream file_p2_wins ("player2wins.txt");
 
@@ -494,16 +479,6 @@ string Game::getFileContents (std::ifstream& File){
 }
 
 
-
-
-/*void Game::getCoordinates(){
-
-}*/
-
-
-
-
-
 void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
 
     cout<<"Opponent's Board:\n";
@@ -519,7 +494,6 @@ void Game::printOwnBoard(Board* ownBoard)
     //cout<<"Own Board:\n";
     ownBoard->printBoard();
 }
-
 
 void Game::addShiptoArray(string ship, int row, int col, std::string direction, int player)
 {
