@@ -40,7 +40,8 @@ class Game{
 
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
     void printOwnBoard(Board* ownBoard);
-    int convertCol(string c);
+    int convertCol(string col);
+    void convertStringToLower(string wordToConvert);
 
 //functions below will be used for adding ships to the board in setup()
     bool isAvailable(int row, int col);//check if position is empty

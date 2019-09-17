@@ -6,6 +6,8 @@
 #include <cctype> //included for isUpper function
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 Game::Game() {
@@ -47,6 +49,21 @@ int Game::convertCol(string col){
         return(int(charCol)-97);
     }
 
+}
+
+//INCOMPLETE
+void Game::convertStringToLower(string wordToConvert)
+{
+    char charWordToConvert=wordToConvert.at(0);
+    for(int i=0; i<wordToConvert.length(); i++)
+    {
+        charWordToConvert=wordToConvert.at(i);
+        if(isupper(charWordToConvert))
+        {
+            tolower(charWordToConvert);
+        }
+    }
+    //string newWord=transform(wordToConvert.begin(), wordToConvert.end(), wordToConvert.begin(), ::toupper);
 }
 
 void Game::setup(){
@@ -101,18 +118,25 @@ void Game::setup(){
                     if(m_currentPlayer==1)
                     {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 1);
+                        std::cout<<"Player 1's current Board:\n";
+                        printOwnBoard(m_p1ownBoard);
                     }
                     else
                     {
                         addShiptoArray("1", arrRow, arrCol, userDirection, 2);
+                        std::cout<<"Player 2's current Board:\n";
+                        printOwnBoard(m_p2ownBoard);
+                        
                     }
                 }
 
                 //test code
-                std::cout<<"Player 1 Board:\n";
-                printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
-                std::cout<<"Player 2 Board:\n";
-                printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
+//                std::cout<<"Player 1 Board:\n";
+//                printOwnBoard(m_p1ownBoard);
+//                printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
+//                std::cout<<"Player 2 Board:\n";
+//                printOwnBoard(m_p2ownBoard);
+                //printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
                 //test code above
 
                 break;
@@ -131,7 +155,15 @@ void Game::setup(){
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
+                        //ask in which direction want the thing to be stored; then convert all chars tolower
                     }while(arrRow < 0 || arrRow > 7);
+                    
+                    std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
+                    std::cin>>userDirection;
+                    convertStringToLower(userDirection);
+                    //TESTCODE
+                    std::cout<<userDirection<<std::endl;
+                    
 
                     do{
 
@@ -482,7 +514,7 @@ void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard){
 
 void Game::printOwnBoard(Board* ownBoard)
 {
-    cout<<"Own Board:\n";
+    //cout<<"Own Board:\n";
     ownBoard->printBoard();
 }
 
