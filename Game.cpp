@@ -163,17 +163,6 @@ void Game::setup(){
                         //ask in which direction want the thing to be stored; then convert all chars tolower
                     }while(arrRow < 0 || arrRow > 7);
 
-                    if(i>1)
-                    {
-                        std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
-                        std::cin>>userDirection;
-                        userDirection=convertStringToLower(userDirection);
-                    }
-                    else if(i<2)
-                    {
-                        userDirection="none";
-                    }
-
                     do{
 
                         cout << "Col (A-H): ";
@@ -185,6 +174,20 @@ void Game::setup(){
                         }
 
                     }while(arrCol < 0 || arrCol > 7);
+                    
+                    if(i>1)
+                    {
+                        do
+                        {
+                            std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
+                            std::cin>>userDirection;
+                            userDirection=convertStringToLower(userDirection);
+                            
+                        }while(userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right");
+                    }else if(i<2)
+                    {
+                        userDirection="none";
+                    }
                     
                     if(m_currentPlayer==1)
                     {
@@ -560,25 +563,197 @@ void Game::addShiptoArray(string ship, int row, int col, std::string direction, 
             m_p1ownBoard->setEntryAtPosition(ship, col, row);
             m_p1ownBoard->setEntryAtPosition(ship, col, row-1);
             m_p1ownBoard->setEntryAtPosition(ship, col, row-2);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-3);
         }
         else if(player==2 && ship=="4")
         {
             m_p2ownBoard->setEntryAtPosition(ship, col, row);
             m_p2ownBoard->setEntryAtPosition(ship, col, row-1);
             m_p2ownBoard->setEntryAtPosition(ship, col, row-2);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-3);
         }
+        else if(player==1 && ship=="5")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-2);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-3);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row-4);
+        }
+        else if(player==2 && ship=="5")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-2);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-3);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row-4);
+        }
+        
     }
     else if(direction=="down")
     {
-
+        if(player==1 && ship=="2")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+1);
+        }
+        else if(player==2 && ship=="2")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+1);
+        }
+        else if(player==1 && ship=="3")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+2);
+        }
+        else if(player==2 && ship=="3")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+2);
+        }
+        else if(player==1 && ship=="4")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+2);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+3);
+        }
+        else if(player==2 && ship=="4")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+2);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+3);
+        }
+        else if(player==1 && ship=="5")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+2);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+3);
+            m_p1ownBoard->setEntryAtPosition(ship, col, row+4);
+        }
+        else if(player==2 && ship=="5")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+1);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+2);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+3);
+            m_p2ownBoard->setEntryAtPosition(ship, col, row+4);
+        }
     }
     else if(direction=="left")
     {
-
+        if(player==1 && ship=="2")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-1, row);
+        }
+        else if(player==2 && ship=="2")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-1, row);
+        }
+        else if(player==1 && ship=="3")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-2, row);
+        }
+        else if(player==2 && ship=="3")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-2, row);
+        }
+        else if(player==1 && ship=="4")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-2, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-3, row);
+        }
+        else if(player==2 && ship=="4")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-2, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-3, row);
+        }
+        else if(player==1 && ship=="5")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-2, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-3, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col-4, row);
+        }
+        else if(player==2 && ship=="5")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-2, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-3, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col-4, row);
+        }
     }
     else//happens if direction is "right"
     {
-
+        if(player==1 && ship=="2")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+1, row);
+        }
+        else if(player==2 && ship=="2")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+1, row);
+        }
+        else if(player==1 && ship=="3")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+2, row);
+        }
+        else if(player==2 && ship=="3")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+2, row);
+        }
+        else if(player==1 && ship=="4")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+2, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+3, row);
+        }
+        else if(player==2 && ship=="4")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+2, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+3, row);
+        }
+        else if(player==1 && ship=="5")
+        {
+            m_p1ownBoard->setEntryAtPosition(ship, col, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+2, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+3, row);
+            m_p1ownBoard->setEntryAtPosition(ship, col+4, row);
+        }
+        else if(player==2 && ship=="5")
+        {
+            m_p2ownBoard->setEntryAtPosition(ship, col, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+1, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+2, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+3, row);
+            m_p2ownBoard->setEntryAtPosition(ship, col+4, row);
+        }
     }
 }
 
