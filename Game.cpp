@@ -789,8 +789,10 @@ int Game::getUserCol(){
 }
 
 bool Game::isHit(Board* playerBoard, int row, int col){
-  //This is temporary, will add code later
-  return false;
+    if(playerBoard->getEntryAtPosition(col, row) == " "){
+        return false;
+    }
+    return true;
 }
 
 string Game::getFileContents (std::ifstream& File){
