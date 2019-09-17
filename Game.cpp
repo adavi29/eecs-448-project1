@@ -145,11 +145,21 @@ void Game::setup(){
                 break;
 
             case 2:
-
+//IF THE BOARD ISN'T OPEN UP DOWN LEFT RIGHT AT COORDINATE THEY PROVIDE, DO I REASK THEM WHAT COORDINATE THEY WANT?
                 for(int i=1; i<3; i++)
                 {
                     std::string shipString=to_string(i);
                     int shipNum=i;
+                    Board* currentPlayerBoard=nullptr;
+                    if(m_currentPlayer==1)
+                    {
+                        currentPlayerBoard=m_p1ownBoard;
+                    }
+                    else
+                    {
+                        currentPlayerBoard=m_p2ownBoard;
+                    }
+                    
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
@@ -177,9 +187,31 @@ void Game::setup(){
                     
                     if(i>1)
                     {
+                        std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
+                        {
+                            std::cout<<" up ";
+                        }
+                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
+                        {
+                            std::cout<<" down ";
+                        }
+                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
+                        {
+                            std::cout<<" left ";
+                        }
+                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
+                        {
+                            std::cout<<" right ";
+                        }
+                        else
+                        {
+                            std::cout<<" none ";
+                        }
+                           
                         do
                         {
-                            std::cout<<"In which direction do you want the ship to be placed (up/down/left/right):";
+                            std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
                             std::cin>>userDirection;
                             userDirection=convertStringToLower(userDirection);
                             
