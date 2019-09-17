@@ -40,7 +40,7 @@ class Game{
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
     void printOwnBoard(Board* ownBoard);
     int convertCol(string col);
-    void convertStringToLower(string wordToConvert);
+    std::string convertStringToLower(string wordToConvert);
 
 //functions below will be used for adding ships to the board in setup()
     bool isAvailable(Board* board, int row, int col);//check if position is empty
