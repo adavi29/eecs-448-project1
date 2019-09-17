@@ -683,7 +683,7 @@ void Game::p1Turn(){
   //print Board
   printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
-  cout << "It time to attack!" << endl;
+  cout << "It's time to attack!" << endl;
 
   //gets good input from the user
   p1_attack_row = getUserRow();
@@ -701,7 +701,7 @@ void Game::p1Turn(){
     m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
   }
 
-  cout << "Next Players Turn. Press any key then hit Enter to continue...";
+  cout << "Next Player's Turn. Press any key then hit Enter to continue...";
   cin>> wait;
 }
 
@@ -735,7 +735,7 @@ void Game::p2Turn(){
 
 
 
-    cout << "Next Players Turn. Press any key then hit Enter to continue...";
+    cout << "Next Player's Turn. Press any key then hit Enter to continue...";
     cin>> wait;
 }
 
