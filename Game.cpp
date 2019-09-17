@@ -532,7 +532,7 @@ bool Game::isAvailable(Board* board, int row, int col)
       }
 }
 
-bool Game::checkUpDownLeftRight(int row, int col, int shipNum, string direction)
+bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, string direction)
 {
 	bool alwaysFits = true;
 		if(direction == "up") {

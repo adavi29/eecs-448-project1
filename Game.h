@@ -45,7 +45,7 @@ class Game{
 //functions below will be used for adding ships to the board in setup()
     bool isAvailable(Board* board, int row, int col);//check if position is empty
 
-    bool checkUpDownLeftRight(int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
+    bool checkUpDownLeftRight(Board* board, int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
 
     void addShiptoArray(string ship, int row, int col, std::string direction, int player);//throws runtime error when orientation runs off the board or is full
 
