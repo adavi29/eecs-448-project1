@@ -121,6 +121,7 @@ void Game::setup(){
                         addShiptoArray("1", arrRow, arrCol, userDirection, 1);
                         std::cout<<"Player 1's current Board:\n";
                         printOwnBoard(m_p1ownBoard);
+                      }
                     }
                     else
                     {
@@ -129,7 +130,7 @@ void Game::setup(){
                         addShiptoArray("1", arrRow, arrCol, userDirection, 2);
                         std::cout<<"Player 2's current Board:\n";
                         printOwnBoard(m_p2ownBoard);
-
+                      }
                     }
 
                 //test code
@@ -276,17 +277,10 @@ void Game::setup(){
 
                 break;
         }
-        m_currentPlayer=2;//change value of current player to 2 for second round of for loop
+       m_currentPlayer=2;//change value of current player to 2 for second round of for loop
     }
+  }
 
-
-  //cout << "Player 1,
-
-
-
-}
-    }
-}
 
 
 void Game::run(){
@@ -389,11 +383,11 @@ void Game::p2Turn(){
     //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
     if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
       cout << "That's a HIT!" << endl;
-      m_p2oppBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row);
+      m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
 
     }else{
       cout << "That's a MISS! Better luck next time." << endl;
-      m_p2oppBoard->setEntryAtPosition("O", p2_attack_col, p2_attack_row);
+      m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
     }
 
 
