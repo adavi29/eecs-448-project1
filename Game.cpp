@@ -70,6 +70,8 @@ void Game::setup(){
     string numShipsString="";
     string userRowString="";
     string openDirection="";
+    printBattleship();
+    
   //gets number of ships
   do{
     cout << "Enter the amount of ships both players want to use (Max: 5):  ";
@@ -691,12 +693,12 @@ void Game::p1Turn(){
   if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
 
     cout << "That's a HIT!" << endl;
-    m_p1oppBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row);
+    m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
   }else{
 
     cout << "That's a MISS! Better luck next time." << endl;
-    m_p1oppBoard->setEntryAtPosition("O", p1_attack_col, p1_attack_row);
+    m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
   }
 
   cout << "Next Players Turn. Press any key then hit Enter to continue...";
