@@ -67,17 +67,18 @@ std::string Game::convertStringToLower(string wordToConvert)
 }
 
 void Game::setup(){
-
+    string numShipsString="";
+    string userRowString="";
   //gets number of ships
   do{
     cout << "Enter the amount of ships both players want to use (Max: 5):  ";
-    cin >> m_numShips;
-      if(m_numShips < 1 || m_numShips > 5)
+      cin>>numShipsString;
+      if(numShipsString!="1" && numShipsString!="2" && numShipsString!="3" && numShipsString!="4" && numShipsString!="5")
       {
           std::cout<<"Invalid number of ships. Must be 1 to 5. Try again.\n";
       }
-  }while(m_numShips<1 || m_numShips>5);
-
+  }while(numShipsString!="1" && numShipsString!="2" && numShipsString!="3" && numShipsString!="4" && numShipsString!="5");
+    m_numShips=stoi(numShipsString);
     //test code
     //printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
     //test code above
@@ -91,14 +92,15 @@ void Game::setup(){
 
                 do{
                     cout << "Row (1-8):  ";
-                    cin >> userRow;
-                    arrRow = userRow - 1;
-                    if(arrRow<0 || arrRow >7)
+                    cin>>userRowString;
+                    if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
                     {
                         std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                     }
-                }while(arrRow < 0 || arrRow > 7);
-
+                }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                userRow=stoi(userRowString);
+                arrRow=userRow-1;
+                
                 do{
 
                     cout << "Col (A-H): ";
@@ -163,16 +165,16 @@ void Game::setup(){
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
-                        cout << "Row (1-8): ";
-                        cin>>userRow;
-                        arrRow=userRow - 1;
-                        if(arrRow<0 || arrRow >7)
+                        cout << "Row (1-8):  ";
+                        cin>>userRowString;
+                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
-                        //ask in which direction want the thing to be stored; then convert all chars tolower
-                    }while(arrRow < 0 || arrRow > 7);
-
+                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                    userRow=stoi(userRowString);
+                    arrRow=userRow-1;
+                    
                     do{
 
                         cout << "Col (A-H): ";
@@ -252,16 +254,16 @@ void Game::setup(){
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
-                        cout << "Row (1-8): ";
-                        cin>>userRow;
-                        arrRow=userRow - 1;
-                        if(arrRow<0 || arrRow >7)
+                        cout << "Row (1-8):  ";
+                        cin>>userRowString;
+                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
-
-                    }while(arrRow < 0 || arrRow > 7);
-
+                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                    userRow=stoi(userRowString);
+                    arrRow=userRow-1;
+                    
                     do{
 
                         cout << "Col (A-H): ";
@@ -285,15 +287,16 @@ void Game::setup(){
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
-                        cout << "Row (1-8): ";
-                        cin>>userRow;
-                        arrRow=userRow - 1;
-                        if(arrRow<0 || arrRow >7)
+                        cout << "Row (1-8):  ";
+                        cin>>userRowString;
+                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
-                    }while(arrRow < 0 || arrRow > 7);
-
+                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                    userRow=stoi(userRowString);
+                    arrRow=userRow-1;
+                    
                     do{
 
                         cout << "Col (A-H): ";
@@ -317,15 +320,16 @@ void Game::setup(){
                     cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
 
                     do{
-                        cout << "Row (1-8): ";
-                        cin>>userRow;
-                        arrRow=userRow - 1;
-                        if(arrRow<0 || arrRow >7)
+                        cout << "Row (1-8):  ";
+                        cin>>userRowString;
+                        if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
                         {
                             std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
                         }
-                    }while(arrRow < 0 || arrRow > 7);
-
+                    }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                    userRow=stoi(userRowString);
+                    arrRow=userRow-1;
+                    
                     do{
 
                         cout << "Col (A-H): ";
