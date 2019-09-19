@@ -1,6 +1,10 @@
-//Game.cpp
+/**
+ *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @date
+ *   @file
+ *   @brief
+ */
 #include "Game.h"
-//#include "Player.h"
 #include "Board.h"
 #include <stdexcept>
 #include <cctype> //included for isUpper function

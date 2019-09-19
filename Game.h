@@ -1,5 +1,9 @@
-//Game.h
-
+/**
+ *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @date
+ *   @file
+ *   @brief
+ */
 #ifndef GAME_H
 #define GAME_H
 
@@ -34,45 +38,168 @@ class Game{
 
   public:
 
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     Game();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     ~Game();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void run();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void setup();
-
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printPlayerBoards(Board* ownBoard, Board* oppBoard);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printOwnBoard(Board* ownBoard);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     int convertCol(string col);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     std::string convertStringToLower(string wordToConvert);
-
-//functions below will be used for adding ships to the board in setup()
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
+    //functions below will be used for adding ships to the board in setup()
     bool isAvailable(Board* board, int row, int col);//check if position is empty
-
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     bool checkUpDownLeftRight(Board* board, int row, int col, int shipNum, string direction);//checks if up, down, left, right is available
-
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void addShiptoArray(string ship, int row, int col, std::string direction, int player);//throws runtime error when orientation runs off the board or is full
-
-    // use isAvailable() --will tell if position is open
-    //if position is open, ask if user wants to place it up/down/left/right
-    //then call checkUpDownLeftRight--checks if it will run off the board and if so, is false
-    //if checkUpDownLeftRight returns false then tell user that direction is not possible
-    //if true, addShiptoArray
-    //if cant put in any direction: what do you do???
-
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printBattleship();
-
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     //helper method for run()
     void p1Turn();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void p2Turn();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void clearConsole();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     int getUserRow();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     int getUserCol();
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     bool isHit(Board* playerBoard, int row, int col);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printWinner(int player);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     string getFileContents(ifstream& File);
-    
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printCoordinateInteraction(Board* currentPlayerBoard, int shipNum);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void shipPlacementInteraction(int i, int j, Board* currentPlayerBoard);
+    /**
+     * @pre
+     * @post
+     * @param
+     * @return
+     */
     void printPlayerTurn(int player);
-
 };
 #endif

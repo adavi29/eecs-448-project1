@@ -1,7 +1,9 @@
-/*
-
-@file main.cpp
-*/
+/**
+ *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @date
+ *   @file
+ *   @brief
+ */
 #include "Game.h"
 #include <iostream>
 #include <string>
