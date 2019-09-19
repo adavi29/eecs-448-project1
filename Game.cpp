@@ -25,7 +25,6 @@ Game::Game() {
   m_p2ownBoard=new Board();
 
     m_currentPlayer=1;
-
 }
 
 Game::~Game()
@@ -91,8 +90,27 @@ void Game::setup(){
             case 1:
                 cout << "Enter the coordinates for player "<<j<<"'s ship 1 (1x1): \n";
 
-                printCoordinateInteraction(currentPlayerBoard);
-
+                do{
+                    cout << "Row (1-8):  ";
+                    cin>>userRowString;
+                    if(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8")
+                    {
+                        std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+                    }
+                }while(userRowString!="1" && userRowString!="2" && userRowString!="3" && userRowString!="4" && userRowString!="5" && userRowString!="6" && userRowString!="7" && userRowString!="8");
+                userRow=stoi(userRowString);
+                arrRow=userRow-1;
+                
+                do{
+                    cout << "Col (A-H): ";
+                    cin >> userCol;
+                    arrCol = convertCol(userCol);
+                    if(arrCol < 0 || arrCol > 7)
+                    {
+                        std::cout<<"Invalid column. Must be A to H. Try again.\n";
+                    }
+                }while(arrCol < 0 || arrCol > 7);
+                
                 userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
 
                 if(m_currentPlayer==1)
