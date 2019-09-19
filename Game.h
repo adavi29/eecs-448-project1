@@ -27,8 +27,10 @@ class Game{
 
     int m_currentPlayer;
 
-    //Player p1;
-    //Player p2;
+    string letsPlay;
+    string p1Text;
+    string p2Text;
+    string wait;
 
   public:
 
@@ -70,6 +72,7 @@ class Game{
     
     void printCoordinateInteraction(Board* currentPlayerBoard, int shipNum);
     void shipPlacementInteraction(int i, int j, Board* currentPlayerBoard);
+    void printPlayerTurn(int player);
 
 };
 #endif

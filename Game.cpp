@@ -25,6 +25,12 @@ Game::Game() {
   m_p2ownBoard=new Board();
 
     m_currentPlayer=1;
+    
+    //string variables for text in console
+    letsPlay = "\n  _          _         _____  _             _ \n | |        | |       |  __ \\| |           | |\n | |     ___| |_ ___  | |__) | | __ _ _   _| |\n | |    / _ \\ __/ __| |  ___/| |/ _` | | | | |\n | |___|  __/ |_\\__ \\ | |    | | (_| | |_| |_|\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)\n                                       __/ |  \n                                      |___/   \n";
+    p1Text = "\n  _____  _                          ____             \n |  __ \\| |                        / __ \\            \n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___ \n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\\n | |    | | (_| | |_| |  __/ |    | |__| | | | |  __/\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|\n                  __/ |                              \n                 |___/                               \n";
+    p2Text = "\n  _____  _                         _______            \n |  __ \\| |                       |__   __|           \n | |__) | | __ _ _   _  ___ _ __     | |_      _____  \n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\ \n | |    | | (_| | |_| |  __/ |       | |\\ V  V / (_) |\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/ \n                  __/ |                               \n                 |___/                                \n";
+    wait = "";
 }
 
 Game::~Game()
@@ -85,8 +91,15 @@ void Game::setup(){
   //get number ships coordinates
     for(int j=1; j<3; j++)
     {
+        if(j==1){
+            printPlayerTurn(1);
+        }else{
+            printPlayerTurn(2);
+        }
+        
         switch (m_numShips) {
             case 1:
+                
                 cout << "Enter the coordinates for player "<<j<<"'s ship 1 (1x1): \n";
 
                 do{
@@ -127,19 +140,10 @@ void Game::setup(){
                     printOwnBoard(m_p2ownBoard);
                     }
                 }
-
-                //test code
-//                std::cout<<"Player 1 Board:\n";
-//                printOwnBoard(m_p1ownBoard);
-//                printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
-//                std::cout<<"Player 2 Board:\n";
-//                printOwnBoard(m_p2ownBoard);
-                //printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
-                //test code above
                 break;
 
             case 2:
-//IF THE BOARD ISN'T OPEN UP DOWN LEFT RIGHT AT COORDINATE THEY PROVIDE, DO I REASK THEM WHAT COORDINATE THEY WANT?
+                
                 for(int i=1; i<3; i++)
                 {
                     std::string shipString=to_string(i);
@@ -169,7 +173,7 @@ void Game::setup(){
                 break;
 
             case 3:
-
+                
                 for(int i=1; i<4; i++)
                 {
                     std::string shipString=to_string(i);
@@ -199,7 +203,7 @@ void Game::setup(){
                 break;
 
             case 4:
-
+                
                 for(int i=1; i<5; i++)
                 {
                     std::string shipString=to_string(i);
@@ -229,7 +233,7 @@ void Game::setup(){
                 break;
 
             case 5:
-
+                
                 for(int i=1; i<6; i++)
                 {
                     std::string shipString=to_string(i);
@@ -264,12 +268,6 @@ void Game::setup(){
 
 void Game::run(){
 
-  //string variables for text in console
-  string letsPlay = "\n  _          _         _____  _             _ \n | |        | |       |  __ \\| |           | |\n | |     ___| |_ ___  | |__) | | __ _ _   _| |\n | |    / _ \\ __/ __| |  ___/| |/ _` | | | | |\n | |___|  __/ |_\\__ \\ | |    | | (_| | |_| |_|\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)\n                                       __/ |  \n                                      |___/   \n";
-  string p1Text = "\n  _____  _                          ____             \n |  __ \\| |                        / __ \\            \n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___ \n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\\n | |    | | (_| | |_| |  __/ |    | |__| | | | |  __/\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|\n                  __/ |                              \n                 |___/                               \n";
-  string p2Text = "\n  _____  _                         _______            \n |  __ \\| |                       |__   __|           \n | |__) | | __ _ _   _  ___ _ __     | |_      _____  \n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\ \n | |    | | (_| | |_| |  __/ |       | |\\ V  V / (_) |\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/ \n                  __/ |                               \n                 |___/                                \n";
-  string wait = "";
-
   //start game
   system("clear");
 
@@ -282,20 +280,12 @@ void Game::run(){
 
   while(endGame){
 
-    clearConsole();
-
-    //players 1 turn
-    cout << p1Text << endl;
-    cout << "Press any key then hit Enter to continue...";
-    cin >> wait;
+    //player 1 turn
+    printPlayerTurn(1);
     p1Turn();
 
-    clearConsole();
-
-    //playes 2 turn
-    cout << p2Text << endl;
-    cout << "Press any key then hit Enter to continue...";
-    cin >> wait;
+    //player 2 turn
+    printPlayerTurn(2);
     p2Turn();
   }
 }
@@ -786,4 +776,16 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard){
         {
             userDirection="none";
         }
+}
+
+void Game::printPlayerTurn(int player){
+    clearConsole();
+    
+    if(player==1){
+        cout << p1Text << endl;
+    } else {
+        cout << p2Text << endl;
+    }
+    cout << "Press any key then hit Enter to continue...";
+    cin >> wait;
 }
