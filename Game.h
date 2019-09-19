@@ -68,8 +68,8 @@ class Game{
     void printWinner(int player);
     string getFileContents(ifstream& File);
     
-    void printCoordinateInteraction(Board* currentPlayerBoard);
-
+    void printCoordinateInteraction(Board* currentPlayerBoard, int shipNum);
+    void shipPlacementInteraction(int i, int j, Board* currentPlayerBoard);
 
 };
 #endif

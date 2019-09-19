@@ -65,7 +65,6 @@ std::string Game::convertStringToLower(string wordToConvert)
 void Game::setup(){
     string numShipsString="";
     string userRowString="";
-    string openDirection="";
     Board* currentPlayerBoard=nullptr;
     printBattleship();
     
@@ -113,17 +112,14 @@ void Game::setup(){
                 
                 userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
 
-                if(m_currentPlayer==1)
-                {
+                if(m_currentPlayer==1){
                     if (isAvailable(m_p1ownBoard,arrRow, arrCol))
                     {
                     addShiptoArray("1", arrRow, arrCol, userDirection, 1);
                     std::cout<<"Player 1's current Board:\n";
                     printOwnBoard(m_p1ownBoard);
                     }
-                }
-                else
-                {
+                }else{
                     if (isAvailable(m_p2ownBoard,arrRow, arrCol))
                     {
                     addShiptoArray("1", arrRow, arrCol, userDirection, 2);
@@ -149,69 +145,7 @@ void Game::setup(){
                     std::string shipString=to_string(i);
                     int shipNum=i;
 
-                do{
-                    if(openDirection=="none")
-                    {
-                        std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
-                    }
-                    if(m_currentPlayer==1)
-                    {
-                        currentPlayerBoard=m_p1ownBoard;
-                    }
-                    else
-                    {
-                        currentPlayerBoard=m_p2ownBoard;
-                    }
-                    
-                    cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-
-                    printCoordinateInteraction(currentPlayerBoard);
-                    
-                    if(i>1)
-                    {
-                        std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
-                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
-                        {
-                            std::cout<<" up ";
-                            openDirection="";
-                        }
-                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
-                        {
-                            std::cout<<" down ";
-                            openDirection="";
-                        }
-                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
-                        {
-                            std::cout<<" left ";
-                            openDirection="";
-                        }
-                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
-                        {
-                            std::cout<<" right ";
-                            openDirection="";
-                        }
-                        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
-                           checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
-                        {
-                            std::cout<<" none ";
-                            openDirection="none";
-                        }
-                           
-                        do
-                        {
-                            std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
-                            std::cin>>userDirection;
-                            userDirection=convertStringToLower(userDirection);
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
-                            {
-                                std::cout<<"The direction you chose is not open.\n";
-                            }
-                        }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
-                    }else if(i<2)
-                    {
-                        userDirection="none";
-                    }
-                }while(openDirection=="none");
+                    shipPlacementInteraction(i, j, currentPlayerBoard);
                     
                     if(m_currentPlayer==1)
                     {
@@ -241,70 +175,7 @@ void Game::setup(){
                     std::string shipString=to_string(i);
                     int shipNum=i;
                     
-                    do{
-                        if(openDirection=="none")
-                        {
-                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
-                        }
-                        Board* currentPlayerBoard=nullptr;
-                        if(m_currentPlayer==1)
-                        {
-                            currentPlayerBoard=m_p1ownBoard;
-                        }
-                        else
-                        {
-                            currentPlayerBoard=m_p2ownBoard;
-                        }
-                        
-                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                        
-                        printCoordinateInteraction(currentPlayerBoard);
-                        
-                        if(i>1)
-                        {
-                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
-                            {
-                                std::cout<<" up ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
-                            {
-                                std::cout<<" down ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
-                            {
-                                std::cout<<" left ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
-                            {
-                                std::cout<<" right ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
-                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
-                            {
-                                std::cout<<" none ";
-                                openDirection="none";
-                            }
-                            
-                            do
-                            {
-                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
-                                std::cin>>userDirection;
-                                userDirection=convertStringToLower(userDirection);
-                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
-                                {
-                                    std::cout<<"The direction you chose is not open.\n";
-                                }
-                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
-                        }else if(i<2)
-                        {
-                            userDirection="none";
-                        }
-                    }while(openDirection=="none");
+                    shipPlacementInteraction(i, j, currentPlayerBoard);
                     
                     if(m_currentPlayer==1)
                     {
@@ -334,70 +205,7 @@ void Game::setup(){
                     std::string shipString=to_string(i);
                     int shipNum=i;
                     
-                    do{
-                        if(openDirection=="none")
-                        {
-                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
-                        }
-                        Board* currentPlayerBoard=nullptr;
-                        if(m_currentPlayer==1)
-                        {
-                            currentPlayerBoard=m_p1ownBoard;
-                        }
-                        else
-                        {
-                            currentPlayerBoard=m_p2ownBoard;
-                        }
-                        
-                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                        
-                        printCoordinateInteraction(currentPlayerBoard);
-                        
-                        if(i>1)
-                        {
-                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
-                            {
-                                std::cout<<" up ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
-                            {
-                                std::cout<<" down ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
-                            {
-                                std::cout<<" left ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
-                            {
-                                std::cout<<" right ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
-                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
-                            {
-                                std::cout<<" none ";
-                                openDirection="none";
-                            }
-                            
-                            do
-                            {
-                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
-                                std::cin>>userDirection;
-                                userDirection=convertStringToLower(userDirection);
-                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
-                                {
-                                    std::cout<<"The direction you chose is not open.\n";
-                                }
-                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
-                        }else if(i<2)
-                        {
-                            userDirection="none";
-                        }
-                    }while(openDirection=="none");
+                    shipPlacementInteraction(i, j, currentPlayerBoard);
                     
                     if(m_currentPlayer==1)
                     {
@@ -427,70 +235,7 @@ void Game::setup(){
                     std::string shipString=to_string(i);
                     int shipNum=i;
                     
-                    do{
-                        if(openDirection=="none")
-                        {
-                            std::cout<<"Your ship could not be placed. Enter new coordinates.\n";
-                        }
-                        Board* currentPlayerBoard=nullptr;
-                        if(m_currentPlayer==1)
-                        {
-                            currentPlayerBoard=m_p1ownBoard;
-                        }
-                        else
-                        {
-                            currentPlayerBoard=m_p2ownBoard;
-                        }
-                        
-                        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
-                        
-                        printCoordinateInteraction(currentPlayerBoard);
-                        
-                        if(i>1)
-                        {
-                            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
-                            {
-                                std::cout<<" up ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
-                            {
-                                std::cout<<" down ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
-                            {
-                                std::cout<<" left ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
-                            {
-                                std::cout<<" right ";
-                                openDirection="";
-                            }
-                            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
-                               checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false)
-                            {
-                                std::cout<<" none ";
-                                openDirection="none";
-                            }
-                            
-                            do
-                            {
-                                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
-                                std::cin>>userDirection;
-                                userDirection=convertStringToLower(userDirection);
-                                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
-                                {
-                                    std::cout<<"The direction you chose is not open.\n";
-                                }
-                            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false && openDirection!="none"));
-                        }else if(i<2)
-                        {
-                            userDirection="none";
-                        }
-                    }while(openDirection=="none");
+                    shipPlacementInteraction(i, j, currentPlayerBoard);
                     
                     if(m_currentPlayer==1)
                     {
@@ -1013,10 +758,12 @@ void Game::printBattleship(){
   cout<<"*********     **         **      **            **       ***********   ***********     *********     **          **  ***********   ** \n\n\n";
 }
 
-void Game::printCoordinateInteraction(Board* currentPlayerBoard){
+void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum){
     string userRowString="";
+    bool keepAsking = false;
 
     do{
+        keepAsking = false;
         do{
             cout << "Row (1-8):  ";
             cin>>userRowString;
@@ -1040,6 +787,66 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard){
         
         if(!isAvailable(currentPlayerBoard, arrRow, arrCol)){
             cout<< "This coordinate has already been taken. Enter new coordinates:\n";
+            keepAsking = true;
         }
-    }while(!isAvailable(currentPlayerBoard, arrRow, arrCol));
+        if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")==false && checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")==false &&
+           checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")==false && keepAsking != true)
+        {
+            cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
+            keepAsking = true;
+        }
+
+    }while(keepAsking == true);
+}
+
+void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard){
+    int shipNum=i;
+    
+        if(m_currentPlayer==1)
+        {
+            currentPlayerBoard=m_p1ownBoard;
+        }
+        else
+        {
+            currentPlayerBoard=m_p2ownBoard;
+        }
+        
+        cout<<"Enter the coordinates for player "<<j<<"'s ship "<<i<<" (1x"<<i<<")\n";
+        
+        printCoordinateInteraction(currentPlayerBoard, shipNum);
+
+        if(i>1)
+        {
+            std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))
+            {
+                std::cout<<" up ";
+            }
+            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))
+            {
+                std::cout<<" down ";
+            }
+            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))
+            {
+                std::cout<<" left ";
+            }
+            if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))
+            {
+                std::cout<<" right ";
+            }
+            
+            do
+            {
+                std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
+                std::cin>>userDirection;
+                userDirection=convertStringToLower(userDirection);
+                if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false)
+                {
+                    std::cout<<"The direction you chose is not open.\n";
+                }
+            }while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)==false));
+        }else if(i<2)
+        {
+            userDirection="none";
+        }
 }
