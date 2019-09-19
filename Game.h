@@ -67,6 +67,8 @@ class Game{
     bool isHit(Board* playerBoard, int row, int col);
     void printWinner(int player);
     string getFileContents(ifstream& File);
+    
+    void printCoordinateInteraction(Board* currentPlayerBoard);
 
 
 };
