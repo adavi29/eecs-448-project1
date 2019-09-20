@@ -288,7 +288,7 @@ void Game::run(){
     printPlayerTurn(1);
     p1Turn();
 
-    //check if player 1 has won
+    //checks if player 1 has won
     // if(p2_ships.allSunk()){
     //     printWinner(1);
     //     endGame = false;
@@ -345,10 +345,17 @@ void Game::p1Turn(){
     m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
 
+    //puts an x on the opponnets board
+    m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
+
     //decreases the opponents ship on hit
     //shipNum = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) ;
     //p2_ships.decreaseSize(shipNum)
 
+    //checks if ship is sunk and announces it 
+    // if(p2_ships.isSunk(shipNum)){
+    //     p2_ships.announce(shipNum);
+    // }
 
 
 
@@ -394,15 +401,27 @@ void Game::p2Turn(){
 
 
 
-    //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
+    //hit or miss,
     if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
       cout << "That's a HIT!" << endl;
       m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
+
+    //puts an x on the opponnets board
+      m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
+
 
 
     //decreases the opponents ship on hit
     //shipNum = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) ;
     //p1_ships.decreaseSize(shipNum)
+
+
+    //checks if ship is sunk and announces it 
+    // if(p1_ships.isSunk(shipNum)){
+    //     p1_ships.announce(shipNum);
+    // }
+
+    
 
 
 
