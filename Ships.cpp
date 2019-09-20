@@ -92,5 +92,5 @@ bool Ships::allSunk()
 	}
 }
 void Ships::announce(int ship){
-	cout << "You've sunk ship "<<ship<<" !\n";
+	cout << "You've sunk ship "<<ship<<"!\n";
 }

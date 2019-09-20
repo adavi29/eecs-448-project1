@@ -8,6 +8,7 @@
 #define GAME_H
 
 #include "Board.h"
+#include "Ships.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -23,6 +24,10 @@ class Game{
 
     int arrCol;
     int arrRow;
+
+    Ships* m_p1Ships;
+    Ships* m_p2Ships;
+
 
     Board* m_p1ownBoard;
     Board* m_p1oppBoard;

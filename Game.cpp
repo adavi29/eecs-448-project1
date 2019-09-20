@@ -6,6 +6,7 @@
  */
 #include "Game.h"
 #include "Board.h"
+
 #include <stdexcept>
 #include <cctype> //included for isUpper function
 #include <iostream>
@@ -23,10 +24,13 @@ Game::Game() {
   arrCol = 0;
   arrRow = 0;
 
+  
+
   m_p1oppBoard=new Board();
   m_p1ownBoard=new Board();
   m_p2oppBoard=new Board();
   m_p2ownBoard=new Board();
+
 
     m_currentPlayer=1;
     
@@ -271,7 +275,8 @@ void Game::setup(){
   }
 
 void Game::run(){
-
+    m_p1Ships = new Ships(m_numShips);
+    m_p2Ships = new Ships(m_numShips);
   //start game
   system("clear");
 
@@ -289,22 +294,22 @@ void Game::run(){
     p1Turn();
 
     //checks if player 1 has won
-    // if(p2_ships.allSunk()){
-    //     printWinner(1);
-    //     endGame = false;
-    //     break;
-    // }
+    if(m_p2Ships->allSunk()){
+        printWinner(1);
+        endGame = false;
+        break;
+    }
     
     //player 2 turn
     printPlayerTurn(2);
     p2Turn();
 
     //checks if player 2 has won
-    // if(p1_ships.allSunk()){
-    //     printWinner(2);
-    //     endGame = false;
-    //     break;
-    // }
+    if(m_p1Ships->allSunk()){
+        printWinner(2);
+        endGame = false;
+        break;
+    }
   }
 }
 
@@ -315,6 +320,9 @@ void Game::p1Turn(){
   int p1_attack_col = 0;
   //string p1_attack_col_string;
   string wait = "";
+
+  string shipNum_string;
+    int shipNum;
 
   //print Board
   printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
@@ -345,19 +353,18 @@ void Game::p1Turn(){
     m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
 
+    
+
+    //decreases the opponents ship on hit and announce if sunk
+    
+    shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
+    shipNum = stoi(shipNum_string);
+    cout << shipNum << endl;
+    m_p2Ships->decreaseSize(shipNum);
+    
+
     //puts an x on the opponnets board
     m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
-
-    //decreases the opponents ship on hit
-    //shipNum = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) ;
-    //p2_ships.decreaseSize(shipNum)
-
-    //checks if ship is sunk and announces it 
-    // if(p2_ships.isSunk(shipNum)){
-    //     p2_ships.announce(shipNum);
-    // }
-
-
 
   }else{
 
@@ -379,6 +386,9 @@ void Game::p2Turn(){
     //string p2_attack_col_string;
     string wait = "";
 
+    string shipNum_string;
+    int shipNum;
+
     //print Board
     printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
@@ -397,35 +407,26 @@ void Game::p2Turn(){
     
 
 
-
-
-
-
     //hit or miss,
     if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
       cout << "That's a HIT!" << endl;
       m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
 
-    //puts an x on the opponnets board
-      m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
+
+        //decreases the opponents ship on hit and announces if sunk
+        
+        shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
+        shipNum = stoi(shipNum_string);
+        m_p1Ships->decreaseSize(shipNum);
+
+        //puts an x on the opponnets board
+        m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
 
 
 
-    //decreases the opponents ship on hit
-    //shipNum = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) ;
-    //p1_ships.decreaseSize(shipNum)
 
-
-    //checks if ship is sunk and announces it 
-    // if(p1_ships.isSunk(shipNum)){
-    //     p1_ships.announce(shipNum);
-    // }
 
     
-
-
-
-
 
 
     }else{

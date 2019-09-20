@@ -8,7 +8,7 @@
 #define SHIPS_H
 
 #include <stdexcept>
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 class Ships
