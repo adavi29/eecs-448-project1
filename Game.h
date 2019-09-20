@@ -125,61 +125,62 @@ class Game{
      */
     void printBattleship();
     /**
-     * @pre
-     * @post
+     * @pre board object exist
+     * @post prints board to the screen and handles user input when its player 2's turn
      * @param
-     * @return
+     * @return nothing
      */
     //helper method for run()
     void p1Turn();
     /**
      * @pre
-     * @post
+     * @post prints board to the screen and handles user input when its player 2's turn
      * @param
      * @return
      */
     void p2Turn();
     /**
      * @pre
-     * @post
+     * @post clears the console and adds empty lines above so players can't cheet
      * @param
      * @return
      */
     void clearConsole();
     /**
      * @pre
-     * @post
+     * @post gets good input from the user of a spefic row
      * @param
-     * @return
+     * @return integer of row
      */
     int getUserRow();
     /**
      * @pre
-     * @post
+     * @post gets good input from the user of a spefic column
      * @param
-     * @return
+     * @return integer of row
      */
     int getUserCol();
     /**
-     * @pre
-     * @post
-     * @param
-     * @param
-     * @return
+     * @pre board contains ships 1,2,3,4,5. 
+     * @post checks if a coordinate on a board is a hit or miss
+     * @param Board - players board to check
+     * @param int row - row
+     * @param int col - column
+     * @return true for hit, false for miss
      */
     bool isHit(Board* playerBoard, int row, int col);
     /**
-     * @pre
-     * @post
-     * @param
+     * @pre the game is over, either player 1 or 2 wins
+     * @post prints the winner to console
+     * @param int player - which play to print
      * @return
      */
     void printWinner(int player);
     /**
-     * @pre
-     * @post
-     * @param
-     * @return
+     * @pre a file exist the contains text
+     * @post reads a txt file and prints the ascii art to the console
+     * @param ifsteram& File - file to print
+     * @return a string of the the ascii art
      */
     string getFileContents(ifstream& File);
     /**
