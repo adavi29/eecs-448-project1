@@ -284,7 +284,7 @@ void Game::run(){
   system("clear");
 
   cout << letsPlay << endl;
-  cout << "Press any key then hit Enter to continue...";
+  cout << "Press any letter key then hit Enter to continue...";
   cin >> wait;
 
   //loop section
@@ -363,7 +363,7 @@ void Game::p1Turn(){
     cout << "That's a MISS! Better luck next time." << endl;
     m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
   }
-  cout << "Next Player's Turn. Press any key then hit Enter to continue...";
+  cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
   cin>> wait;
 }
 
@@ -412,7 +412,7 @@ void Game::p2Turn(){
       m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
     }
 
-    cout << "Next Player's Turn. Press any key then hit Enter to continue...";
+    cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
     cin>> wait;
 }
 
@@ -856,7 +856,7 @@ void Game::printPlayerTurn(int player){
     } else {
         cout << p2Text << endl;
     }
-    cout << "Press any key then hit Enter to continue...";
+    cout << "Press any letter key then hit Enter to continue...";
     cin >> wait;
 }
 
