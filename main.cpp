@@ -16,7 +16,7 @@ int main ()
   {
     game1.setup();
     game1.run();
-    //game1.printWinner(2);
+    
   }
   catch(std::runtime_error& rte)
   {

@@ -288,9 +288,23 @@ void Game::run(){
     printPlayerTurn(1);
     p1Turn();
 
+    //check if player 1 has won
+    // if(p2_ships.allSunk()){
+    //     printWinner(1);
+    //     endGame = false;
+    //     break;
+    // }
+    
     //player 2 turn
     printPlayerTurn(2);
     p2Turn();
+
+    //checks if player 2 has won
+    // if(p1_ships.allSunk()){
+    //     printWinner(2);
+    //     endGame = false;
+    //     break;
+    // }
   }
 }
 
@@ -317,7 +331,7 @@ void Game::p1Turn(){
     }else{
         break;
     }
-}
+    }
   //gets good input from the user
   
 
@@ -327,6 +341,11 @@ void Game::p1Turn(){
   if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
     cout << "That's a HIT!" << endl;
     m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
+
+
+
+
+
   }else{
     cout << "That's a MISS! Better luck next time." << endl;
     m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
@@ -346,18 +365,18 @@ void Game::p2Turn(){
     //print Board
     printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
-while(1){
-    p2_attack_row = getUserRow();
-    p2_attack_col = getUserCol();
+    while(1){
+        p2_attack_row = getUserRow();
+        p2_attack_col = getUserCol();
 
 
-    if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" || m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M"){
-        cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
-    }else{
-        break;
+        if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" || m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M"){
+            cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
+        }else{
+            break;
+        }
+
     }
-
-}
     
 
 
@@ -821,3 +840,5 @@ void Game::printPlayerTurn(int player){
     cout << "Press any key then hit Enter to continue...";
     cin >> wait;
 }
+
+
