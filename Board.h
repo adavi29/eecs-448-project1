@@ -30,17 +30,17 @@ public:
     ~Board();
     /**
      * @pre  Valid row and column number
-     * @param  Integer denoting a column number
-     * @param  Integer denoting a row number
+     * @param  integer denoting a column number
+     * @param  integer denoting a row number
      * @return String containing an entry
      */
     string getEntryAtPosition(int column, int row);
     /**
      * @pre Valid row and column number
      * @post Sets array at given position to the new entry
-     * @param String entry for array
-     * @param  Integer denoting a column number
-     * @param  Integer denoting a row number
+     * @param string entry for array
+     * @param  integer denoting a column number
+     * @param  integer denoting a row number
      */
     void setEntryAtPosition(string entry, int column, int row);
     /**
