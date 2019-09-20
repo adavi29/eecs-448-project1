@@ -307,9 +307,21 @@ void Game::p1Turn(){
 
   cout << "It's time to attack!" << endl;
 
+ 
+   while(1){
+        p1_attack_row = getUserRow();
+        p1_attack_col = getUserCol();
+
+    if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" || m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M"){
+        cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
+    }else{
+        break;
+    }
+}
   //gets good input from the user
-  p1_attack_row = getUserRow();
-  p1_attack_col = getUserCol();
+  
+
+
 
   //checks if isHit() or not
   if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
@@ -334,8 +346,24 @@ void Game::p2Turn(){
     //print Board
     printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
+while(1){
     p2_attack_row = getUserRow();
     p2_attack_col = getUserCol();
+
+
+    if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" || m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M"){
+        cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
+    }else{
+        break;
+    }
+
+}
+    
+
+
+
+
+
 
     //hit or miss, THIS IF BLOCK OF CODE IS TEMPORARY
     if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
