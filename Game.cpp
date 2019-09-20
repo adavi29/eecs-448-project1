@@ -66,7 +66,8 @@ int Game::convertCol(string col){
 std::string Game::convertStringToLower(string wordToConvert)
 {
     char charWordToConvert=wordToConvert.at(0);
-    for(int i=0; i<wordToConvert.length(); i++)
+    int wordLength =wordToConvert.length();
+    for(int i=0; i<wordLength; i++)
     {
         charWordToConvert=wordToConvert.at(i);
         if(isupper(charWordToConvert))
