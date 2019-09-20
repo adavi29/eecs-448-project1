@@ -1,8 +1,8 @@
 /**
  *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
- *   @date
- *   @file
- *   @brief
+ *   @date 9/19/19
+ *   @file Game.cpp
+ *   @brief implemented methods needed for game play from header file
  */
 #include "Game.h"
 #include "Board.h"
