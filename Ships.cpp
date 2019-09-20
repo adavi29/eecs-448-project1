@@ -1,3 +1,9 @@
+/**
+ *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @date
+ *   @file
+ *   @brief
+ */
 #include "Ships.h"
 
 Ships::Ships(int numShips){
@@ -18,14 +24,11 @@ Ships::Ships(int numShips){
 			m_ship3 = 3;
 		}
 		if(numShips>3) {
-			m_ship4 = 4;
+            m_ship4 = 4;
 		}
 		if(numShips>4){
 			m_ship5 = 5;
 		}
-	}
-	else{
-		throw(std::runtime_error("invalid number of ships, should be 1 through 5"));
 	}
 }
 
@@ -72,7 +75,7 @@ bool Ships::isSunk(int ship){
 				 return(m_ship4 <= 0);
 			 }
 
-			 else{
+			 else{//if ship = 5
 				 return(m_ship5 <= 0);
 			 }
 }
@@ -89,5 +92,5 @@ bool Ships::allSunk()
 	}
 }
 void Ships::announce(int ship){
-	cout << "You've sunk ship "<<ship<<" !\n";
+	cout << "You've sunk ship "<<ship<<"!\n";
 }

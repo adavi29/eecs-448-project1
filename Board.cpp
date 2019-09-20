@@ -1,9 +1,9 @@
 /**
-*   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
-*   @date 9/16/19
-*   @file Board.cpp
-*   @brief prints out game board and edits board entries
-*/
+ *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @date 9/16/19
+ *   @file Board.cpp
+ *   @brief prints out game board and edits board entries
+ */
 
 #include "Board.h"
 Board::Board(){
