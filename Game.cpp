@@ -339,16 +339,26 @@ void Game::p1Turn(){
 
   //checks if isHit() or not
   if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)){
+
+
     cout << "That's a HIT!" << endl;
     m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
+
+    //decreases the opponents ship on hit
+    //shipNum = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) ;
+    //p2_ships.decreaseSize(shipNum)
 
 
 
 
   }else{
+
+
     cout << "That's a MISS! Better luck next time." << endl;
     m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
+
+
   }
 
   cout << "Next Player's Turn. Press any key then hit Enter to continue...";
@@ -388,6 +398,17 @@ void Game::p2Turn(){
     if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)){
       cout << "That's a HIT!" << endl;
       m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
+
+
+    //decreases the opponents ship on hit
+    //shipNum = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) ;
+    //p1_ships.decreaseSize(shipNum)
+
+
+
+
+
+
     }else{
       cout << "That's a MISS! Better luck next time." << endl;
       m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
