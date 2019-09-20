@@ -10,7 +10,6 @@
 
 int main ()
 {
-
   Game game1;
   try
   {
@@ -22,8 +21,5 @@ int main ()
   {
       std::cout<<rte.what()<<std::endl;
   }
-
-  //game1.printPlayerBoards(game1.getP1());
-
   return 0;
 }

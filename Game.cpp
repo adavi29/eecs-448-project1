@@ -859,4 +859,3 @@ void Game::printPlayerTurn(int player){
     cin >> wait;
 }
 
-

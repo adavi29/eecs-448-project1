@@ -13,7 +13,7 @@
 
 using namespace std;
 class Board{
-    
+
 private:
     string** m_board;
 
