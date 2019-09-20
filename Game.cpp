@@ -47,6 +47,8 @@ Game::~Game()
     delete m_p2oppBoard;
     delete m_p1ownBoard;
     delete m_p1oppBoard;
+    delete m_p1Ships;
+    delete m_p2Ships;
 }
 
 int Game::convertCol(string col){
