@@ -1,6 +1,7 @@
-//works cited
+WORKS CITED
+-----------
 
-
+Method: string getFileContents (std::ifstream& File)
 Author: TheMassiveChipmunk
-string getFileContents (std::ifstream& File) in the Game.h and Game.cpp file. 
-http://www.cplusplus.com/forum/general/58945/
+Classes: Used in Game.h and Game.cpp files 
+Website: http://www.cplusplus.com/forum/general/58945/
