@@ -1,5 +1,7 @@
 /**
- *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @author Runtime Terrors:
+ *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *               Jacob Swearingen, Chongzhi Gao
  *   @date 9/16/19
  *   @file Board.h
  *   @brief lists all methods for interacting with the game board
@@ -49,7 +51,6 @@ class Board {
 		void setEntryAtPosition(std::string entry, int column, int row);
 
 		/**
-		 * @pre None
 		 * @post Prints content of 2D board array
 		 */
 		void printBoard();

@@ -1,20 +1,24 @@
 /**
- *	 @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
- *	 @date 9/19/19
- *	 @file Game.cpp
- *	 @brief implemented methods needed for game play from header file
+ * @author Runtime Terrors:
+ *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *             Jacob Swearingen, Chongzhi Gao
+ * @date 9/19/19
+ * @file Game.cpp
+ * @brief implemented methods needed for game play from header file
  */
+
 #include "game.h"
 #include "board.h"
 
 #include <stdexcept>
-#include <cctype> //included for isUpper function
+#include <cctype> // provides isUpper()
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <string>
 
 Game::Game() {
+
 	m_numShips = 0;
 
 	userRow = 0;
@@ -31,35 +35,36 @@ Game::Game() {
 	m_currentPlayer = 1;
 
 	// In C++ adjacent strings will be concatenated by the compiler.
+	// TODO: Print these with strings from files in '../ascii/'
 	letsPlay = "\n  _          _         _____  _             _ "
-		       "\n | |        | |       |  __ \\| |                   | |"
-		       "\n | |         ___| |_ ___      | |__) | | __ _ _   _| |"
-		       "\n | |        / _ \\ __/ __| |      ___/| |/ _` | | | | |"
-		       "\n | |___|  __/ |_\\__ \\ | |        | | (_| | |_| |_|"
-		       "\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)"
-		       "\n                                       __/ |  "
-		       "\n                                      |___/   "
-		       "\n";
-    p1Text = "\n  _____      _                          ____"
-		     "\n |  __ \\| |                        / __ \\"
-		     "\n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___"
-		     "\n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\"
-		     "\n | |    | | (_| | |_| |      __/ |    | |__| | | | |  __/"
-		     "\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|"
-		     "\n                  __/ |"
-		     "\n                 |___/"
-		     "\n";
-    p2Text = "\n"
-		     "\n  _____      _                         _______"
-		     "\n |  __ \\| |                       |__   __|"
-		     "\n | |__) | | __ _ _   _  ___ _ __     | |_      _____"
-		     "\n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\"
-		     "\n | |    | | (_| | |_| |      __/ |       | |\\ V  V / (_) |"
-		     "\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/"
-		     "\n                  __/ |"
-		     "\n                 |___/"
-		     "\n";
-    wait = "";
+	           "\n | |        | |       |  __ \\| |                   | |"
+	           "\n | |         ___| |_ ___      | |__) | | __ _ _   _| |"
+	           "\n | |        / _ \\ __/ __| |      ___/| |/ _` | | | | |"
+	           "\n | |___|  __/ |_\\__ \\ | |        | | (_| | |_| |_|"
+	           "\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)"
+	           "\n                                       __/ |  "
+	           "\n                                      |___/   "
+	           "\n";
+	p1Text = "\n  _____      _                          ____"
+	         "\n |  __ \\| |                        / __ \\"
+	         "\n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___"
+	         "\n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\"
+	         "\n | |    | | (_| | |_| |      __/ |    | |__| | | | |  __/"
+	         "\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|"
+	         "\n                  __/ |"
+	         "\n                 |___/"
+	         "\n";
+	p2Text = "\n"
+	         "\n  _____      _                         _______"
+	         "\n |  __ \\| |                       |__   __|"
+	         "\n | |__) | | __ _ _   _  ___ _ __     | |_      _____"
+	         "\n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\"
+	         "\n | |    | | (_| | |_| |      __/ |       | |\\ V  V / (_) |"
+	         "\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/"
+	         "\n                  __/ |"
+	         "\n                 |___/"
+	         "\n";
+	wait = "";
 }
 
 Game::~Game() {
@@ -101,10 +106,17 @@ void Game::setup() {
 	printBattleship();
 	//gets number of ships
 	do {
-		std::cout << "Enter the amount of ships both players want to use (Max: 5):	";
+		std::cout << "Enter the amount of ships both players want to use:"
+				  << "(Max: 5): ";
 		std::cin >> numShipsChoice;
-		if((numShipsChoice < 1) || (numShipsChoice > 5)) {
-			std::cout<<"Invalid number of ships. Must be 1 to 5. Try again.\n";
+		if(std::cin.fail()) {
+			std::cin.clear();
+			numShipsChoice = 0;
+		} else {
+			if((numShipsChoice < 1) || (numShipsChoice > 5)) {
+				std::cout << "Invalid number of ships."
+					  << "Must be 1 to 5. Try again.\n";
+			}
 		}
 	} while((numShipsChoice < 1) || (numShipsChoice > 5));
 	m_numShips = numShipsChoice;
@@ -120,7 +132,9 @@ void Game::setup() {
 		}
 		switch (m_numShips) {
 			case 1: {
-				std::cout << "Enter the coordinates for player "<<j<<"'s ship 1 (1x1): \n";
+				std::cout << "Enter the coordinates for player "
+						  << j
+						  << "'s ship 1 (1x1): \n";
 				do {
 					std::cout << "Row (1-8):  ";
 					std::cin>>userRowChoice;
@@ -135,10 +149,13 @@ void Game::setup() {
 					std::cin >> userCol;
 					arrCol = convertCol(userCol);
 					if(arrCol < 0 || arrCol > 7) {
-						std::cout<<"Invalid column. Must be A to H. Try again.\n";
+						std::cout << "Invalid column."
+								  << "Must be A to H. Try again.\n";
 					}
 				} while(arrCol < 0 || arrCol > 7);
-				userDirection="none";//set userDirection=none because ship of size 1 is only one point on the array
+				//set userDirection=none because ship of size 1 is only one
+				//point on the array
+				userDirection="none";
 				if(m_currentPlayer==1) {
 					if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
 						addShiptoArray("1", arrRow, arrCol, userDirection, 1);

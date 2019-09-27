@@ -11,13 +11,15 @@
 #include <string>
 
 int main(int argc, char* argv[]) {
-	Game game1;
+
+	Game the_game; // Gotcha, sucka!
 	try {
-		game1.setup();
-		game1.run();
+		the_game.setup();
+		//TODO: Return the_game.run() 1 if bad exit 0 if good.
+		the_game.run();
 	}
-	catch(std::runtime_error& rte) {
-		std::cout << rte.what() << std::endl;
+	catch(std::runtime_error& e) {
+		std::cout << e.what() << std::endl;
 	}
 	return 0;
 }

@@ -1,5 +1,7 @@
 /**
- *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @author Runtime Terrors:
+ *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *               Jacob Swearingen, Chongzhi Gao
  *   @date 9/16/19
  *   @file Board.cpp
  *   @brief prints out game board and edits board entries
@@ -47,7 +49,7 @@ void Board::printBoard() {
 		std::cout << "  |     |     |     |     |     |     |     |     |\n";
 		for(int j = 0; j < 8; j++) {
 			if(j == 0) {
-				std::cout << i+1 <<" ";
+				std::cout << i+1 << " ";
 			}
 			std::cout << "|  " << m_board[i][j] << "  ";
 			if(j == 7) {

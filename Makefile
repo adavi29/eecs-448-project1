@@ -72,7 +72,9 @@ LDFLAGS = $(GENFLAGS)
 # Recursively expands to target name of any rule that uses the variable.
 EXPORT = -o $@
 
-DEPENDENCIES = $(OBJDIR)/main.o $(OBJDIR)/game.o $(OBJDIR)/board.o $(OBJDIR)/ships.o
+SRCFILES := $(wildcard $(SRCDIR)/*.cpp)
+PRE_DEPENDENCIES := $(SRCFILES:.cpp=.o)
+DEPENDENCIES := $(pathsubst $(SRCDIR), $(OBJDIR), $(PRE_DEPENDENCIES))
 
 
 # --- Phonies ---
@@ -84,28 +86,19 @@ DEPENDENCIES = $(OBJDIR)/main.o $(OBJDIR)/game.o $(OBJDIR)/board.o $(OBJDIR)/shi
 # --- Compilation Options ---
 # By convention 'all' compiles the entire program.
 all: pre-build $(DEPENDENCIES)
-	$(CXX) $(DEPENDENCIES) $(LDFLAGS) -o $(FILENAME)
+	$(CXX) $(filter-out pre-build,$^) $(LDFLAGS) -o $(FILENAME)
 
 # install: all
 # By convention this should place the executable in a standard location, either
 # in /usr/bin or /usr/local/bin
+
 pre-build:
-# The first time we compile, make the directory. The second time, force true
-# so the build doesn't fail.
-	mkdir obj | true
+# The first time we compile, this will make the directory. The second time, it
+# will ignore the preexisting directory error so the build doesn't fail.
+	-mkdir obj
 
 # --- Source Files ---
-# TODO: Reduce this to one automatic line.
-$(OBJDIR)/main.o: $(SRCDIR)/main.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/game.o: $(SRCDIR)/game.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/board.o: $(SRCDIR)/board.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/ships.o: $(SRCDIR)/ships.cpp
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< $(EXPORT)
 
 # --- Housekeeping ---

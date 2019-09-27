@@ -29,7 +29,7 @@
 ;;; Code:
 
 ((c++-mode . ((indent-tabs-mode . t)
-              (tab-width . 4)
+              (tab-width . 8)
               (eval . (if (package-installed-p 'smart-tabs-mode)
                           (smart-tabs-mode 1))))))
 

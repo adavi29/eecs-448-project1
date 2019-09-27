@@ -2,20 +2,23 @@
  *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
  *   @date 2019 09 20
  *   @file Ships.cpp
- *   @brief implements methods in Ships.h
+ *   @brief implements methods in ships.h
  */
 
 #include "ships.h"
 
 Ships::Ships(int numShips) {
 
-	m_ship1 = -1;//initialize ship variables in case they are not assigned a value below
+	//initialize ship variables in case they are not assigned a value below
+	//TODO: Don't declare ships until they are needed.
+	m_ship1 = -1;
 	m_ship2 = -1;
 	m_ship3 = -1;
 	m_ship4 = -1;
 	m_ship5 = -1;
 
 	if((numShips < 6) && (numShips > 0)) {
+		//TODO: Surely there is a clearer, more concise way of doing this.
 		if(numShips > 0) {
 			m_ship1 = 1;
 		}
@@ -35,6 +38,7 @@ Ships::Ships(int numShips) {
 }
 
 void Ships::decreaseSize(int ship) {
+	//TODO: Surely there is a clearer, more concise way of doing this.
 	if(isSunk(ship) != true) {
 		if(ship == 1) {
 		    m_ship1--;
@@ -55,11 +59,12 @@ void Ships::decreaseSize(int ship) {
 			announce(ship);
 		}
 	} else {
-		throw(std::runtime_error("cannot decrease length; ship is already sunk"));
+		throw(std::runtime_error("Cannot decrease length; ship already sunk."));
 	}
 }
 
 bool Ships::isSunk(int ship) {
+	//TODO: Surely there is a clearer, more concise way of doing this.
 	if(ship == 1) {
 		return (m_ship1 <= 0);
 	} else if(ship == 2) {
@@ -74,8 +79,8 @@ bool Ships::isSunk(int ship) {
 	}
 }
 
-bool Ships::allSunk()
-{
+bool Ships::allSunk() {
+	//TODO: Surely there is a clearer, more concise way of doing this.
 	if ((m_ship1 <= 0) &&
 		(m_ship2 <= 0) &&
 		(m_ship3 <= 0) &&
@@ -87,6 +92,8 @@ bool Ships::allSunk()
 		return false;
 	}
 }
+
 void Ships::announce(int ship) {
-	std::cout << "You've sunk ship " << ship << "!\n";
+	// TODO: Make this announce "You've sunken their Destroyer!", etc.
+	std::cout << "You've sunken ship " << ship << "!\n";
 }

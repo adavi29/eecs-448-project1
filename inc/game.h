@@ -1,9 +1,14 @@
 /**
- *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
+ *   @author Runtime Terrors:
+ *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *               Jacob Swearingen, Chongzhi Gao
+ *           TBD:
+ *               Zach Pearson, Brian Clark, Finn Dobbs, Dalton Yoder
  *   @date 9/19/19
  *   @file Game.h
  *   @brief declares methods and member variables needed for game play
  */
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -45,8 +50,8 @@ class Game{
 	public:
 
 		/**
-		 * @pre none
-		 * @post a game object is created with private member variables set to 0.
+		 * @pre Successful initialization of program.
+		 * @post a game object is created with private member variables set to 0
 		 */
 		Game();
 
@@ -70,7 +75,8 @@ class Game{
 
 		/**
 		 * @pre a game object exists
-		 * @post boards are printed to the screen in order of opp board, then own board
+		 * @post boards are printed to the screen in order of opp board, then
+		 *       own board
 		 * @param ownBoard: a board pointer to the player's own board
 		 * @param oppBoard: a board pointer to the opponent's board
 		 */
@@ -85,52 +91,74 @@ class Game{
 
 		/**
 		 * @pre the user inputs a column letter
-		 * @post converts the user's inputted column letter (A-H) to a number that will correspond to the board array column
+		 * @post converts the user's inputted column letter (A-H) to a number
+		 *       that will correspond to the board array column
 		 * @param col: the letter the user inputs for the board column
-		 * @return returns the number that will correspond to the board array column
+		 * @return returns the number that will correspond to the board array
+		 *         column
 		 */
 		int convertCol(std::string col);
 
 		/**
 		 * @pre a std::string is passed in
 		 * @post a word that is passed in is converted to all lowercase
-		 * @param wordToConvert: the word that will be converted to all lowercase
+		 * @param the_word: the word that will be converted to all lowercase
 		 * @return returns the parameter as a lowercase std::string
 		 */
-		std::string convertStringToLower(std::string wordToConvert);
+		std::string convertStringToLower(std::string the_word);
 
 		/**
+		 * @brief check if position is empty
 		 * @pre a board object exists
-		 * @post checks if a coordinate on the board is empty or not; used by Setup method
-		 * @param board: a board pointer pointing at the board you want to check a position in
-		 * @param row: the row of the coordinate you want to check
-		 * @param col: the col of the coordinate you want to check
-		 * @return returns true if the position on the board is empty; false otherwise
+		 * @post checks if a coordinate on the board is empty or not; used by
+		 *       Setup method
+		 * @param board: a board pointer pointing at the board you want to check
+		 *               a position in
+		 * @param row the row of the coordinate you want to check
+		 * @param col the col of the coordinate you want to check
+		 * @return true if the position on the board is empty; else false
 		 */
-		bool isAvailable(Board* board, int row, int col);//check if position is empty
+		bool isAvailable(Board* board, int row, int col);
 
 		/**
+		 * @brief checks if up, down, left, right is available
 		 * @pre a board object exists
-		 * @post checks if the given ship can be placed in the spaces it needs in the chosen direction (checks if the needed coordinates are empty)
-		 * @param board: a board pointer pointing at the board you want to check a position in
+		 * @post checks if the given ship can be placed in the spaces it needs
+		 *       in the chosen direction (checks if the needed coordinates are
+		 *       empty)
+		 * @param board: a board pointer pointing at the board you want to check
+		 *               a position in
 		 * @param row: the row of the coordinate you want to check
 		 * @param col: the col of the coordinate you want to chec
-		 * @param shipNum: the number of the ship that will be added to the board
+		 * @param shipNum: the number of the ship that will be added to the
+		 *        board
 		 * @param direction: the direction in which the ship will be placed.
-		 * @return returns true if the ship can be placed on the board in the specified direction; false otherwise
+		 * @return returns true if the ship can be placed on the board in the
+		 *         specified direction; false otherwise
 		 */
-		bool checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std::string direction);//checks if up, down, left, right is available
+		bool checkUpDownLeftRight(Board* board,
+								  int row, int col,
+								  int shipNum,
+								  std::string direction);
 
 		/**
 		 * @pre board object exists
 		 * @post a ship is added to the board
-		 * @param ship: a std::string denoting the ship number that will be placed on the board
+		 * @param ship: a std::string denoting the ship number that will be
+		 *        placed on the board
 		 * @param row: the user chosen initial row that the ship will be placed
-		 * @param col: the user chosen initial column that the ship will be placed
-		 * @param direction: the user chosen direction in which the ship will be placed
-		 * @param player: the player who's board will be updated with a ship; used in setup()
+		 * @param col: the user chosen initial column that the ship will be
+		 *        placed
+		 * @param direction: the user chosen direction in which the ship will be
+		 *        placed
+		 * @param player: the player who's board will be updated with a ship;
+		 *        used in setup()
+		 * @throw runtime error when orientation runs off the board or is full
 		 */
-		void addShiptoArray(std::string ship, int row, int col, std::string direction, int player);//throws runtime error when orientation runs off the board or is full
+		void addShiptoArray(std::string ship,
+							int row, int col,
+							std::string direction,
+							int player);
 
 		/**
 		 * @post prints the word battleship to the terminal screen
@@ -138,43 +166,37 @@ class Game{
 		void printBattleship();
 
 		/**
+		 * @brief helper method for run()
 		 * @pre board object exist
-		 * @post prints board to the screen and handles user input when its player 2's turn
-		 * @param
+		 * @post prints board to the screen and handles user input when its
+		 *       player 2's turn
 		 * @return nothing
 		 */
-		//helper method for run()
 		void p1Turn();
 
 		/**
-		 * @pre
-		 * @post prints board to the screen and handles user input when its player 2's turn
-		 * @param
-		 * @return
+		 * @post prints board to the screen and handles user input when its
+		 *       player 2's turn
 		 */
 		void p2Turn();
 
 		/**
-		 * @pre
-		 * @post clears the console and adds empty lines above so players can't cheet
-		 * @param
-		 * @return
+		 * @brief clears the console and adds empty lines above so players
+		 *        can't cheet
 		 */
 		void clearConsole();
 
 		/**
-		 * @pre
+		 * @pre A turn is active.
 		 * @post gets good input from the user of a spefic row
-		 * @param
-		 * @return integer of row
+		 * @return integer representing row
 		 */
 		int getUserRow();
 
 		/**
-		 * @pre
+		 * @pre A turn is active.
 		 * @post gets good input from the user of a spefic column
-		 * @param
-		 * @return integer of row
+		 * @return integer representing row
 		 */
 		int getUserCol();
 
@@ -192,7 +214,6 @@ class Game{
 		 * @pre the game is over, either player 1 or 2 wins
 		 * @post prints the winner to console
 		 * @param int player - which play to print
-		 * @return
 		 */
 		void printWinner(int player);
 
@@ -206,10 +227,10 @@ class Game{
 
 		/**
 		 * @pre a board object exists
-		 * @post gets the user's coordinates to place a ship on the board and verifies input
+		 * @post gets the user's coordinates to place a ship on the board and
+		 *       verifies input
 		 * @param currentPlayerBoard: denotes the current player
 		 * @param shipNum: denotes the ship number
-		 * @return
 		 */
 		void printCoordinateInteraction(Board* currentPlayerBoard, int shipNum);
 
