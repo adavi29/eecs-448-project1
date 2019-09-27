@@ -4,8 +4,8 @@
  *	 @file Game.cpp
  *	 @brief implemented methods needed for game play from header file
  */
-#include "Game.h"
-#include "Board.h"
+#include "game.h"
+#include "board.h"
 
 #include <stdexcept>
 #include <cctype> //included for isUpper function
@@ -23,13 +23,10 @@ Game::Game() {
 	arrCol = 0;
 	arrRow = 0;
 
-
-
 	m_p1oppBoard=new Board();
 	m_p1ownBoard=new Board();
 	m_p2oppBoard=new Board();
 	m_p2ownBoard=new Board();
-
 
 	m_currentPlayer = 1;
 
@@ -76,12 +73,10 @@ Game::~Game() {
 
 int Game::convertCol(std::string col) {
 	char charCol = col.at(0);
-	if(isupper(charCol))
-	{
+	if(isupper(charCol)) {
 		return(int(charCol)-65);
 	}
-	else
-	{
+	else {
 		return(int(charCol)-97);
 	}
 }
@@ -89,11 +84,9 @@ int Game::convertCol(std::string col) {
 std::string Game::convertStringToLower(std::string wordToConvert) {
 	char charWordToConvert = wordToConvert.at(0);
 	int wordLength = wordToConvert.length();
-	for(int i = 0; i < wordLength; i++)
-	{
+	for(int i = 0; i < wordLength; i++) {
 		charWordToConvert = wordToConvert.at(i);
-		if(isupper(charWordToConvert))
-		{
+		if(isupper(charWordToConvert)) {
 			charWordToConvert=(char)tolower(charWordToConvert);
 		}
 		wordToConvert.at(i)=charWordToConvert;
