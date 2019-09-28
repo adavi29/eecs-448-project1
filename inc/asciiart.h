@@ -16,6 +16,12 @@ class AsciiArtHandler {
 
     public:
 
+	/**
+	 * @pre a file exist the contains text
+	 * @post reads a txt file and prints the ascii art to the console
+	 * @param ifsteram& File - file to print
+	 * @return a std::string of the the ascii art
+	 */
 	static std::string printFileContents(std::ifstream& File);
 
 	private:

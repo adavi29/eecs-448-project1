@@ -385,9 +385,9 @@ void Game::printWinner(int player) {
 	std::ifstream file_p2_wins ("ascii/player2wins.txt");
 
 	if(player == 1) {
-		std::cout << getFileContents (file_p1_wins) << std::endl;
+		std::cout << AsciiArtHandler::printFileContents (file_p1_wins) << std::endl;
 	}else if(player == 2) {
-		std::cout << getFileContents(file_p2_wins) << std::endl;
+		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
 	}
 	// TODO: Close fstream
 }
@@ -423,27 +423,7 @@ bool Game::isHit(Board* playerBoard, int row, int col) {
 	return true;
 }
 
-std::string Game::getFileContents (std::ifstream& File) {
-    //All lines
-    std::string Lines = "";
-    //Check if everything is good
-    if (File) {
-	while (File.good ()) {
-	    std::string TempLine;				   //Temp line
-	    std::getline (File , TempLine);		   //Get temp line
-	    TempLine += "\n";					   //Add newline character
-	    Lines += TempLine;					   //Add newline
-	}
-	return Lines;
-    }
-    //Return error
-    else {
-	return "ERROR File does not exist.";
-    }
-}
-
 void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard) {
-
 	std::cout<<"Opponent's Board:\n";
 	oppBoard->printBoard();
 	std::cout<<"-----------------------------------------------------\n";
@@ -771,10 +751,10 @@ void Game::printPlayerTurn(int player) {
 
 	if(player==1) {
 	    std::ifstream file_p1_text("ascii/player1.txt");
-	    std::cout << getFileContents (file_p1_text) << std::endl;
+	    std::cout << AsciiArtHandler::printFileContents(file_p1_text) << std::endl;
 	} else {
 		std::ifstream file_p2_text("ascii/player2.txt");
-		std::cout << getFileContents (file_p2_text) << std::endl;
+		std::cout << AsciiArtHandler::printFileContents(file_p2_text) << std::endl;
 	}
 	std::cout << "Press any letter key then hit Enter to continue...";
 	std::cin >> wait;
