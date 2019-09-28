@@ -73,24 +73,18 @@ LDFLAGS = $(GENFLAGS)
 EXPORT = -o $@
 
 SRCFILES := $(wildcard $(SRCDIR)/*.cpp)
-PRE_DEPENDENCIES := $(SRCFILES:.cpp=.o)
-DEPENDENCIES := $(pathsubst $(SRCDIR), $(OBJDIR), $(PRE_DEPENDENCIES))
-
+DEPENDENCIES := $(SRCFILES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 # --- Phonies ---
 # Phonies essentially declare a target as being unrelated to actual files in
 # the project directory, and allow you to make files with the same name as
 # such a target without worrying about aliasing commands.
-.PHONY: clean rebuild memcheck debug $(SRCDIR) $(INCDIR) $(OBJDIR)
+.PHONY: all clean rebuild memcheck debug $(SRCDIR) $(INCDIR) $(OBJDIR)
 
 # --- Compilation Options ---
 # By convention 'all' compiles the entire program.
 all: pre-build $(DEPENDENCIES)
 	$(CXX) $(filter-out pre-build,$^) $(LDFLAGS) -o $(FILENAME)
-
-# install: all
-# By convention this should place the executable in a standard location, either
-# in /usr/bin or /usr/local/bin
 
 pre-build:
 # The first time we compile, this will make the directory. The second time, it
