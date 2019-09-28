@@ -7,15 +7,16 @@
  * @brief implemented methods needed for game play from header file
  */
 
-#include "game.h"
-#include "board.h"
-
 #include <stdexcept>
 #include <cctype> // provides isUpper()
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <string>
+
+#include "game.h"
+#include "board.h"
+#include "asciiart.h"
 
 Game::Game() {
 
@@ -73,6 +74,7 @@ void Game::setup() {
 	int numShipsChoice = 0;
 	int userRowChoice = 0;
 	Board* currentPlayerBoard = nullptr;
+	std::cout << std::endl;
 	printBattleship();
 	//gets number of ships
 	do {
@@ -422,22 +424,22 @@ bool Game::isHit(Board* playerBoard, int row, int col) {
 }
 
 std::string Game::getFileContents (std::ifstream& File) {
-	//All lines
-	std::string Lines = "";
-	//Check if everything is good
-	if (File) {
-		while (File.good ()) {
-			std::string TempLine;				   //Temp line
-			std::getline (File , TempLine);		   //Get temp line
-			TempLine += "\n";					   //Add newline character
-			Lines += TempLine;					   //Add newline
-		}
-		return Lines;
+    //All lines
+    std::string Lines = "";
+    //Check if everything is good
+    if (File) {
+	while (File.good ()) {
+	    std::string TempLine;				   //Temp line
+	    std::getline (File , TempLine);		   //Get temp line
+	    TempLine += "\n";					   //Add newline character
+	    Lines += TempLine;					   //Add newline
 	}
-	//Return error
-	else {
-		return "ERROR File does not exist.";
-	}
+	return Lines;
+    }
+    //Return error
+    else {
+	return "ERROR File does not exist.";
+    }
 }
 
 void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard) {
@@ -676,17 +678,8 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std
 }
 
 void Game::printBattleship() {
-	std::cout<<"\n*********		   *******	  ************	************  **			***********		 *********	  **		  **  ***********	********\n";
-	std::cout<<"**		 **	   **		**		 **			   **		**			  **			 **				**			**		 **		  **	  ** \n";
-	std::cout<<"**		  **  **		 **		 **			   **		**			  **			**				**			**		 **		  **	   ** \n";
-	std::cout<<"**		  **  **		 **		 **			   **		**			  **			**				**			**		 **		  **	   ** \n";
-	std::cout<<"**		 **	  **		 **		 **			   **		**			  **			 **				**			**		 **		  **	  ** \n";
-	std::cout<<"*********	  *************		 **			   **		**			  *****			  *********		**************		 **		  ********\n";
-	std::cout<<"**		 **	  **		 **		 **			   **		**			  **					   **	**			**		 **		  ** \n";
-	std::cout<<"**		  **  **		 **		 **			   **		**			  **						**	**			**		 **		  ** \n";
-	std::cout<<"**		  **  **		 **		 **			   **		**			  **						**	**			**		 **		  ** \n";
-	std::cout<<"**		 **	  **		 **		 **			   **		**			  **					   **	**			**		 **		  ** \n";
-	std::cout<<"*********	  **		 **		 **			   **		***********	  ***********	  *********		**			**	***********	  ** \n\n\n";
+    std::ifstream file_battleship_text("ascii/battleship.txt");
+    std::cout << AsciiArtHandler::printFileContents(file_battleship_text) << std::endl;
 }
 
 void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
@@ -777,8 +770,8 @@ void Game::printPlayerTurn(int player) {
 	clearConsole();
 
 	if(player==1) {
-		std::ifstream file_p1_text("ascii/player1.txt");
-		std::cout << getFileContents (file_p1_text) << std::endl;
+	    std::ifstream file_p1_text("ascii/player1.txt");
+	    std::cout << getFileContents (file_p1_text) << std::endl;
 	} else {
 		std::ifstream file_p2_text("ascii/player2.txt");
 		std::cout << getFileContents (file_p2_text) << std::endl;
