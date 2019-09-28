@@ -1,5 +1,7 @@
-# Project: EECS 448 Project 2
-# Date:    27 September 2019
+#       Project: TBD - EECS 448 Project 2
+# Modified from: TGHET - EECS 448 Project 2
+#        Author: Zach Pearson, Victoria Maldonado
+#          Date: 27 September 2019
 
 # -- General notes about Makefiles --
 # Documentation:
@@ -92,6 +94,7 @@ pre-build:
 	-mkdir obj
 
 # --- Source Files ---
+# TODO: Automatic dependency tracking for cpp files #including multiple h files
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< $(EXPORT)
 
