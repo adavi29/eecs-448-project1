@@ -10,9 +10,9 @@
 #include "board.h"
 
 Board::Board() {
-	m_board = new string*[8];
+	m_board = new std::string*[8];
 	for(int i = 0; i < 8; i++) {
-		m_board[i] = new string[8];
+		m_board[i] = new std::string[8];
 		for(int j = 0; j < 8; j++) {
 			m_board[i][j] = " ";
 		}
@@ -26,11 +26,11 @@ Board::~Board() {
 	delete[] m_board;
 }
 
-string Board::getEntryAtPosition(int column, int row) {
+std::string Board::getEntryAtPosition(int column, int row) {
 	return(m_board[row][column]);
 }
 
-void Board::setEntryAtPosition(string entry, int column, int row) {
+void Board::setEntryAtPosition(std::string entry, int column, int row) {
 	m_board[row][column] = entry;
 }
 

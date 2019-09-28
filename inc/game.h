@@ -223,7 +223,7 @@ class Game{
 		 * @param ifsteram& File - file to print
 		 * @return a std::string of the the ascii art
 		 */
-		std::string getFileContents(ifstream& File);
+	std::string getFileContents(std::ifstream& File);
 
 		/**
 		 * @pre a board object exists

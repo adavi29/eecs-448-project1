@@ -34,36 +34,6 @@ Game::Game() {
 
 	m_currentPlayer = 1;
 
-	// In C++ adjacent strings will be concatenated by the compiler.
-	// TODO: Print these with strings from files in '../ascii/'
-	letsPlay = "\n  _          _         _____  _             _ "
-	           "\n | |        | |       |  __ \\| |                   | |"
-	           "\n | |         ___| |_ ___      | |__) | | __ _ _   _| |"
-	           "\n | |        / _ \\ __/ __| |      ___/| |/ _` | | | | |"
-	           "\n | |___|  __/ |_\\__ \\ | |        | | (_| | |_| |_|"
-	           "\n |______\\___|\\__|___/ |_|    |_|\\__,_|\\__, (_)"
-	           "\n                                       __/ |  "
-	           "\n                                      |___/   "
-	           "\n";
-	p1Text = "\n  _____      _                          ____"
-	         "\n |  __ \\| |                        / __ \\"
-	         "\n | |__) | | __ _ _   _  ___ _ __  | |  | |_ __   ___"
-	         "\n |  ___/| |/ _` | | | |/ _ \\ '__| | |  | | '_ \\ / _ \\"
-	         "\n | |    | | (_| | |_| |      __/ |    | |__| | | | |  __/"
-	         "\n |_|    |_|\\__,_|\\__, |\\___|_|     \\____/|_| |_|\\___|"
-	         "\n                  __/ |"
-	         "\n                 |___/"
-	         "\n";
-	p2Text = "\n"
-	         "\n  _____      _                         _______"
-	         "\n |  __ \\| |                       |__   __|"
-	         "\n | |__) | | __ _ _   _  ___ _ __     | |_      _____"
-	         "\n |  ___/| |/ _` | | | |/ _ \\ '__|    | \\ \\ /\\ / / _ \\"
-	         "\n | |    | | (_| | |_| |      __/ |       | |\\ V  V / (_) |"
-	         "\n |_|    |_|\\__,_|\\__, |\\___|_|       |_| \\_/\\_/ \\___/"
-	         "\n                  __/ |"
-	         "\n                 |___/"
-	         "\n";
 	wait = "";
 }
 
@@ -173,7 +143,7 @@ void Game::setup() {
 			}
 			case 2: {
 				for(int i = 1; i < 3; i++) {
-					std::string shipString=to_string(i);
+					std::string shipString=std::to_string(i);
 					int shipNum=i;
 					shipPlacementInteraction(i, j, currentPlayerBoard);
 					if(m_currentPlayer==1) {
@@ -194,7 +164,7 @@ void Game::setup() {
 			}
 			case 3: {
 				for(int i = 1; i < 4; i++) {
-					std::string shipString=to_string(i);
+					std::string shipString=std::to_string(i);
 					int shipNum=i;
 					shipPlacementInteraction(i, j, currentPlayerBoard);
 					if(m_currentPlayer==1) {
@@ -215,7 +185,7 @@ void Game::setup() {
 			}
 			case 4: {
 				for(int i = 1; i < 5; i++) {
-					std::string shipString=to_string(i);
+					std::string shipString=std::to_string(i);
 					int shipNum=i;
 					shipPlacementInteraction(i, j, currentPlayerBoard);
 					if(m_currentPlayer==1) {
@@ -236,7 +206,7 @@ void Game::setup() {
 			}
 			case 5: {
 				for(int i = 1; i < 6; i++) {
-					std::string shipString=to_string(i);
+					std::string shipString=std::to_string(i);
 					int shipNum=i;
 					shipPlacementInteraction(i, j, currentPlayerBoard);
 					if(m_currentPlayer==1) {
@@ -266,7 +236,8 @@ void Game::run() {
 	//start game
 	system("clear");
 
-	std::cout << letsPlay << endl;
+	// TODO: Change this to print the ASCII file
+	std::cout << letsPlay << std::endl;
 	std::cout << "Press any letter key then hit Enter to continue...";
 	std::cin >> wait;
 
@@ -313,14 +284,14 @@ void Game::p1Turn() {
 	//print Board
 	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
-	std::cout << "It's time to attack!" << endl;
+	std::cout << "It's time to attack!" << std::endl;
 
 	while(1) {
 		p1_attack_row = getUserRow();
 		p1_attack_col = getUserCol();
 
 		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" || m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
-			std::cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
+			std::cout<< "You have already tried to attack there. Pick a different coordinate." << std::endl;
 		}else{
 			break;
 		}
@@ -329,7 +300,7 @@ void Game::p1Turn() {
 
 	//checks if isHit() or not
 	if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
-		std::cout << "That's a HIT!" << endl;
+		std::cout << "That's a HIT!" << std::endl;
 		m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
 		//decreases the opponents ship on hit and announce if sunk
@@ -343,7 +314,7 @@ void Game::p1Turn() {
 		//puts an x on the opponnets board
 		m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
 	}else{
-		std::cout << "That's a MISS! Better luck next time." << endl;
+		std::cout << "That's a MISS! Better luck next time." << std::endl;
 		m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 	}
 	std::cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
@@ -368,7 +339,7 @@ void Game::p2Turn() {
 		p2_attack_col = getUserCol();
 
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" || m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M") {
-			std::cout<< "You have already tried to attack there. Pick a different coordinate." << endl;
+			std::cout<< "You have already tried to attack there. Pick a different coordinate." << std::endl;
 		}else{
 			break;
 		}
@@ -377,7 +348,7 @@ void Game::p2Turn() {
 
 	//hit or miss,
 	if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
-		std::cout << "That's a HIT!" << endl;
+		std::cout << "That's a HIT!" << std::endl;
 		m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
 
 		//decreases the opponents ship on hit and announces if sunk
@@ -391,7 +362,7 @@ void Game::p2Turn() {
 		//puts an x on the opponnets board
 		m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
 	}else{
-		std::cout << "That's a MISS! Better luck next time." << endl;
+		std::cout << "That's a MISS! Better luck next time." << std::endl;
 		m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
 	}
 
@@ -402,21 +373,21 @@ void Game::p2Turn() {
 void Game::clearConsole() {
 	//A load of end lines to clear the console screen inbetween player turns so they can't cheat
 	for(int i = 0; i < 200; i ++) {
-		std::cout << endl;
+		std::cout << std::endl;
 	}
 	system("clear");
 }
 
 void Game::printWinner(int player) {
-
-	ifstream file_p1_wins ("ascii/player1wins.txt");
-	ifstream file_p2_wins ("ascii/player2wins.txt");
+	std::ifstream file_p1_wins ("ascii/player1wins.txt");
+	std::ifstream file_p2_wins ("ascii/player2wins.txt");
 
 	if(player == 1) {
-		std::cout << getFileContents (file_p1_wins) << endl;
+		std::cout << getFileContents (file_p1_wins) << std::endl;
 	}else if(player == 2) {
-		std::cout << getFileContents(file_p2_wins) << endl;
+		std::cout << getFileContents(file_p2_wins) << std::endl;
 	}
+	// TODO: Close fstream
 }
 
 int Game::getUserRow() {
@@ -806,9 +777,11 @@ void Game::printPlayerTurn(int player) {
 	clearConsole();
 
 	if(player==1) {
-		std::cout << p1Text << endl;
+		std::ifstream file_p1_text("ascii/player1.txt");
+		std::cout << getFileContents (file_p1_text) << std::endl;
 	} else {
-		std::cout << p2Text << endl;
+		std::ifstream file_p2_text("ascii/player2.txt");
+		std::cout << getFileContents (file_p2_text) << std::endl;
 	}
 	std::cout << "Press any letter key then hit Enter to continue...";
 	std::cin >> wait;
