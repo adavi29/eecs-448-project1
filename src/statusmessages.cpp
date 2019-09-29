@@ -10,42 +10,42 @@
 
 #include "statusmessages.h"
 
-void StatusMessages::AskNumShips(){
+void StatusMessages::AskNumShips() {
 
 }
 
-void StatusMessages::ErrorNumShips(){
+void StatusMessages::ErrorNumShips() {
 
 }
 
-void StatusMessages::ErrorInvalidRow(){
+void StatusMessages::ErrorInvalidRow() {
 
 }
 
-void StatusMessages::ErrorInvalidCol(){
+void StatusMessages::ErrorInvalidCol() {
 
 }
 
-void StatusMessages::ShipAlreadyThere(){
+void StatusMessages::ShipAlreadyThere() {
 
 }
 
-void StatusMessages::ShipInTheWay(){
+void StatusMessages::ShipInTheWay() {
 
 }
 
-void StatusMessages::AlreadyShotThere(){
+void StatusMessages::AlreadyShotThere() {
 
 }
 
-void StatusMessages::ConfirmHit(){
+void StatusMessages::ConfirmHit() {
 
 }
 
-void StatusMessages::ConfirmMiss(){
+void StatusMessages::ConfirmMiss() {
 
 }
 
-void StatusMessages::NextPlayer(){
+void StatusMessages::NextPlayer() {
 
 }
