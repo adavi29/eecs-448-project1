@@ -91,10 +91,13 @@ all: pre-build $(DEPENDENCIES)
 pre-build:
 # The first time we compile, this will make the directory. The second time, it
 # will ignore the preexisting directory error so the build doesn't fail.
+	@echo "Attempting to create object directory..."
 	-mkdir obj
 
 # --- Source Files ---
 # TODO: Automatic dependency tracking for cpp files #including multiple h files
+# essentially implement
+# http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< $(EXPORT)
 
