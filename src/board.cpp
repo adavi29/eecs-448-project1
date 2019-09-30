@@ -5,7 +5,7 @@
  *   @brief prints out game board and edits board entries
  */
 
-#include "Board.h"
+#include "board.h"
 Board::Board(){
   m_board = new string*[8];
   for(int i=0;i<8;i++){

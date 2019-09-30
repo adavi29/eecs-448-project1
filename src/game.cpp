@@ -4,8 +4,8 @@
  *   @file Game.cpp
  *   @brief implemented methods needed for game play from header file
  */
-#include "Game.h"
-#include "Board.h"
+#include "game.h"
+#include "board.h"
 
 #include <stdexcept>
 #include <cctype> //included for isUpper function
@@ -426,8 +426,8 @@ void Game::clearConsole(){
 
 void Game::printWinner(int player){
 
-  ifstream file_p1_wins ("player1wins.txt");
-  ifstream file_p2_wins ("player2wins.txt");
+  ifstream file_p1_wins ("ascii/player1wins.txt");
+  ifstream file_p2_wins ("ascii/player2wins.txt");
 
   if(player == 1){
     cout << getFileContents (file_p1_wins) << endl;

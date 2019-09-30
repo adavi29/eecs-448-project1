@@ -4,7 +4,7 @@
  *   @file main.cpp
  *   @brief calls game setup and run
  */
-#include "Game.h"
+#include "game.h"
 #include <iostream>
 #include <string>
 

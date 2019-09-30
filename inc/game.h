@@ -1,14 +1,14 @@
 /**
  *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
  *   @date 9/19/19
- *   @file Game.h
+ *   @file game.h
  *   @brief declares methods and member variables needed for game play
  */
 #ifndef GAME_H
 #define GAME_H
 
-#include "Board.h"
-#include "Ships.h"
+#include "board.h"
+#include "ships.h"
 #include <string>
 #include <iostream>
 using namespace std;

@@ -4,7 +4,7 @@
  *   @file Ships.cpp
  *   @brief implements methods in Ships.h
  */
-#include "Ships.h"
+#include "ships.h"
 
 Ships::Ships(int numShips){
 	m_ship1=-1;//initialize ship variables in case they are not assigned a value below
