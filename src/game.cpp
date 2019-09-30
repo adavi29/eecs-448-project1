@@ -30,10 +30,10 @@ Game::Game() {
 	arrCol = 0;
 	arrRow = 0;
 
-	m_p1oppBoard=new Board();
-	m_p1ownBoard=new Board();
-	m_p2oppBoard=new Board();
-	m_p2ownBoard=new Board();
+	m_p1oppBoard = new Board();
+	m_p1ownBoard = new Board();
+	m_p2oppBoard = new Board();
+	m_p2ownBoard = new Board();
 
 	m_currentPlayer = 1;
 
@@ -73,12 +73,14 @@ std::string Game::convertStringToLower(std::string wordToConvert) {
 }
 
 void Game::setup() {
+
 	int numShipsChoice = 0;
 	int userRowChoice = 0;
 	Board* currentPlayerBoard = nullptr;
+
 	std::cout << std::endl;
 	StatusMessages::PrintBattleship();
-	//gets number of ships
+
 	do {
 		StatusMessages::AskNumShips();
 		std::cin >> numShipsChoice;
@@ -91,15 +93,16 @@ void Game::setup() {
 			}
 		}
 	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));
-	m_numShips = numShipsChoice;
-	//test code
-	//printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
-	//test code above
-	//get number ships coordinates
+
+	// Explicit this is good because otherwise how can you know where this came from?
+	this->m_numShips = numShipsChoice;
+
 	for(int j = 0; j < 2; j++) {
 		(j == 0) ? StatusMessages::PrintPlayerBillboard(1) : StatusMessages::PrintPlayerBillboard(2);
-		std::cin >> wait;
-
+		// Explicit namespaces are good. Now I KNOW this function is
+		// defined elsewhere in this header instead potentially under
+		// some random namespace.
+		Game::ContinuePause();
 		switch (m_numShips) {
 			case 1: {
 				StatusMessages::AskToPlaceShips(j, 1);
@@ -139,87 +142,19 @@ void Game::setup() {
 				break;
 			}
 			case 2: {
-				for(int i = 1; i < 3; i++) {
-					std::string shipString=std::to_string(i);
-					int shipNum=i;
-					shipPlacementInteraction(i, j, currentPlayerBoard);
-					if(m_currentPlayer==1) {
-						if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
-							std::cout<<"Player 1's current Board:\n";
-							printOwnBoard(m_p1ownBoard);
-						}
-					} else {
-						if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
-							std::cout<<"Player 2's current Board:\n";
-							printOwnBoard(m_p2ownBoard);
-						}
-					}
-				}
+				Game::SetUpShips(j, 2, currentPlayerBoard);
 				break;
 			}
 			case 3: {
-				for(int i = 1; i < 4; i++) {
-					std::string shipString=std::to_string(i);
-					int shipNum=i;
-					shipPlacementInteraction(i, j, currentPlayerBoard);
-					if(m_currentPlayer==1) {
-						if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
-							std::cout<<"Player 1's current Board:\n";
-							printOwnBoard(m_p1ownBoard);
-						}
-					} else {
-						if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
-							std::cout<<"Player 2's current Board:\n";
-							printOwnBoard(m_p2ownBoard);
-						}
-					}
-				}
+				Game::SetUpShips(j, 3, currentPlayerBoard);
 				break;
 			}
 			case 4: {
-				for(int i = 1; i < 5; i++) {
-					std::string shipString=std::to_string(i);
-					int shipNum=i;
-					shipPlacementInteraction(i, j, currentPlayerBoard);
-					if(m_currentPlayer==1) {
-						if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
-							std::cout<<"Player 1's current Board:\n";
-							printOwnBoard(m_p1ownBoard);
-						}
-					} else {
-						if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
-							std::cout<<"Player 2's current Board:\n";
-							printOwnBoard(m_p2ownBoard);
-						}
-					}
-				}
+				Game::SetUpShips(j, 4, currentPlayerBoard);
 				break;
 			}
 			case 5: {
-				for(int i = 1; i < 6; i++) {
-					std::string shipString=std::to_string(i);
-					int shipNum=i;
-					shipPlacementInteraction(i, j, currentPlayerBoard);
-					if(m_currentPlayer==1) {
-						if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
-							std::cout<<"Player 1's current Board:\n";
-							printOwnBoard(m_p1ownBoard);
-						}
-					} else {
-						if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
-							addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
-							std::cout<<"Player 2's current Board:\n";
-							printOwnBoard(m_p2ownBoard);
-						}
-					}
-				}
+				Game::SetUpShips(j, 5, currentPlayerBoard);
 				break;
 			}
 		}
@@ -288,7 +223,7 @@ void Game::p1Turn() {
 		p1_attack_col = getUserCol();
 
 		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" || m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
-			std::cout<< "You have already tried to attack there. Pick a different coordinate." << std::endl;
+			StatusMessages::AlreadyShotThere();
 		}else{
 			break;
 		}
@@ -297,7 +232,7 @@ void Game::p1Turn() {
 
 	//checks if isHit() or not
 	if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
-		std::cout << "That's a HIT!" << std::endl;
+		StatusMessages::ConfirmHit();
 		m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
 		//decreases the opponents ship on hit and announce if sunk
@@ -311,7 +246,7 @@ void Game::p1Turn() {
 		//puts an x on the opponnets board
 		m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
 	}else{
-		std::cout << "That's a MISS! Better luck next time." << std::endl;
+		StatusMessages::ConfirmMiss();
 		m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 	}
 	std::cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
@@ -338,9 +273,7 @@ void Game::p2Turn() {
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
 		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
 		{
-			std::cout << "You have already tried to attack there. "
-				  << "Pick a different coordinate."
-				  << std::endl;
+			StatusMessages::AlreadyShotThere();
 		}
 		else{
 			break;
@@ -350,7 +283,7 @@ void Game::p2Turn() {
 
 	//hit or miss,
 	if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
-		std::cout << "That's a HIT!" << std::endl;
+		StatusMessages::ConfirmHit();
 		m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
 
 		//decreases the opponents ship on hit and announces if sunk
@@ -364,12 +297,12 @@ void Game::p2Turn() {
 		//puts an x on the opponnets board
 		m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
 	}else{
-		std::cout << "That's a MISS! Better luck next time." << std::endl;
+		StatusMessages::ConfirmMiss();
 		m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
 	}
 
-	std::cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
-	std::cin>> wait;
+	StatusMessages::NextPlayer();
+	std::cin >> wait;
 }
 
 void Game::printWinner(int player) {
@@ -733,5 +666,38 @@ void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
 	}
 	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")) {
 		std::cout<<" right ";
+	}
+}
+
+void Game::ContinuePause() {
+#ifdef _WIN32
+	system("pause");
+#elif defined __linux__ //|| defined __APPLE__
+	system("wait");
+#else
+#warning "Unknown platform, falling back to C++ workarounds."
+	StatusMessages::PressToContinue();
+	std::cin >> wait;
+#endif
+}
+
+void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
+	for(int i = 0; i < ships; i++) {
+		std::string shipString=std::to_string(i+1);
+		int shipNum=i+1;
+		shipPlacementInteraction(i+1, player, currentPlayerBoard);
+		if(m_currentPlayer==1) {
+			if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
+				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
+				std::cout<<"Player 1's current Board:\n";
+				printOwnBoard(m_p1ownBoard);
+			}
+		} else {
+			if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
+				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+				std::cout<<"Player 2's current Board:\n";
+				printOwnBoard(m_p2ownBoard);
+			}
+		}
 	}
 }

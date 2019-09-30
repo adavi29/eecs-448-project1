@@ -241,6 +241,14 @@ class Game{
 		 */
 		void CheckDirections(Board* currentPlayerBoard, int shipNum);
 
+		/**
+		 * @brief Provides platform specific ways to pause the game withi
+		 *        a plain C++ fallback if system calls are unavailable
+		 *        (e.g. if we do not detect a known platform)
+		 */
+		void ContinuePause();
+
+		void SetUpShips(int player, int ships, Board* currentPlayerBoard);
 };
 
 #endif // GAME_H_

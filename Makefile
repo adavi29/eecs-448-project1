@@ -51,7 +51,18 @@ MFLAGS := --leak-check=full \
 CXX := g++
 
 # --- Compiliing: Detect System Type to Automatically Append Paths Later ---
-SYSTYPE := $(shell uname -s)
+SYSTYPE :=
+ifeq ($(OS),Windows_NT)
+	SYSTYPE += WIN32
+else
+	U_NAME := $(shell uname -s)
+	ifeq ($(U_NAME),Linux)
+		SYSTYPE += __linux__
+	endif
+	ifeq ($(U_NAME),Darwin)
+		SYSTYPE += __APPLE__
+	endif
+endif
 
 # --- Compiling: Set Compiler Flags
 # You probably don't want to change these all by hand. Changing this is even
@@ -64,7 +75,7 @@ SYSTYPE := $(shell uname -s)
 # -I$(INCDIR) -- Makes the compiler search /inc for headers -- this is good
 #                because errors become informative instead of being hidden
 #                behind a series of recursive includes.
-GENFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -I$(INCDIR) -g
+GENFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -D$(SYSTYPE) -I$(INCDIR) -g
 CXXFLAGS = $(GENFLAGS) -c
 LDFLAGS = $(GENFLAGS)
 

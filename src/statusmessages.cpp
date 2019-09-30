@@ -19,14 +19,13 @@ void StatusMessages::PrintBattleship() {
 
 void StatusMessages::PrintPlayerBillboard(int player) {
 	StatusMessages::ClearConsole();
-	if(player == 1) {
+	if(player == 0) {
 		std::ifstream file_p1_text("ascii/player1.txt");
 		std::cout << AsciiArtHandler::printFileContents(file_p1_text) << std::endl;
 	} else {
 		std::ifstream file_p2_text("ascii/player2.txt");
 		std::cout << AsciiArtHandler::printFileContents(file_p2_text) << std::endl;
 	}
-	std::cout << "Press any letter key then hit Enter to continue...";
 }
 
 void StatusMessages::ClearConsole() {
@@ -43,7 +42,7 @@ void StatusMessages::PrintLetsPlay() {
 }
 
 void StatusMessages::PressToContinue() {
-	std::cout << "Press any letter key then hit Enter to continue...";
+	std::cout << "Press any letter key then hit Enter to continue..." << std::endl;
 }
 
 void StatusMessages::AskNumShips() {
@@ -58,7 +57,7 @@ void StatusMessages::ErrorNumShips() {
 
 void StatusMessages::AskToPlaceShips(int player, int ship) {
 	std::cout << "Enter the coordinates for player "
-		  << ((player == 1) ? "1" : "2")
+		  << ((player == 0) ? "1" : "2")
 		  << "'s";
 	switch(ship) {
 		default: break;
@@ -105,17 +104,21 @@ void StatusMessages::ShipInTheWay() {
 }
 
 void StatusMessages::AlreadyShotThere() {
-
+	std::cout << "You have already tried to attack there. "
+		  << "Pick a different coordinate."
+		  << std::endl;
 }
 
 void StatusMessages::ConfirmHit() {
-
+	std::cout << "That's a HIT!" << std::endl;
 }
 
 void StatusMessages::ConfirmMiss() {
-
+	std::cout << "That's a MISS! Better luck next time." << std::endl;
 }
 
 void StatusMessages::NextPlayer() {
-
+	std::cout << "Next Player's Turn. Press any letter key then hit Enter "
+		  << "to continue..."
+		  << std::endl;
 }
