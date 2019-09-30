@@ -16,7 +16,9 @@
 
 #include "game.h"
 #include "board.h"
+#include "statusmessages.h"
 #include "asciiart.h"
+#include "gamelimits.h"
 
 Game::Game() {
 
@@ -75,45 +77,39 @@ void Game::setup() {
 	int userRowChoice = 0;
 	Board* currentPlayerBoard = nullptr;
 	std::cout << std::endl;
-	printBattleship();
+	StatusMessages::PrintBattleship();
 	//gets number of ships
 	do {
-		std::cout << "Enter the amount of ships both players want to use:"
-				  << "(Max: 5): ";
+		StatusMessages::AskNumShips();
 		std::cin >> numShipsChoice;
 		if(std::cin.fail()) {
 			std::cin.clear();
 			numShipsChoice = 0;
 		} else {
-			if((numShipsChoice < 1) || (numShipsChoice > 5)) {
-				std::cout << "Invalid number of ships."
-					  << "Must be 1 to 5. Try again.\n";
+			if((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX)) {
+				StatusMessages::ErrorNumShips();
 			}
 		}
-	} while((numShipsChoice < 1) || (numShipsChoice > 5));
+	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));
 	m_numShips = numShipsChoice;
 	//test code
 	//printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 	//test code above
 	//get number ships coordinates
-	for(int j = 1; j < 3; j++) {
-		if(j == 1) {
-			printPlayerTurn(1);
-		} else {
-			printPlayerTurn(2);
-		}
+	for(int j = 0; j < 2; j++) {
+		(j == 0) ? StatusMessages::PrintPlayerBillboard(1) : StatusMessages::PrintPlayerBillboard(2);
+		std::cin >> wait;
+
 		switch (m_numShips) {
 			case 1: {
-				std::cout << "Enter the coordinates for player "
-						  << j
-						  << "'s ship 1 (1x1): \n";
+				StatusMessages::AskToPlaceShips(j, 1);
 				do {
 					std::cout << "Row (1-8):  ";
 					std::cin>>userRowChoice;
-					if((userRowChoice < 1) || (userRowChoice > 8)) {
-						std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+					if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
+						StatusMessages::ErrorInvalidRow();
 					}
-				} while((userRowChoice < 1) || (userRowChoice > 8));
+				} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));
 				userRow = userRowChoice;
 				arrRow = userRow - 1;
 				do {
@@ -121,8 +117,7 @@ void Game::setup() {
 					std::cin >> userCol;
 					arrCol = convertCol(userCol);
 					if(arrCol < 0 || arrCol > 7) {
-						std::cout << "Invalid column."
-								  << "Must be A to H. Try again.\n";
+						StatusMessages::ErrorInvalidCol();
 					}
 				} while(arrCol < 0 || arrCol > 7);
 				//set userDirection=none because ship of size 1 is only one
@@ -239,8 +234,8 @@ void Game::run() {
 	system("clear");
 
 	// TODO: Change this to print the ASCII file
-	std::cout << letsPlay << std::endl;
-	std::cout << "Press any letter key then hit Enter to continue...";
+	StatusMessages::PrintLetsPlay();
+	StatusMessages::PressToContinue();
 	std::cin >> wait;
 
 	//loop section
@@ -249,7 +244,7 @@ void Game::run() {
 	while(endGame) {
 
 		//player 1 turn
-		printPlayerTurn(1);
+		StatusMessages::PrintPlayerBillboard(1);
 		p1Turn();
 
 		//checks if player 1 has won
@@ -260,7 +255,7 @@ void Game::run() {
 		}
 
 		//player 2 turn
-		printPlayerTurn(2);
+		StatusMessages::PrintPlayerBillboard(2);
 		p2Turn();
 
 		//checks if player 2 has won
@@ -340,9 +335,14 @@ void Game::p2Turn() {
 		p2_attack_row = getUserRow();
 		p2_attack_col = getUserCol();
 
-		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" || m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M") {
-			std::cout<< "You have already tried to attack there. Pick a different coordinate." << std::endl;
-		}else{
+		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
+		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
+		{
+			std::cout << "You have already tried to attack there. "
+				  << "Pick a different coordinate."
+				  << std::endl;
+		}
+		else{
 			break;
 		}
 
@@ -370,14 +370,6 @@ void Game::p2Turn() {
 
 	std::cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
 	std::cin>> wait;
-}
-
-void Game::clearConsole() {
-	//A load of end lines to clear the console screen inbetween player turns so they can't cheat
-	for(int i = 0; i < 200; i ++) {
-		std::cout << std::endl;
-	}
-	system("clear");
 }
 
 void Game::printWinner(int player) {
@@ -657,11 +649,6 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std
 	return(alwaysFits);
 }
 
-void Game::printBattleship() {
-    std::ifstream file_battleship_text("ascii/battleship.txt");
-    std::cout << AsciiArtHandler::printFileContents(file_battleship_text) << std::endl;
-}
-
 void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 	int userRowChoice = 0;
 	bool keepAsking = false;
@@ -671,8 +658,8 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 		do {
 			std::cout << "Row (1-8):  ";
 			std::cin>>userRowChoice;
-			if((userRowChoice < 1) || (userRowChoice > 8)) {
-				std::cout<<"Invalid row. Must be 1 to 8. Try again.\n";
+			if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
+				StatusMessages::ErrorInvalidRow();
 			}
 		} while((userRowChoice < 1) || (userRowChoice > 8));
 		userRow = userRowChoice;
@@ -683,7 +670,7 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			std::cin >> userCol;
 			arrCol = convertCol(userCol);
 			if(arrCol < 0 || arrCol > 7) {
-				std::cout<<"Invalid column. Must be A to H. Try again.\n";
+				StatusMessages::ErrorInvalidCol();
 			}
 		} while(arrCol < 0 || arrCol > 7);
 
@@ -714,25 +701,13 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		currentPlayerBoard=m_p2ownBoard;
 	}
 
-	std::cout << "Enter the coordinates for player " << j << "'s ship " << i << " (1x" << i << ")\n";
+	StatusMessages::AskToPlaceShips(m_currentPlayer, i);
 
 	printCoordinateInteraction(currentPlayerBoard, shipNum);
 
 	if(i > 1) {
 		std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
-		if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")) {
-			std::cout<<" up ";
-		}
-		if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")) {
-			std::cout<<" down ";
-		}
-		if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")) {
-			std::cout<<" left ";
-		}
-		if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")) {
-			std::cout<<" right ";
-		}
-
+		CheckDirections(currentPlayerBoard, shipNum);
 		do {
 			std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
 			std::cin>>userDirection;
@@ -746,16 +721,17 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 	}
 }
 
-void Game::printPlayerTurn(int player) {
-	clearConsole();
-
-	if(player==1) {
-	    std::ifstream file_p1_text("ascii/player1.txt");
-	    std::cout << AsciiArtHandler::printFileContents(file_p1_text) << std::endl;
-	} else {
-		std::ifstream file_p2_text("ascii/player2.txt");
-		std::cout << AsciiArtHandler::printFileContents(file_p2_text) << std::endl;
+void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
+	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")) {
+		std::cout<<" up ";
 	}
-	std::cout << "Press any letter key then hit Enter to continue...";
-	std::cin >> wait;
+	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")) {
+		std::cout<<" down ";
+	}
+	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")) {
+		std::cout<<" left ";
+	}
+	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")) {
+		std::cout<<" right ";
+	}
 }

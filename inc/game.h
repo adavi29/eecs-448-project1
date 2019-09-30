@@ -137,9 +137,9 @@ class Game{
 		 *         specified direction; false otherwise
 		 */
 		bool checkUpDownLeftRight(Board* board,
-								  int row, int col,
-								  int shipNum,
-								  std::string direction);
+					  int row, int col,
+					  int shipNum,
+					  std::string direction);
 
 		/**
 		 * @pre board object exists
@@ -156,14 +156,9 @@ class Game{
 		 * @throw runtime error when orientation runs off the board or is full
 		 */
 		void addShiptoArray(std::string ship,
-							int row, int col,
-							std::string direction,
-							int player);
-
-		/**
-		 * @post prints the word battleship to the terminal screen
-		 */
-		void printBattleship();
+				    int row, int col,
+				    std::string direction,
+				    int player);
 
 		/**
 		 * @brief helper method for run()
@@ -240,6 +235,11 @@ class Game{
 		 * @param player: the current player
 		 */
 		void printPlayerTurn(int player);
+
+		/**
+		 * @brief Prints possible directions to terminal
+		 */
+		void CheckDirections(Board* currentPlayerBoard, int shipNum);
 
 };
 
