@@ -74,28 +74,13 @@ std::string Game::convertStringToLower(std::string wordToConvert) {
 
 void Game::setup() {
 
-	int numShipsChoice = 0;
-	int userRowChoice = 0;
 	Board* currentPlayerBoard = nullptr;
 
 	std::cout << std::endl;
 	StatusMessages::PrintBattleship();
 
-	do {
-		StatusMessages::AskNumShips();
-		std::cin >> numShipsChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			numShipsChoice = 0;
-		} else {
-			if((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX)) {
-				StatusMessages::ErrorNumShips();
-			}
-		}
-	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));
-
 	// Explicit this is good because otherwise how can you know where this came from?
-	this->m_numShips = numShipsChoice;
+	this->m_numShips = Game::AskForNumShips();
 
 	for(int j = 0; j < 2; j++) {
 		(j == 0) ? StatusMessages::PrintPlayerBillboard(1) : StatusMessages::PrintPlayerBillboard(2);
@@ -106,25 +91,11 @@ void Game::setup() {
 		switch (m_numShips) {
 			case 1: {
 				StatusMessages::AskToPlaceShips(j, 1);
-				do {
-					std::cout << "Row (1-8):  ";
-					std::cin>>userRowChoice;
-					if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
-						StatusMessages::ErrorInvalidRow();
-					}
-				} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));
-				userRow = userRowChoice;
+				userRow = Game::AskForPlacementRow();
 				arrRow = userRow - 1;
-				do {
-					std::cout << "Col (A-H): ";
-					std::cin >> userCol;
-					arrCol = convertCol(userCol);
-					if(arrCol < 0 || arrCol > 7) {
-						StatusMessages::ErrorInvalidCol();
-					}
-				} while(arrCol < 0 || arrCol > 7);
 				//set userDirection=none because ship of size 1 is only one
 				//point on the array
+				userCol = Game::AskForPlacementCol();
 				userDirection="none";
 				if(m_currentPlayer==1) {
 					if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
@@ -700,4 +671,46 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 			}
 		}
 	}
+}
+
+int Game::AskForPlacementRow() {
+	int userRowChoice = 0;
+	do {
+		std::cout << "Row (1-8):  ";
+		std::cin >> userRowChoice;
+		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
+			StatusMessages::ErrorInvalidRow();
+		}
+	} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));
+	return userRowChoice;
+}
+
+std::string Game::AskForPlacementCol() {
+	std::string userCol;
+	do {
+		std::cout << "Col (A-H): ";
+		std::cin >> userCol;
+		arrCol = convertCol(userCol);
+		if(arrCol < 0 || arrCol > 7) {
+			StatusMessages::ErrorInvalidCol();
+		}
+	} while(arrCol < 0 || arrCol > 7);
+	return userCol;
+}
+
+int Game::AskForNumShips() {
+	int numShipsChoice = 0;
+	do {
+		StatusMessages::AskNumShips();
+		std::cin >> numShipsChoice;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			numShipsChoice = 0;
+		} else {
+			if((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX)) {
+				StatusMessages::ErrorNumShips();
+			}
+		}
+	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));
+	return numShipsChoice;
 }

@@ -249,6 +249,14 @@ class Game{
 		void ContinuePause();
 
 		void SetUpShips(int player, int ships, Board* currentPlayerBoard);
+
+		int AskForPlacementRow();
+
+		// TODO: Change to char
+		std::string AskForPlacementCol();
+
+		int AskForNumShips();
+
 };
 
 #endif // GAME_H_
