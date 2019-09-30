@@ -29,7 +29,10 @@
 ;;; Code:
 
 ((c++-mode . ((indent-tabs-mode . t)
-              (tab-width . 4)
+              ;; Standardize tab widths to GitHub
+              (tab-width . 8)
+              (c-basic-offset . 8)
+              ;; Spaces for alignment; tabs for indentation
               (eval . (if (package-installed-p 'smart-tabs-mode)
                           (smart-tabs-mode 1))))))
 

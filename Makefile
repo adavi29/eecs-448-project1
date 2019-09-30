@@ -1,5 +1,7 @@
-# Project: EECS 448 Project 2
-# Date:    27 September 2019
+#       Project: TBD - EECS 448 Project 2
+# Modified from: TGHET - EECS 448 Project 2
+#        Author: Zach Pearson, Victoria Maldonado
+#          Date: 27 September 2019
 
 # -- General notes about Makefiles --
 # Documentation:
@@ -49,7 +51,18 @@ MFLAGS := --leak-check=full \
 CXX := g++
 
 # --- Compiliing: Detect System Type to Automatically Append Paths Later ---
-SYSTYPE := $(shell uname -s)
+SYSTYPE :=
+ifeq ($(OS),Windows_NT)
+	SYSTYPE += WIN32
+else
+	U_NAME := $(shell uname -s)
+	ifeq ($(U_NAME),Linux)
+		SYSTYPE += __linux__
+	endif
+	ifeq ($(U_NAME),Darwin)
+		SYSTYPE += __APPLE__
+	endif
+endif
 
 # --- Compiling: Set Compiler Flags
 # You probably don't want to change these all by hand. Changing this is even
@@ -62,7 +75,7 @@ SYSTYPE := $(shell uname -s)
 # -I$(INCDIR) -- Makes the compiler search /inc for headers -- this is good
 #                because errors become informative instead of being hidden
 #                behind a series of recursive includes.
-GENFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -I$(INCDIR) -g
+GENFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Wconversion -D$(SYSTYPE) -I$(INCDIR) -g
 CXXFLAGS = $(GENFLAGS) -c
 LDFLAGS = $(GENFLAGS)
 
@@ -72,40 +85,31 @@ LDFLAGS = $(GENFLAGS)
 # Recursively expands to target name of any rule that uses the variable.
 EXPORT = -o $@
 
-DEPENDENCIES = $(OBJDIR)/main.o $(OBJDIR)/game.o $(OBJDIR)/board.o $(OBJDIR)/ships.o
-
+SRCFILES := $(wildcard $(SRCDIR)/*.cpp)
+DEPENDENCIES := $(SRCFILES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 # --- Phonies ---
 # Phonies essentially declare a target as being unrelated to actual files in
 # the project directory, and allow you to make files with the same name as
 # such a target without worrying about aliasing commands.
-.PHONY: clean rebuild memcheck debug $(SRCDIR) $(INCDIR) $(OBJDIR)
+.PHONY: all clean rebuild memcheck debug $(SRCDIR) $(INCDIR) $(OBJDIR)
 
 # --- Compilation Options ---
 # By convention 'all' compiles the entire program.
 all: pre-build $(DEPENDENCIES)
-	$(CXX) $(DEPENDENCIES) $(LDFLAGS) -o $(FILENAME)
+	$(CXX) $(filter-out pre-build,$^) $(LDFLAGS) -o $(FILENAME)
 
-# install: all
-# By convention this should place the executable in a standard location, either
-# in /usr/bin or /usr/local/bin
 pre-build:
-# The first time we compile, make the directory. The second time, force true
-# so the build doesn't fail.
-	mkdir obj | true
+# The first time we compile, this will make the directory. The second time, it
+# will ignore the preexisting directory error so the build doesn't fail.
+	@echo "Attempting to create object directory..."
+	-mkdir obj
 
 # --- Source Files ---
-# TODO: Reduce this to one automatic line.
-$(OBJDIR)/main.o: $(SRCDIR)/main.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/game.o: $(SRCDIR)/game.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/board.o: $(SRCDIR)/board.cpp
-	$(CXX) $(CXXFLAGS) $< $(EXPORT)
-
-$(OBJDIR)/ships.o: $(SRCDIR)/ships.cpp
+# TODO: Automatic dependency tracking for cpp files #including multiple h files
+# essentially implement
+# http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< $(EXPORT)
 
 # --- Housekeeping ---
