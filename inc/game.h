@@ -12,11 +12,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-<<<<<<< HEAD
-#include "board.h"
-#include "ships.h"
-=======
->>>>>>> zach
 #include <string>
 #include <iostream>
 

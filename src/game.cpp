@@ -184,13 +184,8 @@ void Game::p1Turn() {
 	std::string shipNum_string;
 	int shipNum;
 
-<<<<<<< HEAD
-  ifstream file_p1_wins ("ascii/player1wins.txt");
-  ifstream file_p2_wins ("ascii/player2wins.txt");
-=======
 	//print Board
 	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
->>>>>>> zach
 
 	std::cout << "It's time to attack!" << std::endl;
 
