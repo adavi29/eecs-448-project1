@@ -65,7 +65,7 @@ class Game{
 		 * @pre a game object exists
 		 * @post game play happens in this method
 		 */
-		void run();
+		int run();
 
 		/**
 		 * @pre a game object exists

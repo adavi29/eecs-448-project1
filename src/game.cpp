@@ -74,6 +74,7 @@ std::string Game::convertStringToLower(std::string wordToConvert) {
 
 void Game::setup() {
 
+	// TODO: Is there a reason this isn't a member variable?
 	Board* currentPlayerBoard = nullptr;
 
 	std::cout << std::endl;
@@ -82,15 +83,15 @@ void Game::setup() {
 	// Explicit this is good because otherwise how can you know where this came from?
 	this->m_numShips = Game::AskForNumShips();
 
-	for(int j = 0; j < 2; j++) {
-		(j == 0) ? StatusMessages::PrintPlayerBillboard(1) : StatusMessages::PrintPlayerBillboard(2);
+	for(int i = 0; i < 2; i++) {
+		StatusMessages::PrintPlayerBillboard(i);
 		// Explicit namespaces are good. Now I KNOW this function is
 		// defined elsewhere in this header instead potentially under
 		// some random namespace.
 		Game::ContinuePause();
 		switch (m_numShips) {
 			case 1: {
-				StatusMessages::AskToPlaceShips(j, 1);
+				StatusMessages::AskToPlaceShips(i, 1);
 				userRow = Game::AskForPlacementRow();
 				arrRow = userRow - 1;
 				//set userDirection=none because ship of size 1 is only one
@@ -113,19 +114,19 @@ void Game::setup() {
 				break;
 			}
 			case 2: {
-				Game::SetUpShips(j, 2, currentPlayerBoard);
+				Game::SetUpShips(i, 2, currentPlayerBoard);
 				break;
 			}
 			case 3: {
-				Game::SetUpShips(j, 3, currentPlayerBoard);
+				Game::SetUpShips(i, 3, currentPlayerBoard);
 				break;
 			}
 			case 4: {
-				Game::SetUpShips(j, 4, currentPlayerBoard);
+				Game::SetUpShips(i, 4, currentPlayerBoard);
 				break;
 			}
 			case 5: {
-				Game::SetUpShips(j, 5, currentPlayerBoard);
+				Game::SetUpShips(i, 5, currentPlayerBoard);
 				break;
 			}
 		}
@@ -133,13 +134,12 @@ void Game::setup() {
 	}
 }
 
-void Game::run() {
+int Game::run() {
 	m_p1Ships = new Ships(m_numShips);
 	m_p2Ships = new Ships(m_numShips);
 	//start game
 	system("clear");
 
-	// TODO: Change this to print the ASCII file
 	StatusMessages::PrintLetsPlay();
 	StatusMessages::PressToContinue();
 	std::cin >> wait;
@@ -150,7 +150,7 @@ void Game::run() {
 	while(endGame) {
 
 		//player 1 turn
-		StatusMessages::PrintPlayerBillboard(1);
+		StatusMessages::PrintPlayerBillboard(0);
 		p1Turn();
 
 		//checks if player 1 has won
@@ -161,7 +161,7 @@ void Game::run() {
 		}
 
 		//player 2 turn
-		StatusMessages::PrintPlayerBillboard(2);
+		StatusMessages::PrintPlayerBillboard(1);
 		p2Turn();
 
 		//checks if player 2 has won
@@ -220,8 +220,8 @@ void Game::p1Turn() {
 		StatusMessages::ConfirmMiss();
 		m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 	}
-	std::cout << "Next Player's Turn. Press any letter key then hit Enter to continue...";
-	std::cin>> wait;
+	StatusMessages::NextPlayer();
+	std::cin >> wait;
 }
 
 void Game::p2Turn() {
