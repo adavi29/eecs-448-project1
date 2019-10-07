@@ -553,6 +553,54 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std
 	return(alwaysFits);
 }
 
+bool Game::newCheckUpDownLeftRight(Board* board, int row, int col, int shipNum, Directions direction) {
+	bool alwaysFits = true;
+	if(direction == NONE) {
+		alwaysFits = true;
+	} else if(direction == UP) {
+		if((row - (shipNum-1)) >= 0) {
+			for(int i = 0; i < shipNum; i++) {
+				if(isAvailable(board, row-i, col) == false) {
+					alwaysFits = false;
+				}
+			}
+		} else {
+			alwaysFits = false;
+		}
+	} else if(direction == DOWN) {
+		if((row + (shipNum-1)) <= 7) {
+			for(int i = 0; i < shipNum; i++) {
+				if(isAvailable(board, row+i, col) == false) {
+					alwaysFits = false;
+				}
+			}
+		} else {
+			alwaysFits = false;
+		}
+	} else if(direction == LEFT) {
+		if((col - (shipNum-1)) >= 0) {
+			for(int i = 0; i < shipNum; i++) {
+				if(isAvailable(board, row, col-i) == false) {
+					alwaysFits = false;
+				}
+			}
+		} else {
+			alwaysFits = false;
+		}
+	} else if(direction == RIGHT) {
+		if((col +(shipNum - 1)) <= 7) {
+			for(int i = 0; i < shipNum; i++) {
+				if(isAvailable(board, row, col+i) == false) {
+					alwaysFits = false;
+				}
+			}
+		} else {
+			alwaysFits = false;
+		}
+	}
+	return(alwaysFits);
+}
+
 void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 	int userRowChoice = 0;
 	bool keepAsking = false;
@@ -619,24 +667,21 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 			if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
 				std::cout << "The direction you chose is not open.\n";
 			}
-		} while((userDirection!="up" && userDirection!="down" && userDirection!="left" && userDirection!="right") || (!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
+		} while((userDirection!="up" &&
+			 userDirection!="down" &&
+			 userDirection!="left" &&
+			 userDirection!="right") || (!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
 	} else if(i < 2) {
 		userDirection="none";
 	}
 }
 
 void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
-	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up")) {
-		std::cout<<" up ";
-	}
-	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down")) {
-		std::cout<<" down ";
-	}
-	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left")) {
-		std::cout<<" left ";
-	}
-	if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right")) {
-		std::cout<<" right ";
+	std::string directions[5] = {"none", "up", "down", "left", "right"};
+	for(int i = 1; i <= 4; i++) {
+	        if(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, static_cast<Directions>(i))) {
+	                std::cout << " " << directions[i] << " ";
+	        };
 	}
 }
 
@@ -658,13 +703,15 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		int shipNum=i+1;
 		shipPlacementInteraction(i+1, player, currentPlayerBoard);
 		if(m_currentPlayer==1) {
-			if (isAvailable(m_p1ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
+			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
+			    checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
 				std::cout<<"Player 1's current Board:\n";
 				printOwnBoard(m_p1ownBoard);
 			}
 		} else {
-			if (isAvailable(m_p2ownBoard, arrRow, arrCol) && checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
+			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
+			    checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
 				std::cout<<"Player 2's current Board:\n";
 				printOwnBoard(m_p2ownBoard);

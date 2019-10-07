@@ -148,6 +148,10 @@ class Game{
 					  int row, int col,
 					  int shipNum,
 					  std::string direction);
+		bool newCheckUpDownLeftRight(Board* board,
+					  int row, int col,
+					  int shipNum,
+					  Directions direction);
 
 		/**
 		 * @pre board object exists
