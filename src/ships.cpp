@@ -1,8 +1,13 @@
+// -*- C++ -*-
 /**
- *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
- *   @date 2019 09 20
- *   @file Ships.cpp
- *   @brief implements methods in ships.h
+ * @author Runtime Terrors:
+ *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *             Jacob Swearingen, Chongzhi Gao
+ *         git-merge:
+ *             Zach Pearson
+ * @date 06 October 2019
+ * @file Ships.cpp
+ * @brief implements methods in ships.h
  */
 
 #include "ships.h"

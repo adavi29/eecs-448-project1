@@ -1,9 +1,13 @@
+// -*- C++ -*-
 /**
- *   @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke,
- *           Jacob Swearingen, Chongzhi Gao)
- *   @date 9/20/19
- *   @file main.cpp
- *   @brief calls game setup and run
+ * @author Runtime Terrors:
+ *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *             Jacob Swearingen, Chongzhi Gao
+ *         git-merge:
+ *             Zach Pearson
+ * @date 06 October 2019
+ * @file main.cpp
+ * @brief calls game setup and run
  */
 
 #include <iostream>

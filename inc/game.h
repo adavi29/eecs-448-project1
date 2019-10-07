@@ -1,10 +1,11 @@
+// -*- C++ -*-
 /**
  *   @author Runtime Terrors:
  *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,
  *               Jacob Swearingen, Chongzhi Gao
- *           TBD:
+ *           git-merge:
  *               Zach Pearson, Brian Clark, Finn Dobbs, Dalton Yoder
- *   @date 9/19/19
+ *   @date 06 October 2019
  *   @file game.h
  *   @brief declares methods and member variables needed for game play
  */

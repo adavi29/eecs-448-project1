@@ -1,7 +1,12 @@
+// -*- C++ -*-
 /**
- * @author Runtime Terrors (Abby Davidow, Anissa Khan, Grant Schnettgoecke, Jacob Swearingen, Chongzhi Gao)
- * @date 2019 09 20
- * @file Ships.h
+ * @author Runtime Terrors:
+ *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *             Jacob Swearingen, Chongzhi Gao
+ *         git-merge:
+ *             Zach Pearson
+ * @date 06 October 2019
+ * @file ships.h
  * @brief Creates the "fleet" for the game;
  *        keeps track of each ship's "size", or remaining health
  */

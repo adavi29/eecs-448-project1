@@ -1,10 +1,13 @@
+// -*- C++ -*-
 /**
- *   @author Runtime Terrors:
- *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,
- *               Jacob Swearingen, Chongzhi Gao
- *   @date 9/16/19
- *   @file Board.cpp
- *   @brief prints out game board and edits board entries
+ * @author Runtime Terrors:
+ *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
+ *             Jacob Swearingen, Chongzhi Gao
+ *         git-merge:
+ *             Zach Pearson
+ * @date 06 October 2019
+ * @file Board.cpp
+ * @brief prints out game board and edits board entries
  */
 
 #include "board.h"

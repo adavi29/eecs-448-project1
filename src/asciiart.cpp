@@ -1,10 +1,11 @@
 // -*- C++ -*-
 /**
-* @author Zach Pearson
-* @file   asciiart.cpp
-* @date   28 September 2019
-* @brief  Provides methods for ascii art file handler specified in inc/asciiart.h
-*/
+ * @author git-merge:
+ *             Zach Pearson
+ * @file   asciiart.cpp
+ * @date   28 September 2019
+ * @brief  Provides methods for ascii art file handler specified in inc/asciiart.h
+ */
 
 #include <fstream>
 

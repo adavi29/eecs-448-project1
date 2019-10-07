@@ -1,8 +1,9 @@
+// -*- C++ -*-
 /**
  * @author Runtime Terrors:
  *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
  *             Jacob Swearingen, Chongzhi Gao
- *         git merge:
+ *         git-merge:
  *             Zach Pearson
  * @date 6 October 2019
  * @file game.cpp

@@ -1,10 +1,11 @@
 // -*- C++ -*-
 /**
-* @author Zach Pearson
-* @file   asciiart.h
-* @date   28 September 2019
-* @brief
-*/
+ * @author git-merge:
+ *             Zach Pearson
+ * @file   asciiart.h
+ * @date   28 September 2019
+ * @brief
+ */
 
 #ifndef ASCIIART_H
 #define ASCIIART_H

@@ -1,3 +1,4 @@
+// -*- C++ -*-
 /**
  *   @author Runtime Terrors:
  *               Abby Davidow, Anissa Khan, Grant Schnettgoecke,

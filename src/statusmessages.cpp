@@ -1,10 +1,11 @@
 // -*- C++ -*-
 /**
-* @author Zach Pearson
-* @file   statusmessages.cpp
-* @date   29 September 2019
-* @brief
-*/
+ * @author git-merge:
+ *             Zach Pearson
+ * @file   statusmessages.cpp
+ * @date   29 September 2019
+ * @brief
+ */
 
 #include <iostream>
 #include <fstream>
