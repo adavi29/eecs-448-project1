@@ -67,56 +67,60 @@ void Game::setup() {
 	this->m_opponentType = static_cast<OpponentType>(Game::AskPlayerType());
 	this->m_numShips = Game::AskForNumShips();
 
-	for(int i = 0; i < 2; i++) {
-		StatusMessages::PrintPlayerBillboard(i);
-		// Explicit namespaces are good. Now I KNOW this function is
-		// defined elsewhere in this header instead potentially under
-		// some random namespace.
-		Game::ContinuePause();
-		switch (m_numShips) {
-			case 1: {
-				StatusMessages::AskToPlaceShips(i, 1);
-				userRow = Game::AskForPlacementRow();
-				arrRow = userRow - 1;
-				//set userDirection=none because ship of size 1 is only one
-				//point on the array
-				userCol = Game::AskForPlacementCol();
-				userDirection=NONE;
-				if(m_currentPlayer==1) {
-					if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
-						addShiptoArray("1", arrRow, arrCol, userDirection, 1);
-						std::cout<<"Player 1's current Board:\n";
-						printOwnBoard(m_p1ownBoard);
+	if(m_opponentType == HUMAN) {
+		for(int i = 0; i < 2; i++) {
+			StatusMessages::PrintPlayerBillboard(i);
+			// Explicit namespaces are good. Now I KNOW this function is
+			// defined elsewhere in this header instead potentially under
+			// some random namespace.
+			Game::ContinuePause();
+			switch (m_numShips) {
+				case 1: {
+					StatusMessages::AskToPlaceShips(i, 1);
+					userRow = Game::AskForPlacementRow();
+					arrRow = userRow - 1;
+					//set userDirection=none because ship of size 1 is only one
+					//point on the array
+					userCol = Game::AskForPlacementCol();
+					userDirection=NONE;
+					if(m_currentPlayer==1) {
+						if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
+							addShiptoArray("1", arrRow, arrCol, userDirection, 1);
+							std::cout<<"Player 1's current Board:\n";
+							printOwnBoard(m_p1ownBoard);
+						}
+					} else {
+						if (isAvailable(m_p2ownBoard,arrRow, arrCol)) {
+							addShiptoArray("1", arrRow, arrCol, userDirection, 2);
+							std::cout<<"Player 2's current Board:\n";
+							printOwnBoard(m_p2ownBoard);
+						}
 					}
-				} else {
-					if (isAvailable(m_p2ownBoard,arrRow, arrCol)) {
-						addShiptoArray("1", arrRow, arrCol, userDirection, 2);
-						std::cout<<"Player 2's current Board:\n";
-						printOwnBoard(m_p2ownBoard);
-					}
+					break;
 				}
-				break;
+					//TODO: While the game logic is sound, after this point the game displays
+					// "setting player 2's ship x" for both players.
+				case 2: {
+					Game::SetUpShips(i, 2, currentPlayerBoard);
+					break;
+				}
+				case 3: {
+					Game::SetUpShips(i, 3, currentPlayerBoard);
+					break;
+				}
+				case 4: {
+					Game::SetUpShips(i, 4, currentPlayerBoard);
+					break;
+				}
+				case 5: {
+					Game::SetUpShips(i, 5, currentPlayerBoard);
+					break;
+				}
 			}
-			//TODO: While the game logic is sound, after this point the game displays
-			// "setting player 2's ship x" for both players.
-			case 2: {
-				Game::SetUpShips(i, 2, currentPlayerBoard);
-				break;
-			}
-			case 3: {
-				Game::SetUpShips(i, 3, currentPlayerBoard);
-				break;
-			}
-			case 4: {
-				Game::SetUpShips(i, 4, currentPlayerBoard);
-				break;
-			}
-			case 5: {
-				Game::SetUpShips(i, 5, currentPlayerBoard);
-				break;
-			}
+			m_currentPlayer = 2; //change value of current player to 2 for second round of for loop
 		}
-		m_currentPlayer = 2;//change value of current player to 2 for second round of for loop
+	} else {
+		// do different logic if the opponent is an AI
 	}
 }
 

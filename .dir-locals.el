@@ -34,8 +34,9 @@
               (c-basic-offset . 8)
               ;; Spaces for alignment; tabs for indentation
               (eval . (if (package-installed-p 'smart-tabs-mode)
-                          (smart-tabs-mode 1))))))
-
+                          (smart-tabs-mode 1)))
+              ;; Todo: Generalize this so that it is machine, user, and location independent.
+              (eval . (add-to-list 'flycheck-clang-include-path "/home/zjp/ossprojects/eecs448/project2/inc/")))))
 
 (provide '.dir-locals)
 ;;; .dir-locals.el ends here
