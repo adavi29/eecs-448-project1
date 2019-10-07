@@ -155,6 +155,6 @@ void StatusMessages::PrintWinner(int player) {
 	}
 }
 
-void UseBigShot() {
+void StatusMessages::UseBigShot() {
 	std::cout << "Use 3x3 Big Shot? (y/N): ";
 }

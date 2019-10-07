@@ -188,7 +188,7 @@ void Game::p1Turn() {
 	// Get input from the user.
 	while(1) {
 		if(!p1_usedBigShot) {
-			//StatusMessages::UseBigShot();
+			StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
@@ -287,7 +287,7 @@ void Game::p2Turn() {
 
 	while(1) {
 		if(!p2_usedBigShot) {
-			//StatusMessages::UseBigShot();
+			StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
