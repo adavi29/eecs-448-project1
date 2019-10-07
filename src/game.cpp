@@ -43,7 +43,16 @@ Game::Game() {
 
 	m_currentPlayer = 1;
 
+	p1_usedBigShot = false;
+	p2_usedBigShot = false;
+
+	p1_cheatedAlready = false;
+	p2_cheatedAlready = false;
+
+	// TODO: BSD?
+#if !defined(__APPLE__) && !defined(__linux__) && !defined (_WIN32)
 	wait = "";
+#endif
 }
 
 Game::~Game() {
@@ -121,6 +130,8 @@ void Game::setup() {
 		}
 	} else {
 		// do different logic if the opponent is an AI
+		// TODO: Method to ask the user how difficult they want it
+		// EASY, REALISTIC, IMPOSSIBLE
 	}
 }
 
@@ -162,6 +173,7 @@ int Game::run() {
 			}
 		} else {
 			// For now if this is fucked up we'll just immediately end
+			// TODO: AI run method -- possibly switch(difficulty)?
 			StatusMessages::PrintWinner(2);
 			endGame = false;
 			break;
@@ -171,6 +183,7 @@ int Game::run() {
 }
 
 //run() helper methods
+// TODO: Just have a Turn(player) method.
 void Game::p1Turn() {
 
 	int p1_attack_row = 0;
@@ -180,6 +193,7 @@ void Game::p1Turn() {
 	int shipNum;
 
 	int intent_to_use_big_shot = 0;
+	int intent_to_cheat = 0;
 	//print Board
 	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
@@ -187,6 +201,13 @@ void Game::p1Turn() {
 
 	// Get input from the user.
 	while(1) {
+		// TODO: Ensure the player can only do this once, even if they
+		// manage to somehow screw up their shot anyway after having
+		// seen the other board.
+		if(!p1_cheatedAlready) {
+			//StatusMessages::Cheat();
+			//std::cin >> intent_to_cheat;
+		}
 		if(!p1_usedBigShot) {
 			StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
@@ -223,26 +244,26 @@ void Game::p1Turn() {
 		   So we are missing 7 shots
 		 */
 		for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
-			for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; i++) {
+			for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; j++) {
 				if(i >= 0 || i <= 7) {
 					if(j >= 0 || j <= 7) {
-						if(isHit(m_p1ownBoard, i, j)) {
+						if(isHit(m_p2ownBoard, i, j)) {
 							StatusMessages::ConfirmHit();
-							m_p2oppBoard->setEntryAtPosition("H", j, i);
+							m_p1oppBoard->setEntryAtPosition("H", j, i);
 
 							//decreases the opponents ship on hit and announces if sunk
-							shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
+							shipNum_string = m_p2ownBoard->getEntryAtPosition(j, i);
 							shipNum = stoi(shipNum_string);
-							m_p1Ships->decreaseSize(shipNum);
-							if(m_p1Ships->allSunk()) {
+							m_p2Ships->decreaseSize(shipNum);
+							if(m_p2Ships->allSunk()) {
 								return;
 							}
 
 							//puts an x on the opponnets board
-							m_p1ownBoard->setEntryAtPosition("X", j, i);
+							m_p2ownBoard->setEntryAtPosition("X", j, i);
 						} else {
 							StatusMessages::ConfirmMiss();
-							m_p2oppBoard->setEntryAtPosition("M", j, i);
+							m_p1oppBoard->setEntryAtPosition("M", j, i);
 						}
 					}
 				}
@@ -286,6 +307,13 @@ void Game::p2Turn() {
 	printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
 	while(1) {
+		// TODO: Ensure the player can only do this once, even if they
+		// manage to somehow screw up their shot anyway after having
+		// seen the other board.
+		if(!p1_cheatedAlready) {
+			//StatusMessages::Cheat();
+			//std::cin >> intent_to_cheat;
+		}
 		if(!p2_usedBigShot) {
 			StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
@@ -304,9 +332,22 @@ void Game::p2Turn() {
 	}
 
 	//hit or miss,
+
+	/* TODO:
+	  Infinite loop on Linux might be caused by stoi -- should convert ships to use
+	  enumerated type.
+
+	  On MacOS: Method hit ship at 1A when called on 3C -- 3x3 box centered on 3C
+	            should only extend from 2B to 4D.
+
+	  Linux: Infinite Loop
+	  MacOS: libc++abi.dylib: terminating with uncaught exception of type
+	         std::invalid_argument: stoi: no conversion
+	         [1]    3252 abort      ./battleship
+	 */
 	if(intent_to_use_big_shot) {
 		for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
-			for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; i++) {
+			for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; j++) {
 				if(i >= 0 || i <= 7) {
 					if(j >= 0 || j <= 7) {
 						if(isHit(m_p1ownBoard, i, j)) {
@@ -649,6 +690,7 @@ void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
 void Game::ContinuePause() {
 	// Portable implementation of "Press any key to continue..." that
 	// changes to adapt to different platforms.
+	// TODO: BSD?
 #ifdef _WIN32
 	system("pause");
 #elif defined __linux__ || defined __APPLE__

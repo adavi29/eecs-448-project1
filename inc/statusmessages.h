@@ -40,7 +40,7 @@ class StatusMessages {
 		static void PrintLetsPlay();
 
 		/**
-		 *
+		 * @brief
 		 */
 		static void PressToContinue();
 
@@ -111,13 +111,41 @@ class StatusMessages {
 		 */
 		static void NextPlayer();
 
+		/**
+		 * @brief
+		 */
 		static void ValidDirs();
 
+		/**
+		 * @brief
+		 */
 		static void PickedInvalidDir();
+
+		/**
+		 * @brief
+		 */
 		static void PressAnyContinue();
+
+		/**
+		 * @brief
+		 */
 		static void HumanOrAI();
+
+		/**
+		 * @brief
+		 */
 		static void PrintWinner();
+
+		/**
+		 * @brief
+		 */
 		static void UseBigShot();
+
+		/**
+		 * @brief
+		 */
+		static void Cheat();
+
 };
 
 #endif // STATUSMESSAGES_H_

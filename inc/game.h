@@ -32,6 +32,12 @@ enum OpponentType {
 	AI
 };
 
+enum Difficulty {
+	EASY,
+	REALISTIC,
+	IMPOSSIBLE
+};
+
 class Game{
 
 	private:
@@ -56,13 +62,20 @@ class Game{
 		int m_currentPlayer;
 		OpponentType m_opponentType;
 
-		bool p1_usedBigShot = false;
-		bool p2_usedBigShot = false;
+		bool p1_usedBigShot;
+		bool p2_usedBigShot;
+
+		bool p1_cheatedAlready;
+		bool p2_cheatedAlready;
 
 		std::string letsPlay;
 		std::string p1Text;
 		std::string p2Text;
+
+#if !defined(__APPLE__) && !defined(__linux__) && !defined (_WIN32)
+		// Variable to control continue screen on unknown system types.
 		std::string wait;
+#endif
 
 	public:
 

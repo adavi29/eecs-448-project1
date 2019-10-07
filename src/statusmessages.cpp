@@ -158,3 +158,7 @@ void StatusMessages::PrintWinner(int player) {
 void StatusMessages::UseBigShot() {
 	std::cout << "Use 3x3 Big Shot? (y/N): ";
 }
+
+void StatusMessages::Cheat() {
+	std::cout << "Use your one opportunity to view opponent's board? (y/N): ";
+}
