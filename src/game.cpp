@@ -188,7 +188,7 @@ void Game::p1Turn() {
 	// Get input from the user.
 	while(1) {
 		if(!p1_usedBigShot) {
-			StatusMessages::UseBigShot();
+			//StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
@@ -209,7 +209,45 @@ void Game::p1Turn() {
 
 	//checks if isHit() or not
 	if(intent_to_use_big_shot) {
-		// do something
+		/* First test fired at 3B
+		    |A|B|C|D|
+		   -|-|-|-|-|-
+		   1| | | | | ...
+                   -|-|-|-|-|-
+		   2|M| | | | ...
+                   -|-|-|-|-|-
+		   3|M| | | | ...
+                   -|-|-|-|-|-
+		   4| | | | |
+		   -|-|-|-|-|-
+		   So we are missing 7 shots
+		 */
+		for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
+			for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; i++) {
+				if(i >= 0 || i <= 7) {
+					if(j >= 0 || j <= 7) {
+						if(isHit(m_p1ownBoard, i, j)) {
+							StatusMessages::ConfirmHit();
+							m_p2oppBoard->setEntryAtPosition("H", j, i);
+
+							//decreases the opponents ship on hit and announces if sunk
+							shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
+							shipNum = stoi(shipNum_string);
+							m_p1Ships->decreaseSize(shipNum);
+							if(m_p1Ships->allSunk()) {
+								return;
+							}
+
+							//puts an x on the opponnets board
+							m_p1ownBoard->setEntryAtPosition("X", j, i);
+						} else {
+							StatusMessages::ConfirmMiss();
+							m_p2oppBoard->setEntryAtPosition("M", j, i);
+						}
+					}
+				}
+			}
+		}
 		p1_usedBigShot = true;
 	} else {
 		if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
@@ -249,12 +287,13 @@ void Game::p2Turn() {
 
 	while(1) {
 		if(!p2_usedBigShot) {
-			StatusMessages::UseBigShot();
+			//StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
 		p2_attack_row = getUserRow();
 		p2_attack_col = getUserCol();
+
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
 		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
 		{
@@ -266,7 +305,32 @@ void Game::p2Turn() {
 
 	//hit or miss,
 	if(intent_to_use_big_shot) {
-		// do something
+		for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
+			for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; i++) {
+				if(i >= 0 || i <= 7) {
+					if(j >= 0 || j <= 7) {
+						if(isHit(m_p1ownBoard, i, j)) {
+							StatusMessages::ConfirmHit();
+							m_p2oppBoard->setEntryAtPosition("H", j, i);
+
+							//decreases the opponents ship on hit and announces if sunk
+							shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
+							shipNum = stoi(shipNum_string);
+							m_p1Ships->decreaseSize(shipNum);
+							if(m_p1Ships->allSunk()) {
+								return;
+							}
+
+							//puts an x on the opponnets board
+							m_p1ownBoard->setEntryAtPosition("X", j, i);
+						} else {
+							StatusMessages::ConfirmMiss();
+							m_p2oppBoard->setEntryAtPosition("M", j, i);
+						}
+					}
+				}
+			}
+		}
 		p2_usedBigShot = true;
 	} else {
 		if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
