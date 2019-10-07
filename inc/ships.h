@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include <iostream>
 
-enum ShipSizes {
+enum ShipSize {
 	NOSHIP,     // 0
 	SUBMARINE,  // 1
 	DESTROYER,  // 2
