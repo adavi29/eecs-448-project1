@@ -56,7 +56,7 @@ class StatusMessages {
 		/**
 		 * @brief Ask what orientation the player wants for a particular ship.
 		 */
-		static void AskDirection();
+		static void AskDirs();
 
 		/**
 		 * @brief Asks the player where they want their ship to go
@@ -110,6 +110,9 @@ class StatusMessages {
 		 */
 		static void NextPlayer();
 
+		static void ValidDirs();
+
+		static void PickedInvalidDir();
 };
 
 #endif // STATUSMESSAGES_H_

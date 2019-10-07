@@ -627,7 +627,7 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 		} while(arrCol < 0 || arrCol > 7);
 
 		if(!isAvailable(currentPlayerBoard, arrRow, arrCol)) {
-			std::cout<< "This coordinate has already been taken. Enter new coordinates:\n";
+			StatusMessages::ShipAlreadyThere();
 			keepAsking = true;
 		}
 		if( // TODO: checkEveryDirection which runs all of these and returns false if one is false.
@@ -637,7 +637,7 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
 			(!keepAsking))
 		{
-			std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
+			StatusMessages::ShipInTheWay();
 			keepAsking = true;
 		}
 
@@ -658,15 +658,15 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 	printCoordinateInteraction(currentPlayerBoard, shipNum);
 
 	if(i > 1) {
-		std::cout<<"Given your coordinates, your ship can be placed in the following directions:";
+		StatusMessages::ValidDirs();
 		CheckDirections(currentPlayerBoard, shipNum);
 		do {
-			std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
+			StatusMessages::AskDirs();
 			std::cin>>userDirection;
 			userDirection=convertStringToLower(userDirection);
 			// TODO Convert input to enum
 			if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
-				std::cout << "The direction you chose is not open.\n";
+				StatusMessages::PickedInvalidDir();
 			}
 		} while((userDirection!="up" &&
 			 userDirection!="down" &&

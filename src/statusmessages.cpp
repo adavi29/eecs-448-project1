@@ -96,11 +96,11 @@ void StatusMessages::ErrorInvalidCol() {
 }
 
 void StatusMessages::ShipAlreadyThere() {
-
+	std::cout<< "This coordinate has already been taken. Enter new coordinates:\n";
 }
 
 void StatusMessages::ShipInTheWay() {
-
+	std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
 }
 
 void StatusMessages::AlreadyShotThere() {
@@ -121,4 +121,16 @@ void StatusMessages::NextPlayer() {
 	std::cout << "Next Player's Turn. Press any letter key then hit Enter "
 		  << "to continue..."
 		  << std::endl;
+}
+
+void StatusMessages::ValidDirs() {
+	std::cout << "Given your coordinates, your ship can be placed in the following directions: ";
+}
+
+void StatusMessages::AskDirs() {
+	std::cout<<"\nIn which direction do you want the ship to be placed (1 - up/2 - down/3 - left/4 - right):";
+}
+
+void StatusMessages::PickedInvalidDir() {
+	std::cout << "The direction you chose is not open.\n";
 }
