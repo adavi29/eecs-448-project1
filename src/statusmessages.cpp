@@ -138,3 +138,7 @@ void StatusMessages::AskDirs() {
 void StatusMessages::PickedInvalidDir() {
 	std::cout << "The direction you chose is not open.\n";
 }
+
+void StatusMessages::HumanOrAI() {
+	std::cout << "Are you playing against a human, or would you like an AI opponent? (H/a): ";
+}

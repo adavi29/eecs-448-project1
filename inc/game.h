@@ -42,13 +42,13 @@ class Game{
 		Ships* m_p1Ships;
 		Ships* m_p2Ships;
 
-
 		Board* m_p1ownBoard;
 		Board* m_p1oppBoard;
 		Board* m_p2ownBoard;
 		Board* m_p2oppBoard;
 
 		int m_currentPlayer;
+		int m_playerType;
 
 		std::string letsPlay;
 		std::string p1Text;
@@ -247,6 +247,8 @@ class Game{
 		int AskForNumShips();
 
 		void setEntryWrapper(int player, std::string ship, int col, int row);
+
+		int AskPlayerType();
 };
 
 #endif // GAME_H_

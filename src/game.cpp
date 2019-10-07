@@ -2,23 +2,29 @@
  * @author Runtime Terrors:
  *             Abby Davidow, Anissa Khan, Grant Schnettgoecke,
  *             Jacob Swearingen, Chongzhi Gao
- * @date 9/19/19
- * @file Game.cpp
+ *         git merge:
+ *             Zach Pearson
+ * @date 6 October 2019
+ * @file game.cpp
  * @brief implemented methods needed for game play from header file
  */
 
 #include <stdexcept>
-#include <cctype> // provides isUpper()
+#include <cctype>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <limits>
 
 #include "game.h"
 #include "board.h"
 #include "statusmessages.h"
 #include "asciiart.h"
 #include "gamelimits.h"
+
+#define CHARSET_A 65
+#define CHARSET_CAPS_GAP 32
 
 Game::Game() {
 
@@ -58,6 +64,7 @@ void Game::setup() {
 	StatusMessages::PrintBattleship();
 
 	// Explicit this is good because otherwise how can you know where this came from?
+	this->m_playerType = Game::AskPlayerType();
 	this->m_numShips = Game::AskForNumShips();
 
 	for(int i = 0; i < 2; i++) {
@@ -259,7 +266,7 @@ void Game::printWinner(int player) {
 
 	if(player == 1) {
 		std::cout << AsciiArtHandler::printFileContents (file_p1_wins) << std::endl;
-	}else if(player == 2) {
+	} else if(player == 2) {
 		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
 	}
 }
@@ -281,7 +288,7 @@ int Game::getUserCol() {
 	while(1) {
 		std::cout << "Enter Column(A-H): ";
 		std::cin >> input;
-		input_num = static_cast<int>(input) - 65;
+		input_num = static_cast<int>(input) - CHARSET_A;
 		if((input_num >= 0) || (input_num <= 7)) {
 			return input_num;
 		}
@@ -486,7 +493,7 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 		do {
 			std::cout << "Col (A-H): ";
 			std::cin >> userCol;
-			arrCol = static_cast<int>(userCol) - 65;
+			arrCol = static_cast<int>(userCol) - CHARSET_A;
 			if(arrCol < 0 || arrCol > 7) {
 				StatusMessages::ErrorInvalidCol();
 			}
@@ -575,7 +582,6 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		shipPlacementInteraction(i+1, player, currentPlayerBoard);
 		if(m_currentPlayer==1) {
 			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
-			    // TODO: Convert this to use the enum
 			    CheckDirection(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
 				std::cout<<"Player 1's current Board:\n";
@@ -583,7 +589,6 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 			}
 		} else {
 			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
-			    // TODO: Convert this to use the enum
 			    CheckDirection(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
 				std::cout<<"Player 2's current Board:\n";
@@ -599,6 +604,12 @@ int Game::AskForPlacementRow() {
 		std::cout << "Row (1-8):  ";
 		// TODO: Sanitize this input
 		std::cin >> userRowChoice;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			StatusMessages::ErrorInvalidRow();
+			std::cin >> userRowChoice;
+		}
 		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
 			StatusMessages::ErrorInvalidRow();
 		}
@@ -612,7 +623,7 @@ char Game::AskForPlacementCol() {
 		std::cout << "Col (A-H): ";
 		// TODO:: Sanitize this input
 		std::cin >> userCol;
-		arrCol = static_cast<int>(userCol) - 65;
+		arrCol = static_cast<int>(userCol) - CHARSET_A;
 		if(arrCol < 0 || arrCol > 7) {
 			StatusMessages::ErrorInvalidCol();
 		}
@@ -636,4 +647,27 @@ int Game::AskForNumShips() {
 		}
 	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));
 	return numShipsChoice;
+}
+
+int Game::AskPlayerType() {
+	char playerChoice = '\0';
+	StatusMessages::HumanOrAI();
+	do {
+		std::cin >> playerChoice;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			StatusMessages::HumanOrAI();
+			std::cin >> playerChoice;
+		}
+		// hacky version of toLower()
+		if(playerChoice < 97) {
+			playerChoice = static_cast<char>(static_cast<int>(playerChoice) + CHARSET_CAPS_GAP);
+		}
+	} while(playerChoice != 'h' && playerChoice != 'a');
+	if(playerChoice == 'h') {
+		return 0;
+	} else {
+		return 1;
+	}
 }
