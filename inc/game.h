@@ -18,6 +18,14 @@
 #include "board.h"
 #include "ships.h"
 
+enum Directions {
+	NONE,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
 class Game{
 
 	private:
