@@ -6,9 +6,10 @@
  *   @brief calls game setup and run
  */
 
-#include "game.h"
 #include <iostream>
 #include <string>
+
+#include "game.h"
 
 int main(int argc, char* argv[]) {
 	if(argc > 2) {

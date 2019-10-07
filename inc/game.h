@@ -5,7 +5,7 @@
  *           TBD:
  *               Zach Pearson, Brian Clark, Finn Dobbs, Dalton Yoder
  *   @date 9/19/19
- *   @file Game.h
+ *   @file game.h
  *   @brief declares methods and member variables needed for game play
  */
 
