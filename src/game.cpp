@@ -49,19 +49,6 @@ Game::~Game() {
 	delete m_p2Ships;
 }
 
-std::string Game::convertStringToLower(std::string wordToConvert) {
-	char charWordToConvert = wordToConvert.at(0);
-	int wordLength = wordToConvert.length();
-	for(int i = 0; i < wordLength; i++) {
-		charWordToConvert = wordToConvert.at(i);
-		if(isupper(charWordToConvert)) {
-			charWordToConvert=(char)tolower(charWordToConvert);
-		}
-		wordToConvert.at(i)=charWordToConvert;
-	}
-	return(wordToConvert);
-}
-
 void Game::setup() {
 
 	// TODO: Is there a reason this isn't a member variable?
@@ -275,7 +262,6 @@ void Game::printWinner(int player) {
 	}else if(player == 2) {
 		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
 	}
-	// TODO: Close fstream
 }
 
 int Game::getUserRow() {
@@ -318,7 +304,6 @@ void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard) {
 }
 
 void Game::printOwnBoard(Board* ownBoard) {
-	//std::cout<<"Own Board:\n";
 	ownBoard->printBoard();
 }
 
@@ -590,19 +575,18 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		StatusMessages::ValidDirs();
 		CheckDirections(currentPlayerBoard, shipNum);
 		do {
+			int dirChoice = 0;
 			StatusMessages::AskDirs();
-			std::cin>>userDirection;
-			// TODO: Convert this to enum then remove the function it calls
-			userDirection=convertStringToLower(userDirection);
-			// TODO Convert input to enum
-			if(checkDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
+			// TODO: Sanitize this input
+			std::cin >> dirChoice;
+			newUserDirection = (Directions)dirChoice;
+			if(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, newUserDirection) == false) {
 				StatusMessages::PickedInvalidDir();
 			}
-		} while((userDirection!="up" &&
-			 userDirection!="down" &&
-			 userDirection!="left" &&
-			 // TODO: Convert this to use the enum
-			 userDirection!="right") || (!(checkDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
+		} while((newUserDirection != UP &&
+			 newUserDirection != DOWN &&
+			 newUserDirection != LEFT &&
+			 newUserDirection != RIGHT) || (!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, newUserDirection))));
 	} else if(i < 2) {
 		userDirection="none";
 	}

@@ -35,7 +35,7 @@ class Game{
 		int userRow;
 		char userCol;
 		std::string userDirection;
-
+		Directions newUserDirection;
 		int arrCol;
 		int arrRow;
 
@@ -96,14 +96,6 @@ class Game{
 		 * @param ownBoard: a board pointer to the player's own board
 		 */
 		void printOwnBoard(Board* ownBoard);
-
-		/**
-		 * @pre a std::string is passed in
-		 * @post a word that is passed in is converted to all lowercase
-		 * @param the_word: the word that will be converted to all lowercase
-		 * @return returns the parameter as a lowercase std::string
-		 */
-		std::string convertStringToLower(std::string the_word);
 
 		/**
 		 * @brief check if position is empty
