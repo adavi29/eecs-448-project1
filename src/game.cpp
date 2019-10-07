@@ -535,10 +535,9 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 			if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
 				StatusMessages::PickedInvalidDir();
 			}
-		} while((userDirection != UP &&
-			 userDirection != DOWN &&
-			 userDirection != LEFT &&
-			 userDirection != RIGHT) || (!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
+		} while((userDirection != UP && userDirection != DOWN &&
+			 userDirection != LEFT && userDirection != RIGHT) ||
+			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
 	} else if(i < 2) {
 		userDirection=NONE;
 	}
@@ -598,6 +597,7 @@ int Game::AskForPlacementRow() {
 	int userRowChoice = 0;
 	do {
 		std::cout << "Row (1-8):  ";
+		// TODO: Sanitize this input
 		std::cin >> userRowChoice;
 		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
 			StatusMessages::ErrorInvalidRow();
@@ -610,6 +610,7 @@ char Game::AskForPlacementCol() {
 	char userCol;
 	do {
 		std::cout << "Col (A-H): ";
+		// TODO:: Sanitize this input
 		std::cin >> userCol;
 		arrCol = static_cast<int>(userCol) - 65;
 		if(arrCol < 0 || arrCol > 7) {
@@ -623,6 +624,7 @@ int Game::AskForNumShips() {
 	int numShipsChoice = 0;
 	do {
 		StatusMessages::AskNumShips();
+		// TODO: Sanitize this input
 		std::cin >> numShipsChoice;
 		if(std::cin.fail()) {
 			std::cin.clear();
