@@ -175,102 +175,121 @@ void Game::p1Turn() {
 
 	int p1_attack_row = 0;
 	int p1_attack_col = 0;
-	//string p1_attack_col_string;
-	std::string wait = "";
 
 	std::string shipNum_string;
 	int shipNum;
 
+	int intent_to_use_big_shot = 0;
 	//print Board
 	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
 	std::cout << "It's time to attack!" << std::endl;
 
+	// Get input from the user.
 	while(1) {
+		if(!p1_usedBigShot) {
+			StatusMessages::UseBigShot();
+			// TODO: Sanitize this input
+			std::cin >> intent_to_use_big_shot;
+		}
 		p1_attack_row = getUserRow();
 		p1_attack_col = getUserCol();
 
-		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" || m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
+		// The logic here doesn't change when the player uses the big shot. They shouldn't
+		// be able to shoot it at a square that's already marked, true, but they should be
+		// able to shoot it at an empty square even if there's a status marker already in
+		// one of the boxes in the 3x3 area centered around the shot.
+		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" ||
+		   m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
 			StatusMessages::AlreadyShotThere();
 		} else {
 			break;
 		}
 	}
-	//gets good input from the user
 
 	//checks if isHit() or not
-	if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
-		StatusMessages::ConfirmHit();
-		m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
+	if(intent_to_use_big_shot) {
+		// do something
+		p1_usedBigShot = true;
+	} else {
+		if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
+			StatusMessages::ConfirmHit();
+			m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
-		//decreases the opponents ship on hit and announce if sunk
-		shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
-		shipNum = stoi(shipNum_string);
-		m_p2Ships->decreaseSize(shipNum);
-		if(m_p2Ships->allSunk()) {
-			return;
+			//decreases the opponents ship on hit and announce if sunk
+			shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
+			shipNum = stoi(shipNum_string);
+			m_p2Ships->decreaseSize(shipNum);
+			if(m_p2Ships->allSunk()) {
+				return;
+			}
+
+			//puts an x on the opponnets board
+			m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
+		} else {
+			StatusMessages::ConfirmMiss();
+			m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 		}
-
-		//puts an x on the opponnets board
-		m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
-	}else{
-		StatusMessages::ConfirmMiss();
-		m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 	}
 	StatusMessages::NextPlayer();
-	std::cin >> wait;
+	Game::ContinuePause();
 }
 
 void Game::p2Turn() {
 
 	int p2_attack_row = 0;
 	int p2_attack_col = 0;
-	//string p2_attack_col_string;
-	std::string wait = "";
 
 	std::string shipNum_string;
 	int shipNum;
 
+	int intent_to_use_big_shot = 0;
 	//print Board
 	printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
 	while(1) {
+		if(!p2_usedBigShot) {
+			StatusMessages::UseBigShot();
+			// TODO: Sanitize this input
+			std::cin >> intent_to_use_big_shot;
+		}
 		p2_attack_row = getUserRow();
 		p2_attack_col = getUserCol();
-
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
 		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
 		{
 			StatusMessages::AlreadyShotThere();
-		}
-		else{
+		} else {
 			break;
 		}
-
 	}
 
 	//hit or miss,
-	if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
-		StatusMessages::ConfirmHit();
-		m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
+	if(intent_to_use_big_shot) {
+		// do something
+		p2_usedBigShot = true;
+	} else {
+		if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
+			StatusMessages::ConfirmHit();
+			m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
 
-		//decreases the opponents ship on hit and announces if sunk
-		shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
-		shipNum = stoi(shipNum_string);
-		m_p1Ships->decreaseSize(shipNum);
-		if(m_p1Ships->allSunk()) {
-			return;
+			//decreases the opponents ship on hit and announces if sunk
+			shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
+			shipNum = stoi(shipNum_string);
+			m_p1Ships->decreaseSize(shipNum);
+			if(m_p1Ships->allSunk()) {
+				return;
+			}
+
+			//puts an x on the opponnets board
+			m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
+		} else {
+			StatusMessages::ConfirmMiss();
+			m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
 		}
-
-		//puts an x on the opponnets board
-		m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
-	}else{
-		StatusMessages::ConfirmMiss();
-		m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
 	}
-
 	StatusMessages::NextPlayer();
-	std::cin >> wait;
+	Game::ContinuePause();
 }
 
 int Game::getUserRow() {

@@ -117,6 +117,7 @@ class StatusMessages {
 		static void PressAnyContinue();
 		static void HumanOrAI();
 		static void PrintWinner();
+		static void UseBigShot();
 };
 
 #endif // STATUSMESSAGES_H_

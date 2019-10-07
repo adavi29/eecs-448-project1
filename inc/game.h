@@ -56,6 +56,9 @@ class Game{
 		int m_currentPlayer;
 		OpponentType m_opponentType;
 
+		bool p1_usedBigShot = false;
+		bool p2_usedBigShot = false;
+
 		std::string letsPlay;
 		std::string p1Text;
 		std::string p2Text;

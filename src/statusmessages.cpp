@@ -154,3 +154,7 @@ void StatusMessages::PrintWinner(int player) {
 		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
 	}
 }
+
+void UseBigShot() {
+	std::cout << "Use 3x3 Big Shot? (y/N): ";
+}
