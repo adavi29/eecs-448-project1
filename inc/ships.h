@@ -12,6 +12,15 @@
 #include <stdexcept>
 #include <iostream>
 
+enum ShipSizes {
+	NOSHIP,     // 0
+	SUBMARINE,  // 1
+	DESTROYER,  // 2
+	CRUISER,    // 3
+	BATTLESHIP, // 4
+	CARRIER,    // 5
+};
+
 class Ships {
 
 	public:
