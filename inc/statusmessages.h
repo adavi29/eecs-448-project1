@@ -113,6 +113,7 @@ class StatusMessages {
 		static void ValidDirs();
 
 		static void PickedInvalidDir();
+		static void PressAnyContinue();
 };
 
 #endif // STATUSMESSAGES_H_

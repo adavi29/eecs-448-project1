@@ -45,6 +45,10 @@ void StatusMessages::PressToContinue() {
 	std::cout << "Press any letter key then hit Enter to continue..." << std::endl;
 }
 
+void StatusMessages::PressAnyContinue() {
+	std::cout << "Press any key to continue..." << std::endl;
+}
+
 void StatusMessages::AskNumShips() {
 	std::cout << "Enter the amount of ships both players want to use "
 	          << "(Max: 5): ";

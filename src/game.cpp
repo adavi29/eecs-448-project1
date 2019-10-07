@@ -127,12 +127,11 @@ void Game::setup() {
 int Game::run() {
 	m_p1Ships = new Ships(m_numShips);
 	m_p2Ships = new Ships(m_numShips);
-	//start game
+
 	system("clear");
 
 	StatusMessages::PrintLetsPlay();
-	StatusMessages::PressToContinue();
-	std::cin >> wait;
+	Game::ContinuePause();
 
 	//loop section
 	bool endGame = true;
@@ -678,10 +677,14 @@ void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
 }
 
 void Game::ContinuePause() {
+	// Portable implementation of "Press any key to continue..." that
+	// changes to adapt to different platforms.
 #ifdef _WIN32
 	system("pause");
-#elif defined __linux__ //|| defined __APPLE__
-	system("wait");
+#elif defined __linux__ || defined __APPLE__
+	// -s silent don't echo chars -n # chars to read before return
+	StatusMessages::PressAnyContinue();
+	system("read -sn 1");
 #else
 #warning "Unknown platform, falling back to C++ workarounds."
 	StatusMessages::PressToContinue();
