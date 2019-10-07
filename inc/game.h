@@ -258,6 +258,7 @@ class Game{
 
 		int AskForNumShips();
 
+		void setEntryWrapper(int player, std::string ship, int col, int row);
 };
 
 #endif // GAME_H_

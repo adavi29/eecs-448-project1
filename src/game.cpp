@@ -160,6 +160,7 @@ int Game::run() {
 			break;
 		}
 	}
+	return 0;
 }
 
 //run() helper methods
@@ -184,7 +185,7 @@ void Game::p1Turn() {
 
 		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" || m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
 			StatusMessages::AlreadyShotThere();
-		}else{
+		} else {
 			break;
 		}
 	}
@@ -321,127 +322,82 @@ void Game::printOwnBoard(Board* ownBoard) {
 	ownBoard->printBoard();
 }
 
+void Game::setEntryWrapper(int player, std::string ship, int col, int row) {
+	if(player == 1) {
+		m_p1ownBoard->setEntryAtPosition(ship, col, row);
+	} else {
+		m_p2ownBoard->setEntryAtPosition(ship, col, row);
+	}
+}
+
 void Game::addShiptoArray(std::string ship, int row, int col, std::string direction, int player) {
 //direction=none means plastd::cing m_ship1 on the board: 1x1 size
 	if(direction == "none") {
-		if(player == 1) {
-			m_p1ownBoard->setEntryAtPosition(ship, col, row);
-		}
-		else{
-			m_p2ownBoard->setEntryAtPosition(ship, col, row);
-		}
+		setEntryWrapper(player, ship, col, row);
 	}
 	else if(direction == "up") {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row-i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row-i);
-				}
+				Game::setEntryWrapper(player, ship, col, row-i);
 			}
 		}
 		else if(ship == "3") {
 			for(int i = 0; i < 3; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row-i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row-i);
-				}
+				Game::setEntryWrapper(player, ship, col, row-i);
 			}
 		}
 		else if(ship == "4") {
 			for(int i = 0; i < 4; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row-i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row-i);
-				}
+				Game::setEntryWrapper(player, ship, col, row-i);
 			}
 		}
 		else if(ship == "5") {
 			for(int i = 0; i < 5; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row-i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row-i);
-				}
+				Game::setEntryWrapper(player, ship, col, row-i);
 			}
 		}
 	}
 	else if(direction == "down") {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row+i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row+i);
-				}
+				Game::setEntryWrapper(player, ship, col, row+i);
 			}
 		}
 		else if(ship == "3") {
 			for(int i = 0; i < 3; i++) {
-				if(player==1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row+i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row+i);
-				}
+				Game::setEntryWrapper(player, ship, col, row+i);
 			}
 		}
 		else if(ship == "4") {
 			for(int i = 0; i < 4; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row+i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row+i);
-				}
+				Game::setEntryWrapper(player, ship, col, row+i);
 			}
 		}
 		else if(ship == "5") {
 			for(int i = 0; i < 5; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col, row+i);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col, row+i);
-				}
+				Game::setEntryWrapper(player, ship, col, row+i);
 			}
 		}
 	}
 	else if(direction == "left") {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col-i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col-i, row);
-				}
+				Game::setEntryWrapper(player, ship, col-i, row);
 			}
 		}
 		else if(ship == "3") {
 			for(int i = 0; i < 3; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col-i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col-i, row);
-				}
+				Game::setEntryWrapper(player, ship, col-i, row);
 			}
 		}
 		else if(ship == "4") {
 			for(int i = 0; i < 4; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col-i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col-i, row);
-				}
+				Game::setEntryWrapper(player, ship, col-i, row);
 			}
 		}
 		else if(ship == "5") {
 			for(int i = 0; i < 5; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col-i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col-i, row);
-				}
+				Game::setEntryWrapper(player, ship, col-i, row);
 			}
 		}
 	}
@@ -449,38 +405,22 @@ void Game::addShiptoArray(std::string ship, int row, int col, std::string direct
 	else {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col+i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col+i, row);
-				}
+				Game::setEntryWrapper(player, ship, col+i, row);
 			}
 		}
 		else if(ship == "3") {
 			for(int i = 0; i < 3; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col+i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col+i, row);
-				}
+				Game::setEntryWrapper(player, ship, col+i, row);
 			}
 		}
 		else if(ship == "4") {
 			for(int i = 0; i < 4; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col+i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col+i, row);
-				}
+				Game::setEntryWrapper(player, ship, col+i, row);
 			}
 		}
 		else if(ship == "5") {
 			for(int i = 0; i < 5; i++) {
-				if(player == 1) {
-					m_p1ownBoard->setEntryAtPosition(ship, col+i, row);
-				} else {
-					m_p2ownBoard->setEntryAtPosition(ship, col+i, row);
-				}
+				Game::setEntryWrapper(player, ship, col+i, row);
 			}
 		}
 	}
@@ -652,6 +592,7 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		do {
 			StatusMessages::AskDirs();
 			std::cin>>userDirection;
+			// TODO: Convert this to enum then remove the function it calls
 			userDirection=convertStringToLower(userDirection);
 			// TODO Convert input to enum
 			if(checkDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
