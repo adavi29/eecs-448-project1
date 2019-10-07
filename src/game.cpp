@@ -631,10 +631,10 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			keepAsking = true;
 		}
 		if( // TODO: checkEveryDirection which runs all of these and returns false if one is false.
-			(!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "up"))) &&
-			(!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "down"))) &&
-			(!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "left"))) &&
-			(!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, "right"))) &&
+			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, UP))) &&
+			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
+			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
+			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
 			(!keepAsking))
 		{
 			std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
@@ -664,12 +664,14 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 			std::cout<<"\nIn which direction do you want the ship to be placed (up/down/left/right):";
 			std::cin>>userDirection;
 			userDirection=convertStringToLower(userDirection);
+			// TODO Convert input to enum
 			if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
 				std::cout << "The direction you chose is not open.\n";
 			}
 		} while((userDirection!="up" &&
 			 userDirection!="down" &&
 			 userDirection!="left" &&
+			 // TODO: Convert this to use the enum
 			 userDirection!="right") || (!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
 	} else if(i < 2) {
 		userDirection="none";
@@ -704,6 +706,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		shipPlacementInteraction(i+1, player, currentPlayerBoard);
 		if(m_currentPlayer==1) {
 			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
+			    // TODO: Convert this to use the enum
 			    checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
 				std::cout<<"Player 1's current Board:\n";
@@ -711,6 +714,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 			}
 		} else {
 			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
+			    // TODO: Convert this to use the enum
 			    checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
 				std::cout<<"Player 2's current Board:\n";
