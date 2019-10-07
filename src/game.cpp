@@ -505,7 +505,7 @@ bool Game::isAvailable(Board* board, int row, int col) {
 	}
 }
 
-bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std::string direction) {
+bool Game::checkDirection(Board* board, int row, int col, int shipNum, std::string direction) {
 	bool alwaysFits = true;
 	if(direction == "none") {
 		alwaysFits = true;
@@ -553,7 +553,7 @@ bool Game::checkUpDownLeftRight(Board* board, int row, int col, int shipNum, std
 	return(alwaysFits);
 }
 
-bool Game::newCheckUpDownLeftRight(Board* board, int row, int col, int shipNum, Directions direction) {
+bool Game::newCheckDirection(Board* board, int row, int col, int shipNum, Directions direction) {
 	bool alwaysFits = true;
 	if(direction == NONE) {
 		alwaysFits = true;
@@ -631,10 +631,10 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			keepAsking = true;
 		}
 		if( // TODO: checkEveryDirection which runs all of these and returns false if one is false.
-			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, UP))) &&
-			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
-			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
-			(!(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
+			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, UP))) &&
+			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
+			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
+			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
 			(!keepAsking))
 		{
 			StatusMessages::ShipInTheWay();
@@ -665,14 +665,14 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 			std::cin>>userDirection;
 			userDirection=convertStringToLower(userDirection);
 			// TODO Convert input to enum
-			if(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
+			if(checkDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
 				StatusMessages::PickedInvalidDir();
 			}
 		} while((userDirection!="up" &&
 			 userDirection!="down" &&
 			 userDirection!="left" &&
 			 // TODO: Convert this to use the enum
-			 userDirection!="right") || (!(checkUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
+			 userDirection!="right") || (!(checkDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
 	} else if(i < 2) {
 		userDirection="none";
 	}
@@ -681,7 +681,7 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
 	std::string directions[5] = {"none", "up", "down", "left", "right"};
 	for(int i = 1; i <= 4; i++) {
-	        if(newCheckUpDownLeftRight(currentPlayerBoard, arrRow, arrCol, shipNum, static_cast<Directions>(i))) {
+	        if(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, static_cast<Directions>(i))) {
 	                std::cout << " " << directions[i] << " ";
 	        };
 	}
@@ -707,7 +707,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		if(m_currentPlayer==1) {
 			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
 			    // TODO: Convert this to use the enum
-			    checkUpDownLeftRight(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
+			    checkDirection(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
 				std::cout<<"Player 1's current Board:\n";
 				printOwnBoard(m_p1ownBoard);
@@ -715,7 +715,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		} else {
 			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
 			    // TODO: Convert this to use the enum
-			    checkUpDownLeftRight(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
+			    checkDirection(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
 				std::cout<<"Player 2's current Board:\n";
 				printOwnBoard(m_p2ownBoard);

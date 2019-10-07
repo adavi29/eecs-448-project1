@@ -144,11 +144,11 @@ class Game{
 		 * @return returns true if the ship can be placed on the board in the
 		 *         specified direction; false otherwise
 		 */
-		bool checkUpDownLeftRight(Board* board,
+		bool checkDirection(Board* board,
 					  int row, int col,
 					  int shipNum,
 					  std::string direction);
-		bool newCheckUpDownLeftRight(Board* board,
+		bool newCheckDirection(Board* board,
 					  int row, int col,
 					  int shipNum,
 					  Directions direction);
