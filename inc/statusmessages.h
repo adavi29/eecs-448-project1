@@ -116,7 +116,7 @@ class StatusMessages {
 		static void PickedInvalidDir();
 		static void PressAnyContinue();
 		static void HumanOrAI();
-
+		static void PrintWinner();
 };
 
 #endif // STATUSMESSAGES_H_

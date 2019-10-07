@@ -143,3 +143,14 @@ void StatusMessages::PickedInvalidDir() {
 void StatusMessages::HumanOrAI() {
 	std::cout << "Are you playing against a human, or would you like an AI opponent? (H/a): ";
 }
+
+void StatusMessages::PrintWinner(int player) {
+	std::ifstream file_p1_wins ("ascii/player1wins.txt");
+	std::ifstream file_p2_wins ("ascii/player2wins.txt");
+
+	if(player == 1) {
+		std::cout << AsciiArtHandler::printFileContents (file_p1_wins) << std::endl;
+	} else if(player == 2) {
+		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
+	}
+}

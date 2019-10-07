@@ -197,13 +197,6 @@ class Game{
 		bool isHit(Board* playerBoard, int row, int col);
 
 		/**
-		 * @pre the game is over, either player 1 or 2 wins
-		 * @post prints the winner to console
-		 * @param int player - which play to print
-		 */
-		void printWinner(int player);
-
-		/**
 		 * @pre a board object exists
 		 * @post gets the user's coordinates to place a ship on the board and
 		 *       verifies input

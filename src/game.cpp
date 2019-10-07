@@ -21,7 +21,6 @@
 #include "game.h"
 #include "board.h"
 #include "statusmessages.h"
-#include "asciiart.h"
 #include "gamelimits.h"
 
 #define CHARSET_A 65
@@ -139,7 +138,7 @@ int Game::run() {
 
 		//checks if player 1 has won
 		if(m_p2Ships->allSunk()) {
-			printWinner(1);
+			StatusMessages::PrintWinner(1);
 			endGame = false;
 			break;
 		}
@@ -150,7 +149,7 @@ int Game::run() {
 
 		//checks if player 2 has won
 		if(m_p1Ships->allSunk()) {
-			printWinner(2);
+			StatusMessages::PrintWinner(2);
 			endGame = false;
 			break;
 		}
@@ -259,17 +258,6 @@ void Game::p2Turn() {
 
 	StatusMessages::NextPlayer();
 	std::cin >> wait;
-}
-
-void Game::printWinner(int player) {
-	std::ifstream file_p1_wins ("ascii/player1wins.txt");
-	std::ifstream file_p2_wins ("ascii/player2wins.txt");
-
-	if(player == 1) {
-		std::cout << AsciiArtHandler::printFileContents (file_p1_wins) << std::endl;
-	} else if(player == 2) {
-		std::cout << AsciiArtHandler::printFileContents(file_p2_wins) << std::endl;
-	}
 }
 
 int Game::getUserRow() {
