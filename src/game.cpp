@@ -74,7 +74,7 @@ void Game::setup() {
 				//set userDirection=none because ship of size 1 is only one
 				//point on the array
 				userCol = Game::AskForPlacementCol();
-				userDirection="none";
+				userDirection=NONE;
 				if(m_currentPlayer==1) {
 					if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
 						addShiptoArray("1", arrRow, arrCol, userDirection, 1);
@@ -315,12 +315,12 @@ void Game::setEntryWrapper(int player, std::string ship, int col, int row) {
 	}
 }
 
-void Game::addShiptoArray(std::string ship, int row, int col, std::string direction, int player) {
+void Game::addShiptoArray(std::string ship, int row, int col, Directions direction, int player) {
 //direction=none means plastd::cing m_ship1 on the board: 1x1 size
-	if(direction == "none") {
+	if(direction == NONE) {
 		setEntryWrapper(player, ship, col, row);
 	}
-	else if(direction == "up") {
+	else if(direction == UP) {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
 				Game::setEntryWrapper(player, ship, col, row-i);
@@ -342,7 +342,7 @@ void Game::addShiptoArray(std::string ship, int row, int col, std::string direct
 			}
 		}
 	}
-	else if(direction == "down") {
+	else if(direction == DOWN) {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
 				Game::setEntryWrapper(player, ship, col, row+i);
@@ -364,7 +364,7 @@ void Game::addShiptoArray(std::string ship, int row, int col, std::string direct
 			}
 		}
 	}
-	else if(direction == "left") {
+	else if(direction == LEFT) {
 		if(ship == "2") {
 			for(int i = 0; i < 2; i++) {
 				Game::setEntryWrapper(player, ship, col-i, row);
@@ -419,55 +419,7 @@ bool Game::isAvailable(Board* board, int row, int col) {
 	}
 }
 
-bool Game::checkDirection(Board* board, int row, int col, int shipNum, std::string direction) {
-	bool alwaysFits = true;
-	if(direction == "none") {
-		alwaysFits = true;
-	} else if(direction == "up") {
-		if((row - (shipNum-1)) >= 0) {
-			for(int i = 0; i < shipNum; i++) {
-				if(isAvailable(board, row-i, col) == false) {
-					alwaysFits = false;
-				}
-			}
-		} else {
-			alwaysFits = false;
-		}
-	} else if(direction == "down") {
-		if((row + (shipNum-1)) <= 7) {
-			for(int i = 0; i < shipNum; i++) {
-				if(isAvailable(board, row+i, col) == false) {
-					alwaysFits = false;
-				}
-			}
-		} else {
-			alwaysFits = false;
-		}
-	} else if(direction == "left") {
-		if((col - (shipNum-1)) >= 0) {
-			for(int i = 0; i < shipNum; i++) {
-				if(isAvailable(board, row, col-i) == false) {
-					alwaysFits = false;
-				}
-			}
-		} else {
-			alwaysFits = false;
-		}
-	} else if(direction == "right") {
-		if((col +(shipNum - 1)) <= 7) {
-			for(int i = 0; i < shipNum; i++) {
-				if(isAvailable(board, row, col+i) == false) {
-					alwaysFits = false;
-				}
-			}
-		} else {
-			alwaysFits = false;
-		}
-	}
-	return(alwaysFits);
-}
-
-bool Game::newCheckDirection(Board* board, int row, int col, int shipNum, Directions direction) {
+bool Game::CheckDirection(Board* board, int row, int col, int shipNum, Directions direction) {
 	bool alwaysFits = true;
 	if(direction == NONE) {
 		alwaysFits = true;
@@ -545,10 +497,10 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			keepAsking = true;
 		}
 		if( // TODO: checkEveryDirection which runs all of these and returns false if one is false.
-			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, UP))) &&
-			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
-			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
-			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
+			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, UP))) &&
+			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
+			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
+			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
 			(!keepAsking))
 		{
 			std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
@@ -579,23 +531,23 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 			StatusMessages::AskDirs();
 			// TODO: Sanitize this input
 			std::cin >> dirChoice;
-			newUserDirection = (Directions)dirChoice;
-			if(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, newUserDirection) == false) {
+			userDirection = (Directions)dirChoice;
+			if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
 				StatusMessages::PickedInvalidDir();
 			}
-		} while((newUserDirection != UP &&
-			 newUserDirection != DOWN &&
-			 newUserDirection != LEFT &&
-			 newUserDirection != RIGHT) || (!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, newUserDirection))));
+		} while((userDirection != UP &&
+			 userDirection != DOWN &&
+			 userDirection != LEFT &&
+			 userDirection != RIGHT) || (!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
 	} else if(i < 2) {
-		userDirection="none";
+		userDirection=NONE;
 	}
 }
 
 void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
 	std::string directions[5] = {"none", "up", "down", "left", "right"};
 	for(int i = 1; i <= 4; i++) {
-	        if(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, static_cast<Directions>(i))) {
+	        if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, static_cast<Directions>(i))) {
 	                std::cout << " " << directions[i] << " ";
 	        };
 	}
@@ -625,7 +577,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		if(m_currentPlayer==1) {
 			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
 			    // TODO: Convert this to use the enum
-			    checkDirection(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
+			    CheckDirection(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 1);
 				std::cout<<"Player 1's current Board:\n";
 				printOwnBoard(m_p1ownBoard);
@@ -633,7 +585,7 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 		} else {
 			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
 			    // TODO: Convert this to use the enum
-			    checkDirection(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
+			    CheckDirection(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
 				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
 				std::cout<<"Player 2's current Board:\n";
 				printOwnBoard(m_p2ownBoard);

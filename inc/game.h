@@ -34,8 +34,8 @@ class Game{
 
 		int userRow;
 		char userCol;
-		std::string userDirection;
-		Directions newUserDirection;
+		Directions userDirection;
+
 		int arrCol;
 		int arrRow;
 
@@ -126,11 +126,7 @@ class Game{
 		 * @return returns true if the ship can be placed on the board in the
 		 *         specified direction; false otherwise
 		 */
-		bool checkDirection(Board* board,
-					  int row, int col,
-					  int shipNum,
-					  std::string direction);
-		bool newCheckDirection(Board* board,
+		bool CheckDirection(Board* board,
 					  int row, int col,
 					  int shipNum,
 					  Directions direction);
@@ -151,7 +147,7 @@ class Game{
 		 */
 		void addShiptoArray(std::string ship,
 				    int row, int col,
-				    std::string direction,
+				    Directions direction,
 				    int player);
 
 		/**
