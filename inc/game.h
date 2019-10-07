@@ -27,6 +27,11 @@ enum Directions {
 	RIGHT
 };
 
+enum OpponentType {
+	HUMAN,
+	AI
+};
+
 class Game{
 
 	private:
@@ -49,7 +54,7 @@ class Game{
 		Board* m_p2oppBoard;
 
 		int m_currentPlayer;
-		int m_playerType;
+		OpponentType m_opponentType;
 
 		std::string letsPlay;
 		std::string p1Text;

@@ -64,7 +64,7 @@ void Game::setup() {
 	StatusMessages::PrintBattleship();
 
 	// Explicit this is good because otherwise how can you know where this came from?
-	this->m_playerType = Game::AskPlayerType();
+	this->m_opponentType = static_cast<OpponentType>(Game::AskPlayerType());
 	this->m_numShips = Game::AskForNumShips();
 
 	for(int i = 0; i < 2; i++) {
@@ -97,6 +97,8 @@ void Game::setup() {
 				}
 				break;
 			}
+			//TODO: While the game logic is sound, after this point the game displays
+			// "setting player 2's ship x" for both players.
 			case 2: {
 				Game::SetUpShips(i, 2, currentPlayerBoard);
 				break;
@@ -143,12 +145,19 @@ int Game::run() {
 			break;
 		}
 
-		//player 2 turn
-		StatusMessages::PrintPlayerBillboard(1);
-		p2Turn();
+		if(m_opponentType == HUMAN) {
+			//player 2 turn
+			StatusMessages::PrintPlayerBillboard(1);
+			p2Turn();
 
-		//checks if player 2 has won
-		if(m_p1Ships->allSunk()) {
+			//checks if player 2 has won
+			if(m_p1Ships->allSunk()) {
+				StatusMessages::PrintWinner(2);
+				endGame = false;
+				break;
+			}
+		} else {
+			// For now if this is fucked up we'll just immediately end
 			StatusMessages::PrintWinner(2);
 			endGame = false;
 			break;
@@ -311,6 +320,8 @@ void Game::setEntryWrapper(int player, std::string ship, int col, int row) {
 	}
 }
 
+// TODO: Unstringify ship or add ship enum to collapse elses into a single statement
+// ex. for(size_t i = 0; i < static_cast<int>(shipSize); i++) { ... }
 void Game::addShiptoArray(std::string ship, int row, int col, Directions direction, int player) {
 //direction=none means plastd::cing m_ship1 on the board: 1x1 size
 	if(direction == NONE) {
