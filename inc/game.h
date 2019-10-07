@@ -33,7 +33,7 @@ class Game{
 		int m_numShips;
 
 		int userRow;
-		std::string userCol;
+		char userCol;
 		std::string userDirection;
 
 		int arrCol;
@@ -96,16 +96,6 @@ class Game{
 		 * @param ownBoard: a board pointer to the player's own board
 		 */
 		void printOwnBoard(Board* ownBoard);
-
-		/**
-		 * @pre the user inputs a column letter
-		 * @post converts the user's inputted column letter (A-H) to a number
-		 *       that will correspond to the board array column
-		 * @param col: the letter the user inputs for the board column
-		 * @return returns the number that will correspond to the board array
-		 *         column
-		 */
-		int convertCol(std::string col);
 
 		/**
 		 * @pre a std::string is passed in
@@ -264,8 +254,7 @@ class Game{
 
 		int AskForPlacementRow();
 
-		// TODO: Change to char
-		std::string AskForPlacementCol();
+		char AskForPlacementCol();
 
 		int AskForNumShips();
 

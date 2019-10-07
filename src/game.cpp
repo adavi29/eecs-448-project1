@@ -25,7 +25,7 @@ Game::Game() {
 	m_numShips = 0;
 
 	userRow = 0;
-	userCol = "";
+	userCol = '0';
 
 	arrCol = 0;
 	arrRow = 0;
@@ -47,16 +47,6 @@ Game::~Game() {
 	delete m_p1oppBoard;
 	delete m_p1Ships;
 	delete m_p2Ships;
-}
-
-int Game::convertCol(std::string col) {
-	char charCol = col.at(0);
-	if(isupper(charCol)) {
-		return(int(charCol)-65);
-	}
-	else {
-		return(int(charCol)-97);
-	}
 }
 
 std::string Game::convertStringToLower(std::string wordToConvert) {
@@ -300,12 +290,12 @@ int Game::getUserRow() {
 }
 
 int Game::getUserCol() {
-	std::string input;
+	char input;
 	int input_num = 0;
 	while(1) {
 		std::cout << "Enter Column(A-H): ";
 		std::cin >> input;
-		input_num = convertCol(input);
+		input_num = static_cast<int>(input) - 65;
 		if((input_num >= 0) || (input_num <= 7)) {
 			return input_num;
 		}
@@ -620,14 +610,14 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 		do {
 			std::cout << "Col (A-H): ";
 			std::cin >> userCol;
-			arrCol = convertCol(userCol);
+			arrCol = static_cast<int>(userCol) - 65;
 			if(arrCol < 0 || arrCol > 7) {
 				StatusMessages::ErrorInvalidCol();
 			}
 		} while(arrCol < 0 || arrCol > 7);
 
 		if(!isAvailable(currentPlayerBoard, arrRow, arrCol)) {
-			StatusMessages::ShipAlreadyThere();
+			std::cout<< "This coordinate has already been taken. Enter new coordinates:\n";
 			keepAsking = true;
 		}
 		if( // TODO: checkEveryDirection which runs all of these and returns false if one is false.
@@ -637,7 +627,7 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			(!(newCheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
 			(!keepAsking))
 		{
-			StatusMessages::ShipInTheWay();
+			std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
 			keepAsking = true;
 		}
 
@@ -736,12 +726,12 @@ int Game::AskForPlacementRow() {
 	return userRowChoice;
 }
 
-std::string Game::AskForPlacementCol() {
-	std::string userCol;
+char Game::AskForPlacementCol() {
+	char userCol;
 	do {
 		std::cout << "Col (A-H): ";
 		std::cin >> userCol;
-		arrCol = convertCol(userCol);
+		arrCol = static_cast<int>(userCol) - 65;
 		if(arrCol < 0 || arrCol > 7) {
 			StatusMessages::ErrorInvalidCol();
 		}
