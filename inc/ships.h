@@ -67,11 +67,7 @@ class Ships {
 
 	private:
 
-		int m_ship1;
-		int m_ship2;
-		int m_ship3;
-		int m_ship4;
-		int m_ship5;
+		int m_ship[5];
 
 };
 
