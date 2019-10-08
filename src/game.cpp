@@ -402,7 +402,7 @@ int Game::getUserRow() {
 	while(1) {
 		std::cout << "Enter Row(1-8): ";
 		std::cin >> input;
-		if((input >= 1) || (input <= 8)) {
+		if((input >= 1) && (input <= 8)) {
 			return (input - 1);
 		}
 	}
@@ -415,7 +415,7 @@ int Game::getUserCol() {
 		std::cout << "Enter Column(A-H): ";
 		std::cin >> input;
 		input_num = static_cast<int>(input) - CHARSET_A;
-		if((input_num >= 0) || (input_num <= 7)) {
+		if((input_num >= 0) && (input_num <= 7)) {
 			return input_num;
 		}
 	}
