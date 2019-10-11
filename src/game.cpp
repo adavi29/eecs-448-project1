@@ -773,7 +773,7 @@ int Game::AskPlayerType() {
 	StatusMessages::HumanOrAI();
 	while (std::cin.fail() || playerChoice > 1 || playerChoice < 2){
 		std::cin.clear();
-		std::cin.ignore(INT_MAX8, '\n');
+		std::cin.ignore(INT8_MAX, '\n');
 		StatusMessages::HumanOrAI();
 		std::cin >> playerChoice;
 	}
