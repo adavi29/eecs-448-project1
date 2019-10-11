@@ -213,8 +213,8 @@ void Game::p1Turn() {
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
-		p1_attack_row = getUserRow();
-		p1_attack_col = getUserCol();
+		p1_attack_row = Game::AskForPlacementRow();
+		p1_attack_col = Game::AskForPlacementCol();
 
 		// The logic here doesn't change when the player uses the big shot. They shouldn't
 		// be able to shoot it at a square that's already marked, true, but they should be
@@ -319,8 +319,8 @@ void Game::p2Turn() {
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
-		p2_attack_row = getUserRow();
-		p2_attack_col = getUserCol();
+		p2_attack_row = Game::AskForPlacementRow();
+		p2_attack_col = Game::AskForPlacementCol();
 
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
 		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
