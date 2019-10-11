@@ -60,7 +60,7 @@ class Game{
 		Board* m_p2oppBoard;
 
 		int m_currentPlayer;
-		OpponentType m_opponentType;
+		int m_opponentType;
 
 		bool p1_usedBigShot;
 		bool p2_usedBigShot;
