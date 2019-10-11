@@ -729,20 +729,14 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 
 int Game::AskForPlacementRow() {
 	int userRowChoice = 0;
-	do {
-		std::cout << "Row (1-8):  ";
-		// TODO: Sanitize this input
+	std::cout << "Row (1-8):  ";
+	std::cin >> userRowChoice;
+	if(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::ErrorInvalidRow();
 		std::cin >> userRowChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			StatusMessages::ErrorInvalidRow();
-			std::cin >> userRowChoice;
-		}
-		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
-			StatusMessages::ErrorInvalidRow();
-		}
-	} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));
+	}
 	return userRowChoice;
 }
 
@@ -761,16 +755,16 @@ char Game::AskForPlacementCol() {
 }
 
 int Game::AskForNumShips() {
-	int numShipsChoice = 0;
-	StatusMessages::AskNumShips();
-	std::cin >> numShipsChoice;
-	while (cin.fail() || numShipsChoice > 5 || numShipsChoice < 1){
-				cin.clear();
-				cin.ignore(INT_MAX, '\n');
-				StatusMessages::ErrorNumShips();
-				cin >> numShipsChoice;
+	int userRowChoice = 0;
+	std::cout << "Row (1-8):  ";
+	std::cin >> userRowChoice;
+	while(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::ErrorInvalidRow();
+		std::cin >> userRowChoice;
 	}
-	return numShipsChoice;
+	return userRowChoice;
 }
 
 int Game::AskPlayerType() {
