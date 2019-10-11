@@ -731,7 +731,7 @@ int Game::AskForPlacementRow() {
 	int userRowChoice = 0;
 	std::cout << "Row (1-8):  ";
 	std::cin >> userRowChoice;
-	if(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
+	while(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		StatusMessages::ErrorInvalidRow();
