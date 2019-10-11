@@ -73,10 +73,10 @@ void Game::setup() {
 	StatusMessages::PrintBattleship();
 
 	// Explicit this is good because otherwise how can you know where this came from?
-	this->m_opponentType = static_cast<OpponentType>(Game::AskPlayerType());
+	this->m_opponentType = Game::AskPlayerType();
 	this->m_numShips = Game::AskForNumShips();
 
-	if(m_opponentType == HUMAN) {
+	if(m_opponentType == 1) {
 		for(int i = 0; i < 2; i++) {
 			StatusMessages::PrintPlayerBillboard(i);
 			// Explicit namespaces are good. Now I KNOW this function is
