@@ -761,7 +761,7 @@ int Game::AskForNumShips() {
 	while(std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 5) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		StatusMessages::ErrorInvalidRow();
+		StatusMessages::ErrorNumShips();
 		std::cin >> numShipsChoice;
 	}
 	return numShipsChoice;
