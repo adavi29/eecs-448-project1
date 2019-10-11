@@ -766,9 +766,19 @@ int Game::AskForNumShips() {
 	}
 	return userRowChoice;
 }
-
+//Why are we taking in a character, converting it to lowercase, and returning an integer?
+//Why not just ask for and return an integer?
 int Game::AskPlayerType() {
-	char playerChoice = '\0';
+	int playerChoice = 0;
+	StatusMessages::HumanOrAI();
+	while (cin.fail() || playerChoice > 1 || playerChoice < 2){
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+				StatusMessages::HumanOrAI();
+				cin >> playerChoice;
+	}
+	return playerChoice;	
+	/*char playerChoice = '\0';
 	StatusMessages::HumanOrAI();
 	do {
 		std::cin >> playerChoice;
@@ -787,5 +797,5 @@ int Game::AskPlayerType() {
 		return 0;
 	} else {
 		return 1;
-	}
+	}*/
 }
