@@ -755,27 +755,27 @@ char Game::AskForPlacementCol() {
 }
 
 int Game::AskForNumShips() {
-	int userRowChoice = 0;
-	std::cout << "Row (1-8):  ";
-	std::cin >> userRowChoice;
-	while(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
+	int numShipsChoice = 0;
+	std::cout << "Ships(1-5):  ";
+	std::cin >> numShipsChoice;
+	while(std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 8) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		StatusMessages::ErrorInvalidRow();
-		std::cin >> userRowChoice;
+		std::cin >> numShipsChoice;
 	}
-	return userRowChoice;
+	return numShipsChoice;
 }
 //Why are we taking in a character, converting it to lowercase, and returning an integer?
 //Why not just ask for and return an integer?
 int Game::AskPlayerType() {
 	int playerChoice = 0;
 	StatusMessages::HumanOrAI();
-	while (cin.fail() || playerChoice > 1 || playerChoice < 2){
-				cin.clear();
-				cin.ignore(INT_MAX, '\n');
-				StatusMessages::HumanOrAI();
-				cin >> playerChoice;
+	while (std::cin.fail() || playerChoice > 1 || playerChoice < 2){
+		std::cin.clear();
+		std::cin.ignore(INT_MAX8, '\n');
+		StatusMessages::HumanOrAI();
+		std::cin >> playerChoice;
 	}
 	return playerChoice;	
 	/*char playerChoice = '\0';
