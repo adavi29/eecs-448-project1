@@ -141,7 +141,9 @@ void StatusMessages::PickedInvalidDir() {
 }
 
 void StatusMessages::HumanOrAI() {
-	std::cout << "Are you playing against a human, or would you like an AI opponent? (H/a): ";
+	std::cout << "Are you playing against a human, or would you like an AI opponent?\n";
+	std::cout << "Enter '1' for a 2-player human game";
+	std::cout << "Enter '2' to play against the computer";
 }
 
 void StatusMessages::PrintWinner(int player) {
