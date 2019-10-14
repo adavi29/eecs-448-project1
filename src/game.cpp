@@ -17,6 +17,8 @@
 #include <algorithm>
 #include <string>
 #include <limits>
+#include <time.h>
+#include <stdlib.h>
 
 #include "game.h"
 #include "board.h"
@@ -27,6 +29,10 @@
 #define CHARSET_CAPS_GAP 32
 
 Game::Game() {
+
+	// Seed the pseudorandom number generator with the system clock
+	// otherwise the "randomness" would be seeded at compile time.
+	srand(time(0));
 
 	m_numShips = 0;
 
@@ -49,7 +55,6 @@ Game::Game() {
 	p1_cheatedAlready = false;
 	p2_cheatedAlready = false;
 
-	// TODO: BSD?
 #if !defined(__APPLE__) && !defined(__linux__) && !defined (_WIN32)
 	wait = "";
 #endif
@@ -129,6 +134,25 @@ void Game::setup() {
 			m_currentPlayer = 2; //change value of current player to 2 for second round of for loop
 		}
 	} else {
+		// Only print Player 1's board and only ask player 1 for their ships
+		StatusMessages::PrintPlayerBillboard(1);
+		Game::ContinuePause();
+		Game::SetUpShips(1, m_numShips, currentPlayerBoard);
+
+		// From here on it's the AI's turn
+		// switch (DIFFICULTY) {
+		// 	case EASY: {
+		// 		break;
+		// 	}
+		// 	case REALISTIC: {
+		// 		break;
+		// 	}
+		// 	case IMPOSSIBLE: {
+		// 		break;
+		// 	}
+		// 	default:
+		// 		break;
+		// }
 		// do different logic if the opponent is an AI
 		// TODO: Method to ask the user how difficult they want it
 		// EASY, REALISTIC, IMPOSSIBLE
@@ -310,7 +334,7 @@ void Game::p2Turn() {
 		// TODO: Ensure the player can only do this once, even if they
 		// manage to somehow screw up their shot anyway after having
 		// seen the other board.
-		if(!p1_cheatedAlready) {
+		if(!p2_cheatedAlready) {
 			//StatusMessages::Cheat();
 			//std::cin >> intent_to_cheat;
 		}
@@ -645,8 +669,8 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 	} while(keepAsking == true);
 }
 
-void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
-	int shipNum = i;
+void Game::shipPlacementInteraction(int ship, int player, Board* currentPlayerBoard) {
+	int shipNum = ship;
 
 	if(m_currentPlayer == 1) {
 		currentPlayerBoard=m_p1ownBoard;
@@ -654,11 +678,11 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		currentPlayerBoard=m_p2ownBoard;
 	}
 
-	StatusMessages::AskToPlaceShips(m_currentPlayer, i);
+	StatusMessages::AskToPlaceShips(m_currentPlayer, shipNum);
 
 	printCoordinateInteraction(currentPlayerBoard, shipNum);
 
-	if(i > 1) {
+	if(shipNum > 1) {
 		StatusMessages::ValidDirs();
 		CheckDirections(currentPlayerBoard, shipNum);
 		do {
@@ -673,7 +697,7 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		} while((userDirection != UP && userDirection != DOWN &&
 			 userDirection != LEFT && userDirection != RIGHT) ||
 			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
-	} else if(i < 2) {
+	} else if(shipNum < 2) {
 		userDirection=NONE;
 	}
 }
@@ -706,6 +730,7 @@ void Game::ContinuePause() {
 
 void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 	for(int i = 0; i < ships; i++) {
+
 		std::string shipString=std::to_string(i+1);
 		int shipNum=i+1;
 		shipPlacementInteraction(i+1, player, currentPlayerBoard);
@@ -750,8 +775,13 @@ char Game::AskForPlacementCol() {
 	char userCol;
 	do {
 		std::cout << "Col (A-H): ";
-		// TODO:: Sanitize this input
 		std::cin >> userCol;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			StatusMessages::ErrorInvalidCol();
+			std::cin >> userCol;
+		}
 		arrCol = static_cast<int>(userCol) - CHARSET_A;
 		if(arrCol < 0 || arrCol > 7) {
 			StatusMessages::ErrorInvalidCol();
