@@ -12,6 +12,7 @@
 
 #include "asciiart.h"
 #include "statusmessages.h"
+#include "gamelimits.h"
 
 void StatusMessages::PrintBattleship() {
 	std::ifstream file_battleship_text("ascii/battleship.txt");
@@ -48,11 +49,6 @@ void StatusMessages::PressToContinue() {
 
 void StatusMessages::PressAnyContinue() {
 	std::cout << "Press any key to continue..." << std::endl;
-}
-
-void StatusMessages::AskNumShips() {
-	std::cout << "Enter the amount of ships both players want to use "
-	          << "(Max: 5): ";
 }
 
 void StatusMessages::ErrorNumShips() {
@@ -143,6 +139,14 @@ void StatusMessages::PickedInvalidDir() {
 void StatusMessages::HumanOrAI() {
 	std::cout << "Are you playing against a human, or would you like an AI opponent?\n"
 		  << "Enter '1' for a human opponent, or 2 for AI: ";
+}
+
+void StatusMessages::AskNumShips() {
+	std::cout << "Enter a number of ships in range ["
+		  << SHIPS_MIN
+		  << ","
+		  << SHIPS_MAX
+		  << "]: ";
 }
 
 void StatusMessages::PrintWinner(int player) {

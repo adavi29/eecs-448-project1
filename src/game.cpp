@@ -791,15 +791,20 @@ char Game::AskForPlacementCol() {
 }
 
 int Game::AskForNumShips() {
+
 	int numShipsChoice = 0;
-	std::cout << "Ships(1-5):  ";
+
+	StatusMessages::AskNumShips();
 	std::cin >> numShipsChoice;
+
 	while(std::cin.fail() || numShipsChoice < SHIPS_MIN || numShipsChoice > SHIPS_MAX) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		StatusMessages::ErrorNumShips();
 		std::cin >> numShipsChoice;
+
 	}
+
 	return numShipsChoice;
 }
 
@@ -816,5 +821,5 @@ int Game::AskPlayerType() {
 		std::cin >> playerChoice;
 	}
 
-	return playerChoice;
+	return playerChoice - 1;
 }
