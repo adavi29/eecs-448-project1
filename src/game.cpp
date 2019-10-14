@@ -36,11 +36,19 @@ Game::Game() {
 	arrCol = 0;
 	arrRow = 0;
 
+	AIDifficulty = 0;
 	m_p1oppBoard = new Board();
 	m_p1ownBoard = new Board();
 	m_p2oppBoard = new Board();
 	m_p2ownBoard = new Board();
-
+	AI_ownBoard = new Board();
+	AI_oppBoard = new Board();
+	player1Hits = 0;
+	player1Misses = 0;
+	player2Hits = 0;
+	player2Misses = 0;
+	AIHits = 0;
+	AIMisses = 0;
 	m_currentPlayer = 1;
 
 	p1_usedBigShot = false;
@@ -60,6 +68,9 @@ Game::~Game() {
 	delete m_p2oppBoard;
 	delete m_p1ownBoard;
 	delete m_p1oppBoard;
+	delete AI_ownBoard;
+	delete AI_oppBoard;
+	delete AI_Ships;
 	delete m_p1Ships;
 	delete m_p2Ships;
 }
@@ -73,10 +84,10 @@ void Game::setup() {
 	StatusMessages::PrintBattleship();
 
 	// Explicit this is good because otherwise how can you know where this came from?
-	this->m_opponentType = Game::AskPlayerType();
+	this->m_opponentType = static_cast<OpponentType>(Game::AskPlayerType());
 	this->m_numShips = Game::AskForNumShips();
 
-	if(m_opponentType == 1) {
+	if(m_opponentType == HUMAN) {
 		for(int i = 0; i < 2; i++) {
 			StatusMessages::PrintPlayerBillboard(i);
 			// Explicit namespaces are good. Now I KNOW this function is
@@ -132,9 +143,170 @@ void Game::setup() {
 		// do different logic if the opponent is an AI
 		// TODO: Method to ask the user how difficult they want it
 		// EASY, REALISTIC, IMPOSSIBLE
+		Game::displayAImenu();
+		AI_Ships = new Ships(m_numShips);
+		if(AIDifficulty == 1){
+			AIEasyShot();
+			if(m_p1Ships->allSunk()) {
+				//StatusMessages::PrintWinner(1);
+				std::cout << "The AI opponent has won!\n";
+			}
+		}
+		else if(AIDifficulty == 2){
+			AIMediumShot();
+			if(m_p1Ships->allSunk()) {
+				//StatusMessages::PrintWinner(1);
+				std::cout << "The AI opponent has won!\n";
+			}
+		}
+		else{
+			AIHardShot();
+			if(m_p1Ships->allSunk()) {
+				//StatusMessages::PrintWinner(1);
+				std::cout << "The AI opponent has won!\n";
+			}
+		}
 	}
 }
-
+void Game::displayAImenu(){
+	std::cout << "Please select a level of difficulty for the AI opponent: \n";
+	std::cout << "1. Easy (the AI shoots randomly every turn)\n";
+	std::cout << "2. Realistic (the AI fires randomly until a ship is found)\n";
+	std::cout << "3. Impossible (the AI never misses a shot!)\n";
+	std::cin >> AIDifficulty;
+	while (std::cin.fail() || AIDifficulty < 1 || AIDifficulty > 3){
+		std::cin.clear();
+		std::cin.ignore(INT8_MAX, '\n');
+		std::cout << "Invalid difficulty level selected. Try again.\n";
+		std::cin >> AIDifficulty;
+	}
+}
+void Game::displayPlayer1Menu(){
+	player1Choice = 0;
+	std::cout << "\nPlayer 1\n";
+	std::cout << "Please select from the following options: \n";
+	std::cout << "1. Take a shot\n";
+	std::cout << "2. Use BIG shot(";
+	if(p1_usedBigShot == false){
+		std::cout << "1 remaining)\n";
+	}
+	else{
+		std::cout << "0 remaining)\n";
+	}
+	std::cout << "3. View opponents board\n";
+	std::cout << "4. View your scoreboard\n";
+	std::cout << "5. Exit the game.\n";
+	std::cout << "Make a selection: ";
+	std::cin >> player1Choice;
+	while (std::cin.fail() || player1Choice < 1 || player1Choice > 5){
+		std::cin.clear();
+		std::cin.ignore(INT8_MAX, '\n');
+		std::cout << "Invalid selection. Try again.\n";
+		std::cin >> player1Choice;
+	}
+}
+void Game::displayPlayer2Menu(){
+	player2Choice = 0;
+	std::cout << "\nPlayer 2\n";
+	std::cout << "Please select from the following options: \n";
+	std::cout << "1. Take a shot\n";
+	std::cout << "2. Use BIG shot(";
+	if(p2_usedBigShot == false){
+		std::cout << "1 remaining)\n";
+	}
+	else{
+		std::cout << "0 remaining)\n";
+	}
+	std::cout << "3. View opponents board\n";
+	std::cout << "4. View your scoreboard\n";
+	std::cout << "5. Exit the game.\n";
+	std::cout << "Make a selection: ";
+	std::cin >> player2Choice;
+	while (std::cin.fail() || player2Choice < 1 || player2Choice > 5){
+		std::cin.clear();
+		std::cin.ignore(INT8_MAX, '\n');
+		std::cout << "Invalid selection. Try again.\n";
+		std::cin >> player2Choice;
+	}
+}
+void Game::AIEasyShot(){
+	int AIRandomRow = (rand()%8);
+	int AIRandomColumn = (rand()%8);
+	std::cout << AIRandomRow << " " << AIRandomColumn << "\n";
+	if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
+		StatusMessages::ConfirmHit();
+		m_p1ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
+	}
+	else{
+		StatusMessages::ConfirmMiss();
+		m_p1ownBoard->setEntryAtPosition("M", AIRandomColumn, AIRandomRow);
+	}
+}
+void Game::AIMediumShot(){
+	std::string lastShotReminder = " ";
+	if(lastShotReminder != " "){
+		int row = 0;
+		int col = 0;
+		bool found = false;
+		while(!found){
+			if(col == 7 && row == 7){
+				lastShotReminder = ' ';
+				found = true;
+			}
+			else{
+				if(m_p1ownBoard->getEntryAtPosition(col, row) == lastShotReminder){
+					m_p1ownBoard->setEntryAtPosition("H", col, row);
+					StatusMessages::ConfirmHit();
+					found = true;
+				}
+				else{
+					if(row != 7){
+						row++;
+					}
+					if(row == 7){
+						col++;
+						row = 0;
+					}
+				}
+			}
+		}
+	}
+	else{
+		int AIRandomRow = (rand()%8);
+		int AIRandomColumn = (rand()%8);
+		if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
+			StatusMessages::ConfirmHit();
+			m_p1ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
+			lastShotReminder = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+		}
+		else{
+			StatusMessages::ConfirmMiss();
+			m_p1ownBoard->setEntryAtPosition("M", AIRandomColumn, AIRandomRow);
+			lastShotReminder = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+		}
+	}
+}
+void Game::AIHardShot(){
+	int row = 0;
+	int col = 0;
+	bool shotFired = false;
+	while(!shotFired){
+		if(isHit(m_p1ownBoard, col, row)){
+			m_p1ownBoard->setEntryAtPosition("H", col, row);
+			StatusMessages::ConfirmHit();
+			shotFired = true;
+		}
+		else{
+			if(row != 7){
+				row++;
+			}
+			if(row == 7){
+				col++;
+				row = 0;
+			}
+		}
+	}
+}
 int Game::run() {
 	m_p1Ships = new Ships(m_numShips);
 	m_p2Ships = new Ships(m_numShips);
@@ -192,8 +364,6 @@ void Game::p1Turn() {
 	std::string shipNum_string;
 	int shipNum;
 
-	int intent_to_use_big_shot = 0;
-	int intent_to_cheat = 0;
 	//print Board
 	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
 
@@ -204,32 +374,122 @@ void Game::p1Turn() {
 		// TODO: Ensure the player can only do this once, even if they
 		// manage to somehow screw up their shot anyway after having
 		// seen the other board.
-		if(!p1_cheatedAlready) {
+		//if(!p1_cheatedAlready) {
 			//StatusMessages::Cheat();
 			//std::cin >> intent_to_cheat;
-		}
-		if(!p1_usedBigShot) {
-			StatusMessages::UseBigShot();
+		//}
+		//if(!p1_usedBigShot) {
+			//StatusMessages::UseBigShot();
 			// TODO: Sanitize this input
-			std::cin >> intent_to_use_big_shot;
-		}
-		p1_attack_row = Game::AskForPlacementRow();
-		p1_attack_col = Game::AskForPlacementCol();
+			//std::cin >> intent_to_use_big_shot;
+		//}
+		displayPlayer1Menu();
+		if(player1Choice == 1){
+			p1_attack_row = AskForPlacementRow();
+			p1_attack_col = AskForPlacementCol();
 
 		// The logic here doesn't change when the player uses the big shot. They shouldn't
 		// be able to shoot it at a square that's already marked, true, but they should be
 		// able to shoot it at an empty square even if there's a status marker already in
 		// one of the boxes in the 3x3 area centered around the shot.
-		if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" ||
-		   m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
-			StatusMessages::AlreadyShotThere();
-		} else {
+			if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" ||
+			   m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
+				StatusMessages::AlreadyShotThere();
+			}
+			else if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
+				StatusMessages::ConfirmHit();
+				m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
+
+				//decreases the opponents ship on hit and announce if sunk
+				shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
+				shipNum = stoi(shipNum_string);
+				m_p2Ships->decreaseSize(shipNum);
+				if(m_p2Ships->allSunk()) {
+					return;
+				}
+				//puts an x on the opponnets board
+				m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
+			} else {
+				StatusMessages::ConfirmMiss();
+				m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
+			}
+			return;
+		}
+		else if(player1Choice == 2){
+			StatusMessages::UseBigShot();
+			p1_attack_row = AskForPlacementRow();
+			p1_attack_col = AskForPlacementCol();
+				/* First test fired at 3B
+				    |A|B|C|D|
+				   -|-|-|-|-|-
+				   1| | | | | ...
+		                   -|-|-|-|-|-
+				   2|M| | | | ...
+		                   -|-|-|-|-|-
+				   3|M| | | | ...
+		                   -|-|-|-|-|-
+				   4| | | | |
+				   -|-|-|-|-|-
+				   So we are missing 7 shots
+				 */
+			for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
+				for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; j++) {
+					if(i >= 0 || i <= 7) {
+						if(j >= 0 || j <= 7) {
+							if(isHit(m_p2ownBoard, i, j)) {
+								StatusMessages::ConfirmHit();
+								m_p1oppBoard->setEntryAtPosition("H", j, i);
+								//decreases the opponents ship on hit and announces if sunk
+								shipNum_string = m_p2ownBoard->getEntryAtPosition(j, i);
+								shipNum = stoi(shipNum_string);
+								m_p2Ships->decreaseSize(shipNum);
+								if(m_p2Ships->allSunk()) {
+									return;
+								}
+								//puts an x on the opponnets board
+								m_p2ownBoard->setEntryAtPosition("X", j, i);
+							} else {
+								StatusMessages::ConfirmMiss();
+								m_p1oppBoard->setEntryAtPosition("M", j, i);
+							}
+						}
+					}
+				}
+			}
+			p1_usedBigShot = true;
 			break;
+		}
+		else if(player1Choice == 3){
+			//Display the opponents Board
+			if(AIDifficulty == 0){
+				m_p2ownBoard->printBoard();
+			}
+			else{
+				AI_ownBoard->printBoard();
+			}
+			displayPlayer1Menu();
+		}
+		else if(player1Choice == 4){
+			if(player1Misses != 0){
+				std::cout << "-------------------------------------\n";
+				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
+				std::cout << player1Hits << " " << player1Misses << "	" <<
+				(player1Hits/player1Misses)*100 << "&\n";
+				std::cout << "-------------------------------------\n";
+			}
+			else{
+				std::cout << "You have not taken a shot yet!\n";
+			}
+			displayPlayer1Menu();
+		}
+		else{
+			std::cout << "Goodbye!\n";
+			exit(0);
 		}
 	}
 
 	//checks if isHit() or not
-	if(intent_to_use_big_shot) {
+	//if(intent_to_use_big_shot) {
 		/* First test fired at 3B
 		    |A|B|C|D|
 		   -|-|-|-|-|-
@@ -243,7 +503,7 @@ void Game::p1Turn() {
 		   -|-|-|-|-|-
 		   So we are missing 7 shots
 		 */
-		for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
+		/*for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
 			for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; j++) {
 				if(i >= 0 || i <= 7) {
 					if(j >= 0 || j <= 7) {
@@ -289,20 +549,18 @@ void Game::p1Turn() {
 			StatusMessages::ConfirmMiss();
 			m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
 		}
-	}
+	}*/
 	StatusMessages::NextPlayer();
 	Game::ContinuePause();
 }
 
 void Game::p2Turn() {
-
 	int p2_attack_row = 0;
 	int p2_attack_col = 0;
 
 	std::string shipNum_string;
 	int shipNum;
 
-	int intent_to_use_big_shot = 0;
 	//print Board
 	printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
 
@@ -310,7 +568,108 @@ void Game::p2Turn() {
 		// TODO: Ensure the player can only do this once, even if they
 		// manage to somehow screw up their shot anyway after having
 		// seen the other board.
-		if(!p1_cheatedAlready) {
+		displayPlayer2Menu();
+		if(player2Choice == 1){
+			p2_attack_row = AskForPlacementRow();
+			p2_attack_col = AskForPlacementCol();
+
+		// The logic here doesn't change when the player uses the big shot. They shouldn't
+		// be able to shoot it at a square that's already marked, true, but they should be
+		// able to shoot it at an empty square even if there's a status marker already in
+		// one of the boxes in the 3x3 area centered around the shot.
+			if(m_p1oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
+			   m_p1oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M") {
+				StatusMessages::AlreadyShotThere();
+			}
+			else if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
+				StatusMessages::ConfirmHit();
+				m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
+
+				//decreases the opponents ship on hit and announces if sunk
+				shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
+				shipNum = stoi(shipNum_string);
+				m_p1Ships->decreaseSize(shipNum);
+				if(m_p1Ships->allSunk()) {
+					return;
+				}
+
+				//puts an x on the opponnets board
+				m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
+				} else {
+					StatusMessages::ConfirmMiss();
+					m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
+				}
+				return;
+		}
+		else if(player2Choice == 2){
+			StatusMessages::UseBigShot();
+			p2_attack_row = AskForPlacementRow();
+			p2_attack_col = AskForPlacementCol();
+				/* First test fired at 3B
+				    |A|B|C|D|
+				   -|-|-|-|-|-
+				   1| | | | | ...
+		                   -|-|-|-|-|-
+				   2|M| | | | ...
+		                   -|-|-|-|-|-
+				   3|M| | | | ...
+		                   -|-|-|-|-|-
+				   4| | | | |
+				   -|-|-|-|-|-
+				   So we are missing 7 shots
+				 */
+				 for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
+	 				for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; j++) {
+	 					if(i >= 0 || i <= 7) {
+	 						if(j >= 0 || j <= 7) {
+	 							if(isHit(m_p1ownBoard, i, j)) {
+	 								StatusMessages::ConfirmHit();
+	 								m_p2oppBoard->setEntryAtPosition("H", j, i);
+
+	 								//decreases the opponents ship on hit and announces if sunk
+	 								shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
+	 								shipNum = stoi(shipNum_string);
+	 								m_p1Ships->decreaseSize(shipNum);
+	 								if(m_p1Ships->allSunk()) {
+	 									return;
+	 								}
+
+	 								//puts an x on the opponnets board
+	 								m_p1ownBoard->setEntryAtPosition("X", j, i);
+	 							} else {
+	 								StatusMessages::ConfirmMiss();
+	 								m_p2oppBoard->setEntryAtPosition("M", j, i);
+	 							}
+	 						}
+	 					}
+	 				}
+	 			}
+	 			p2_usedBigShot = true;
+		}
+		else if(player2Choice == 3){
+			//Display the opponents Board
+			m_p1ownBoard->printBoard();
+			displayPlayer2Menu();
+		}
+		else if(player2Choice == 4){
+			if(player2Misses != 0){
+				std::cout << "-------------------------------------\n";
+				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
+				std::cout << player2Hits << " " << player2Misses << "	" <<
+				(player2Hits/player2Misses)*100 << "&\n";
+				std::cout << "-------------------------------------\n";
+			}
+			else{
+				std::cout << "You have not taken a shot yet!\n";
+			}
+			displayPlayer2Menu();
+		}
+		else{
+			std::cout << "Goodbye!\n";
+			exit(0);
+		}
+	}
+		/*if(!p1_cheatedAlready) {
 			//StatusMessages::Cheat();
 			//std::cin >> intent_to_cheat;
 		}
@@ -319,8 +678,8 @@ void Game::p2Turn() {
 			// TODO: Sanitize this input
 			std::cin >> intent_to_use_big_shot;
 		}
-		p2_attack_row = Game::AskForPlacementRow();
-		p2_attack_col = Game::AskForPlacementCol();
+		p2_attack_row = AskForPlacementRow();
+		p2_attack_col = AskForPlacementCol();
 
 		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
 		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
@@ -329,22 +688,20 @@ void Game::p2Turn() {
 		} else {
 			break;
 		}
-	}
+	}*/
 
 	//hit or miss,
 
-	/* TODO:
+	/*TODO:
 	  Infinite loop on Linux might be caused by stoi -- should convert ships to use
 	  enumerated type.
-
 	  On MacOS: Method hit ship at 1A when called on 3C -- 3x3 box centered on 3C
 	            should only extend from 2B to 4D.
-
 	  Linux: Infinite Loop
 	  MacOS: libc++abi.dylib: terminating with uncaught exception of type
 	         std::invalid_argument: stoi: no conversion
 	         [1]    3252 abort      ./battleship
-	 */
+
 	if(intent_to_use_big_shot) {
 		for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
 			for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; j++) {
@@ -392,22 +749,20 @@ void Game::p2Turn() {
 			StatusMessages::ConfirmMiss();
 			m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
 		}
-	}
+	}*/
 	StatusMessages::NextPlayer();
 	Game::ContinuePause();
 }
-
 int Game::getUserRow() {
 	int input;
 	while(1) {
 		std::cout << "Enter Row(1-8): ";
 		std::cin >> input;
-		if((input >= 1) && (input <= 8)) {
+		if((input >= 1) || (input <= 8)) {
 			return (input - 1);
 		}
 	}
 }
-
 int Game::getUserCol() {
 	char input;
 	int input_num = 0;
@@ -415,7 +770,7 @@ int Game::getUserCol() {
 		std::cout << "Enter Column(A-H): ";
 		std::cin >> input;
 		input_num = static_cast<int>(input) - CHARSET_A;
-		if((input_num >= 0) && (input_num <= 7)) {
+		if((input_num >= 0) || (input_num <= 7)) {
 			return input_num;
 		}
 	}
@@ -729,56 +1084,83 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 
 int Game::AskForPlacementRow() {
 	int userRowChoice = 0;
-	std::cout << "Row (1-8):  ";
+	std::cout << "Enter a row number(1-8):  ";
 	std::cin >> userRowChoice;
-	while(std::cin.fail() || userRowChoice < 1 || userRowChoice > 8) {
+	while (std::cin.fail() || userRowChoice > 8 || userRowChoice < 1){
 		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cin.ignore(INT8_MAX, '\n');
 		StatusMessages::ErrorInvalidRow();
 		std::cin >> userRowChoice;
 	}
+	/*do {
+		std::cout << "Row (1-8):  ";
+		// TODO: Sanitize this input
+		std::cin >> userRowChoice;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			StatusMessages::ErrorInvalidRow();
+			std::cin >> userRowChoice;
+		}
+		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
+			StatusMessages::ErrorInvalidRow();
+		}
+	} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));*/
 	return userRowChoice;
 }
 
 char Game::AskForPlacementCol() {
 	char userCol;
+	int input_num;
+	while(1) {
+		std::cout << "Enter Column(A-H): ";
+		std::cin >> userCol;
+		input_num = static_cast<int>(userCol) - CHARSET_A;
+		if((input_num >= 0) || (input_num <= 7)) {
+			return userCol;
+		}
+	}
+	/*char userCol;
 	do {
-		std::cout << "Col (A-H): ";
+		std::cout << "Enter a column letter(A-H): ";
 		// TODO:: Sanitize this input
 		std::cin >> userCol;
 		arrCol = static_cast<int>(userCol) - CHARSET_A;
 		if(arrCol < 0 || arrCol > 7) {
 			StatusMessages::ErrorInvalidCol();
 		}
-	} while(arrCol < 0 || arrCol > 7);
+	} while(arrCol < 0 || arrCol > 7);*/
 	return userCol;
 }
 
 int Game::AskForNumShips() {
 	int numShipsChoice = 0;
-	std::cout << "Ships(1-5):  ";
+	StatusMessages::AskNumShips();
 	std::cin >> numShipsChoice;
-	while(std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 5) {
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		StatusMessages::ErrorNumShips();
-		std::cin >> numShipsChoice;
+	while (std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 5){
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				StatusMessages::ErrorNumShips();
+				std::cin >> numShipsChoice;
 	}
+	/*do {
+		StatusMessages::AskNumShips();
+		// TODO: Sanitize this input
+		std::cin >> numShipsChoice;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			numShipsChoice = 0;
+		} else {
+			if((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX)) {
+				StatusMessages::ErrorNumShips();
+			}
+		}
+	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));*/
 	return numShipsChoice;
 }
-//Why are we taking in a character, converting it to lowercase, and returning an integer?
-//Why not just ask for and return an integer?
+
 int Game::AskPlayerType() {
-	int playerChoice = 0;
-	StatusMessages::HumanOrAI();
-	while (std::cin.fail() || playerChoice > 1 || playerChoice < 2){
-		std::cin.clear();
-		std::cin.ignore(INT8_MAX, '\n');
-		StatusMessages::HumanOrAI();
-		std::cin >> playerChoice;
-	}
-	return playerChoice;	
-	/*char playerChoice = '\0';
+	char playerChoice = '\0';
 	StatusMessages::HumanOrAI();
 	do {
 		std::cin >> playerChoice;
@@ -797,5 +1179,5 @@ int Game::AskPlayerType() {
 		return 0;
 	} else {
 		return 1;
-	}*/
+	}
 }
