@@ -50,17 +50,25 @@ class Game{
 
 		int arrCol;
 		int arrRow;
+		int AIDifficulty;
+		int player1Hits, player1Misses;
+		int player2Hits, player2Misses;
+		int AIHits, AIMisses;
 
 		Ships* m_p1Ships;
 		Ships* m_p2Ships;
-
+		Ships* AI_Ships;
 		Board* m_p1ownBoard;
 		Board* m_p1oppBoard;
 		Board* m_p2ownBoard;
 		Board* m_p2oppBoard;
-
+		Board* AI_ownBoard;
+		Board* AI_oppBoard;
+		
 		int m_currentPlayer;
-		int m_opponentType;
+		OpponentType m_opponentType;
+		int player1Choice;
+		int player2Choice;
 
 		bool p1_usedBigShot;
 		bool p2_usedBigShot;
@@ -264,6 +272,12 @@ class Game{
 		void setEntryWrapper(int player, std::string ship, int col, int row);
 
 		int AskPlayerType();
+		void displayAImenu();
+		void AIEasyShot();
+		void AIMediumShot();
+		void AIHardShot();
+		void displayPlayer1Menu();		
+		void displayPlayer2Menu();
 };
 
 #endif // GAME_H_
