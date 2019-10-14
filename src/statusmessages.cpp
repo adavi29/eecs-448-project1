@@ -58,7 +58,7 @@ void StatusMessages::ErrorNumShips() {
 
 void StatusMessages::AskToPlaceShips(int player, int ship) {
 	std::cout << "Enter the coordinates for player "
-		  << ((player == 0) ? "1" : "2")
+		  << ((player == 1) ? "1" : "2")
 		  << "'s";
 	switch(ship) {
 		default: break;
