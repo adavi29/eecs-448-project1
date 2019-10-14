@@ -809,24 +809,17 @@ int Game::AskForNumShips() {
 }
 
 int Game::AskPlayerType() {
-	char playerChoice = '\0';
+
+	int playerChoice = 0;
+
 	StatusMessages::HumanOrAI();
-	do {
+	std::cin >> playerChoice;
+	while (std::cin.fail() || (playerChoice > 2 || playerChoice < 1)) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::HumanOrAI();
 		std::cin >> playerChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			StatusMessages::HumanOrAI();
-			std::cin >> playerChoice;
-		}
-		// hacky version of toLower()
-		if(playerChoice < 97) {
-			playerChoice = static_cast<char>(static_cast<int>(playerChoice) + CHARSET_CAPS_GAP);
-		}
-	} while(playerChoice != 'h' && playerChoice != 'a');
-	if(playerChoice == 'h') {
-		return 0;
-	} else {
-		return 1;
 	}
+
+	return playerChoice;
 }
