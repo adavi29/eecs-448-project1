@@ -5,7 +5,8 @@
  *             Jacob Swearingen, Chongzhi Gao
  *         git-merge:
  *             Zach Pearson
- * @date 6 October 2019
+ *	       Brian Clark
+ * @date 15 October 2019
  * @file game.cpp
  * @brief implemented methods needed for game play from header file
  */
@@ -474,7 +475,7 @@ void Game::p1Turn() {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
 				std::cout << player1Hits << " " << player1Misses << "	" <<
-				(player1Hits/player1Misses)*100 << "&\n";
+				(player1Hits/(player1Hits+player1Misses))*100 << "&\n";
 				std::cout << "-------------------------------------\n";
 			}
 			else{
@@ -656,7 +657,7 @@ void Game::p2Turn() {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
 				std::cout << player2Hits << " " << player2Misses << "	" <<
-				(player2Hits/player2Misses)*100 << "&\n";
+				(player2Hits/(player2Hits+player2Misses))*100 << "&\n";
 				std::cout << "-------------------------------------\n";
 			}
 			else{
