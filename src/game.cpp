@@ -196,10 +196,11 @@ void Game::displayPlayer1Menu(){
 	}
 	std::cout << "3. View opponents board\n";
 	std::cout << "4. View your scoreboard\n";
-	std::cout << "5. Exit the game.\n";
+	std::cout << "5. View opponents scoreboard.\n";	
+	std::cout << "6. Exit the game.\n";	
 	std::cout << "Make a selection: ";
 	std::cin >> player1Choice;
-	while (std::cin.fail() || player1Choice < 1 || player1Choice > 5){
+	while (std::cin.fail() || player1Choice < 1 || player1Choice > 6){
 		std::cin.clear();
 		std::cin.ignore(INT8_MAX, '\n');
 		std::cout << "Invalid selection. Try again.\n";
@@ -220,10 +221,11 @@ void Game::displayPlayer2Menu(){
 	}
 	std::cout << "3. View opponents board\n";
 	std::cout << "4. View your scoreboard\n";
-	std::cout << "5. Exit the game.\n";
+	std::cout << "5. View opponents scoreboard.\n";	
+	std::cout << "6. Exit the game.\n";
 	std::cout << "Make a selection: ";
 	std::cin >> player2Choice;
-	while (std::cin.fail() || player2Choice < 1 || player2Choice > 5){
+	while (std::cin.fail() || player2Choice < 1 || player2Choice > 6){
 		std::cin.clear();
 		std::cin.ignore(INT8_MAX, '\n');
 		std::cout << "Invalid selection. Try again.\n";
@@ -483,6 +485,25 @@ void Game::p1Turn() {
 			}
 			displayPlayer1Menu();
 		}
+		else if(player1Choice == 5){
+			if((AIHits+AIMisses) == 0 && (player2Hits+player2Misses) == 0){
+				std::cout << "Your opponent has not fired yet!\n";
+			}
+			else if(AIDifficulty != 0 && (AIHits+AIMisses) != 0){
+				std::cout << "-------------------------------------\n";
+				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
+				std::cout << AIHits << " " << AIMisses << "	" <<
+				(AIHits/(AIHits+AIMisses))*100 << "&\n";
+				std::cout << "-------------------------------------\n";
+			}
+			else if(AIDifficulty == 0 && (player2Hits+player2Misses) != 0){
+				std::cout << "-------------------------------------\n";
+				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
+				std::cout << player2Hits << " " << player2Misses << "	" <<
+				(player2Hits/(player2Hits+player2Misses))*100 << "&\n";
+				std::cout << "-------------------------------------\n";
+			}
+		}
 		else{
 			std::cout << "Goodbye!\n";
 			exit(0);
@@ -664,6 +685,18 @@ void Game::p2Turn() {
 				std::cout << "You have not taken a shot yet!\n";
 			}
 			displayPlayer2Menu();
+		}
+		else if(player2Choice == 5){
+			if((player1Hits+player1Misses) != 0){
+				std::cout << "-------------------------------------\n";
+				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
+				std::cout << player1Hits << " " << player1Misses << "	" <<
+				(player1Hits/(player1Hits+player1Misses))*100 << "&\n";
+				std::cout << "-------------------------------------\n";
+			}
+			else{
+				std::cout << "Your opponent has not fired yet!\n";	
+			}
 		}
 		else{
 			std::cout << "Goodbye!\n";
