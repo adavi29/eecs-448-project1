@@ -18,6 +18,8 @@
 #include <algorithm>
 #include <string>
 #include <limits>
+#include <time.h>
+#include <stdlib.h>
 
 #include "game.h"
 #include "board.h"
@@ -28,6 +30,10 @@
 #define CHARSET_CAPS_GAP 32
 
 Game::Game() {
+
+	// Seed the pseudorandom number generator with the system clock
+	// otherwise the "randomness" would be seeded at compile time.
+	srand(time(0));
 
 	m_numShips = 0;
 
@@ -58,7 +64,6 @@ Game::Game() {
 	p1_cheatedAlready = false;
 	p2_cheatedAlready = false;
 
-	// TODO: BSD?
 #if !defined(__APPLE__) && !defined(__linux__) && !defined (_WIN32)
 	wait = "";
 #endif
@@ -141,6 +146,25 @@ void Game::setup() {
 			m_currentPlayer = 2; //change value of current player to 2 for second round of for loop
 		}
 	} else {
+		// Only print Player 1's board and only ask player 1 for their ships
+		StatusMessages::PrintPlayerBillboard(1);
+		Game::ContinuePause();
+		Game::SetUpShips(1, m_numShips, currentPlayerBoard);
+
+		// From here on it's the AI's turn
+		// switch (DIFFICULTY) {
+		// 	case EASY: {
+		// 		break;
+		// 	}
+		// 	case REALISTIC: {
+		// 		break;
+		// 	}
+		// 	case IMPOSSIBLE: {
+		// 		break;
+		// 	}
+		// 	default:
+		// 		break;
+		// }
 		// do different logic if the opponent is an AI
 		// TODO: Method to ask the user how difficult they want it
 		// EASY, REALISTIC, IMPOSSIBLE
@@ -590,6 +614,7 @@ void Game::p2Turn() {
 		// TODO: Ensure the player can only do this once, even if they
 		// manage to somehow screw up their shot anyway after having
 		// seen the other board.
+
 		displayPlayer2Menu();
 		if(player2Choice == 1){
 			p2_attack_row = AskForPlacementRow();
@@ -704,6 +729,7 @@ void Game::p2Turn() {
 		}
 	}
 		/*if(!p1_cheatedAlready) {
+
 			//StatusMessages::Cheat();
 			//std::cin >> intent_to_cheat;
 		}
@@ -1034,8 +1060,8 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 	} while(keepAsking == true);
 }
 
-void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
-	int shipNum = i;
+void Game::shipPlacementInteraction(int ship, int player, Board* currentPlayerBoard) {
+	int shipNum = ship;
 
 	if(m_currentPlayer == 1) {
 		currentPlayerBoard=m_p1ownBoard;
@@ -1043,11 +1069,11 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		currentPlayerBoard=m_p2ownBoard;
 	}
 
-	StatusMessages::AskToPlaceShips(m_currentPlayer, i);
+	StatusMessages::AskToPlaceShips(m_currentPlayer, shipNum);
 
 	printCoordinateInteraction(currentPlayerBoard, shipNum);
 
-	if(i > 1) {
+	if(shipNum > 1) {
 		StatusMessages::ValidDirs();
 		CheckDirections(currentPlayerBoard, shipNum);
 		do {
@@ -1062,7 +1088,7 @@ void Game::shipPlacementInteraction(int i, int j, Board* currentPlayerBoard) {
 		} while((userDirection != UP && userDirection != DOWN &&
 			 userDirection != LEFT && userDirection != RIGHT) ||
 			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
-	} else if(i < 2) {
+	} else if(shipNum < 2) {
 		userDirection=NONE;
 	}
 }
@@ -1095,6 +1121,7 @@ void Game::ContinuePause() {
 
 void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 	for(int i = 0; i < ships; i++) {
+
 		std::string shipString=std::to_string(i+1);
 		int shipNum=i+1;
 		shipPlacementInteraction(i+1, player, currentPlayerBoard);
@@ -1156,9 +1183,15 @@ char Game::AskForPlacementCol() {
 	}
 	/*char userCol;
 	do {
+
 		std::cout << "Enter a column letter(A-H): ";
-		// TODO:: Sanitize this input
 		std::cin >> userCol;
+		if(std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			StatusMessages::ErrorInvalidCol();
+			std::cin >> userCol;
+		}
 		arrCol = static_cast<int>(userCol) - CHARSET_A;
 		if(arrCol < 0 || arrCol > 7) {
 			StatusMessages::ErrorInvalidCol();
@@ -1168,7 +1201,9 @@ char Game::AskForPlacementCol() {
 }
 
 int Game::AskForNumShips() {
+
 	int numShipsChoice = 0;
+
 	StatusMessages::AskNumShips();
 	std::cin >> numShipsChoice;
 	while (std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 5){
@@ -1190,28 +1225,22 @@ int Game::AskForNumShips() {
 			}
 		}
 	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));*/
+
 	return numShipsChoice;
 }
 
 int Game::AskPlayerType() {
-	char playerChoice = '\0';
+
+	int playerChoice = 0;
+
 	StatusMessages::HumanOrAI();
-	do {
+	std::cin >> playerChoice;
+	while (std::cin.fail() || (playerChoice > 2 || playerChoice < 1)) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::HumanOrAI();
 		std::cin >> playerChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			StatusMessages::HumanOrAI();
-			std::cin >> playerChoice;
-		}
-		// hacky version of toLower()
-		if(playerChoice < 97) {
-			playerChoice = static_cast<char>(static_cast<int>(playerChoice) + CHARSET_CAPS_GAP);
-		}
-	} while(playerChoice != 'h' && playerChoice != 'a');
-	if(playerChoice == 'h') {
-		return 0;
-	} else {
-		return 1;
 	}
+
+	return playerChoice - 1;
 }

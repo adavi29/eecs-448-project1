@@ -12,6 +12,7 @@
 
 #include "asciiart.h"
 #include "statusmessages.h"
+#include "gamelimits.h"
 
 void StatusMessages::PrintBattleship() {
 	std::ifstream file_battleship_text("ascii/battleship.txt");
@@ -50,11 +51,6 @@ void StatusMessages::PressAnyContinue() {
 	std::cout << "Press any key to continue..." << std::endl;
 }
 
-void StatusMessages::AskNumShips() {
-	std::cout << "Enter the amount of ships both players want to use "
-	          << "(Max: 5): ";
-}
-
 void StatusMessages::ErrorNumShips() {
 	std::cout << "Invalid number of ships; must be between 1 and 5."
 	          << "Try again.\n";
@@ -62,7 +58,7 @@ void StatusMessages::ErrorNumShips() {
 
 void StatusMessages::AskToPlaceShips(int player, int ship) {
 	std::cout << "Enter the coordinates for player "
-		  << ((player == 0) ? "1" : "2")
+		  << ((player == 1) ? "1" : "2")
 		  << "'s";
 	switch(ship) {
 		default: break;
@@ -141,9 +137,16 @@ void StatusMessages::PickedInvalidDir() {
 }
 
 void StatusMessages::HumanOrAI() {
-	std::cout << "Are you playing against a human, or would you like an AI opponent?\n";
-	std::cout << "Enter '1' for a 2-player human game";
-	std::cout << "Enter '2' to play against the computer";
+	std::cout << "Are you playing against a human, or would you like an AI opponent?\n"
+		  << "Enter '1' for a human opponent, or 2 for AI: ";
+}
+
+void StatusMessages::AskNumShips() {
+	std::cout << "Enter a number of ships in range ["
+		  << SHIPS_MIN
+		  << ","
+		  << SHIPS_MAX
+		  << "]: ";
 }
 
 void StatusMessages::PrintWinner(int player) {
