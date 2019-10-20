@@ -272,24 +272,96 @@ class Game{
 		 */
 		void ContinuePause();
 
+		/**
+		 * @pre takes an integer and the board to be manipulated
+		 * @brief Interacts with the user to set the ships
+		 * @post none
+		 */
 		void SetUpShips(int ships, Board* currentPlayerBoard);
 
+		/**
+		* @pre none
+		* @brief Asks the user for a valid row number
+		* @post returns an integer
+		*/
 		int AskForPlacementRow();
 
+		/**
+		* @pre none
+		* @brief Asks the user for a valid column letter
+		* @post returns an integer
+		*/
 		int AskForPlacementCol();
 
+		/**
+		* @pre none
+		* @brief Asks the user for a valid number of ships
+		* @post returns an integer
+		*/
 		int AskForNumShips();
 
+		/**
+		* @pre takes an integer for the current player, the current ship, around
+		*				the column and rows to place the ship
+		* @brief sets the ship according to the size
+		* @post none
+		*/
 		void setEntryWrapper(int player, std::string ship, int col, int row);
 
+		/**
+		* @pre takes the boards to be displayed
+		* @brief displays the appropriate board for the current player
+		* @post none
+		*/
 		void printPlayerBoardsSBS(Board* ownBoard, Board* oppBoard);
 
+		/**
+		* @pre none
+		* @brief asks the user for the type of opponent, human or AI
+		* @post returns an integer
+		*/
 		int AskPlayerType();
+
+		/**
+		* @pre none
+		* @brief determines the difficulty of the AI
+		* @post none
+		*/
 		void displayAImenu();
+
+		/**
+		* @pre none
+		* @brief the easy shot for the AI player
+		* @post none
+		*/
 		void AIEasyShot();
+
+		/**
+		* @pre none
+		* @brief the medium shot for the AI player
+		* @post none
+		*/
 		void AIMediumShot();
+
+		/**
+		* @pre none
+		* @brief the hard shot for the AI player
+		* @post none
+		*/
 		void AIHardShot();
+
+		/**
+		* @pre none
+		* @brief displays player 1's interactive menu
+		* @post none
+		*/
 		void displayPlayer1Menu();
+
+		/**
+		* @pre none
+		* @brief displays player 1's interactive menu
+		* @post none
+		*/
 		void displayPlayer2Menu();
 };
 #endif
