@@ -2,6 +2,7 @@
 /**
  * @author git-merge:
  *             Zach Pearson
+ *	       Brian Clark
  * @file   statusmessages.h
  * @date   29 September 2019
  * @brief
