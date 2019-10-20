@@ -293,4 +293,3 @@ class Game{
 		void displayPlayer2Menu();
 };
 #endif
-
