@@ -184,7 +184,7 @@ void StatusMessages::InvalidDifficulty() {
 	std::cout << "Invalid difficulty level selected; please try again.\n";
 }
 
-void StatusMessages::MoveMenu(int player, bool bigShot) {
+void StatusMessages::MoveMenu(int player, bool bigShot, bool cheated) {
 	std::cout << (player == 1 ? "\nPlayer 1\n" : "\nPlayer 2\n")
 		  << "Please select from the following options: \n"
 		  << "1. Take a shot\n"
@@ -204,8 +204,14 @@ void StatusMessages::MoveMenu(int player, bool bigShot) {
 			std::cout << "0 remaining)\n";
 		}
 	}
-	std::cout << "3. View opponents board\n"
-		  << "4. View your scoreboard\n"
+	std::cout << "3. View opponents board (";
+	if(!cheated){
+		std::cout << "1 view remaining)\n";
+	}
+	else{
+		std::cout << "0 remaining)\n";
+	}
+		 std::cout << "4. View your scoreboard\n"
 		  << "5. View opponent's scoreboard.\n"
 		  << "6. Exit the game.\n";
 }
