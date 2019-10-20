@@ -2,6 +2,7 @@
 /**
  * @author git-merge:
  *             Zach Pearson
+ *	       		 Brian Clark
  * @file   statusmessages.cpp
  * @date   29 September 2019
  * @brief
@@ -178,6 +179,7 @@ void StatusMessages::AIMenu() {
 		  << "1. Easy (the AI shoots randomly every turn)\n"
 		  << "2. Realistic (the AI fires randomly until a ship is found)\n"
 		  << "3. Impossible (the AI never misses a shot!)\n";
+			std::cout << "Please make a selection: ";
 }
 
 void StatusMessages::InvalidDifficulty() {
