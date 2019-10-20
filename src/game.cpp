@@ -537,7 +537,10 @@ void Game::p1Turn() {
 						for(int j = p1_attack_col - 1; j <= p1_attack_col + 1; j++) {
 							if(i >= 0 && i <= 7) {
 								if(j >= 0 && j <= 7) {
-									if(isHit(opponent_own_board, i, j)) {
+									if(isHit(opponent_own_board, i, j) &&
+										(opponent_own_board->getEntryAtPosition(i, j) != "M" ||
+									 	opponent_own_board->getEntryAtPosition(i, j) != "H" ||
+										opponent_own_board->getEntryAtPosition(i, j) != " ")) {
 										StatusMessages::ConfirmHit();
 										m_p1oppBoard->setEntryAtPosition("H", j, i);
 										//decreases the opponents ship on hit and announces if sunk
