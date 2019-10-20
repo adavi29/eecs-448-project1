@@ -35,7 +35,7 @@ Game::Game() {
 
 	// Seed the pseudorandom number generator with the system clock
 	// otherwise the "randomness" would be seeded at compile time.
-	//srand(time(0));
+	srand(time(0));
 
 	m_numShips = 0;
 
@@ -223,6 +223,8 @@ void Game::displayAImenu() {
 void Game::displayPlayer1Menu() {
 	player1Choice = 0;
 	StatusMessages::MoveMenu(1, p1_usedBigShot);
+	std::cout << "Please make a selection from the menu: ";
+	std::cin >> player1Choice;
 	while (std::cin.fail() || player1Choice < 1 || player1Choice > 6) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -234,6 +236,8 @@ void Game::displayPlayer1Menu() {
 void Game::displayPlayer2Menu() {
 	player2Choice = 0;
 	StatusMessages::MoveMenu(2, p2_usedBigShot);
+	std::cout << "Please make a selection from the menu: ";
+	std::cin >> player2Choice;
 	while (std::cin.fail() || player2Choice < 1 || player2Choice > 6) {
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -247,12 +251,15 @@ void Game::AIEasyShot() {
 	bool shotFired = false;
 	std::string shipNum_string;
 	int shipNum;
-	std::cout << AIRandomRow << " " << AIRandomColumn << "\n";
 	while(!shotFired) {
 		if(AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "H" ||
 			AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "M") {
 			shotFired = false;
-		} else if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
+		} else if(AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "1" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "2" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "3" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "4" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "5"){
 			StatusMessages::ConfirmHit();
 			AIHits++;
 			AI_ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
@@ -266,9 +273,8 @@ void Game::AIEasyShot() {
 			}
 			//puts an x on the opponnets board
 			m_p1ownBoard->setEntryAtPosition("X", AIRandomColumn, AIRandomRow);
-
 			shotFired = true;
-		} else {
+		}else{
 			StatusMessages::ConfirmMiss();
 			AIMisses++;
       m_p1ownBoard->setEntryAtPosition("O", AIRandomColumn, AIRandomRow);
@@ -319,7 +325,11 @@ void Game::AIMediumShot() {
 	else{
 		int AIRandomRow = (rand()%8);
 		int AIRandomColumn = (rand()%8);
-		if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
+		if(AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "1" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "2" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "3" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "4" ||
+			 AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "5"){
 			lastShotReminder = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
 			StatusMessages::ConfirmHit();
 			AIHits++;
@@ -523,19 +533,6 @@ void Game::p1Turn() {
 				if(choice == "y"){
 					p1_attack_row = AskForPlacementRow() - 1;
 					p1_attack_col = AskForPlacementCol();
-					/* First test fired at 3B
-					   |A|B|C|D|
-					   -|-|-|-|-|-
-					   1| | | | | ...
-			                   -|-|-|-|-|-
-					   2|M| | | | ...
-			                   -|-|-|-|-|-
-					   3|M| | | | ...
-			                   -|-|-|-|-|-
-					   4| | | | |
-					   -|-|-|-|-|-
-					   So we are missing 7 shots
-					*/
 					for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
 						for(int j = p1_attack_col - 1; j <= p1_attack_col + 1; j++) {
 							if(i >= 0 && i <= 7) {
@@ -552,7 +549,7 @@ void Game::p1Turn() {
 											return;
 										}
 										//puts an x on the opponnets board
-	                                    opponent_own_board->setEntryAtPosition("X", j, i);
+	                  opponent_own_board->setEntryAtPosition("X", j, i);
 
 									} else {
 										StatusMessages::ConfirmMiss();
@@ -577,10 +574,9 @@ void Game::p1Turn() {
 		else if(player1Choice == 3) {
 			//Display the opponents Board
       opponent_own_board->printBoard();
-			displayPlayer1Menu();
 		}
 		else if(player1Choice == 4) {
-			if(player1Misses != 0) {
+			if((player1Hits+player1Misses) != 0) {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS: ";
 				std::cout << player1Hits << "\n";
@@ -592,7 +588,7 @@ void Game::p1Turn() {
 			else{
 				std::cout << "You have not taken a shot yet!\n";
 			}
-			displayPlayer1Menu();
+			//displayPlayer1Menu();
 		}
 		else if(player1Choice == 5){
 			if((opponent_hits+opponent_misses) == 0){
@@ -604,12 +600,11 @@ void Game::p1Turn() {
 				std::cout << opponent_hits << "\n";
 				std::cout << "MISSES: " << opponent_misses << "\n";
 				double hitPercent = (opponent_hits/(opponent_hits+opponent_misses))*100;
-
 				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
 		}
-		else{
+		else if(player1Choice == 6){
 			std::cout << "Goodbye!\n";
 			exit(0);
 		}
@@ -724,11 +719,13 @@ void Game::p2Turn() {
 			//displayPlayer2Menu();
 		}
 		else if(player2Choice == 4) {
-			if(player2Misses != 0) {
+			if((player2Hits+player2Misses) != 0) {
 				std::cout << "-------------------------------------\n";
-				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
-				std::cout << player2Hits << " " << player2Misses << "	" <<
-				(player2Hits/(player2Hits+player2Misses))*100 << "&\n";
+				std::cout << "HITS: ";
+				std::cout << player2Hits << "\n";
+				std::cout << "MISSES: " << player2Misses << "\n";
+				double hitPercent = (player2Hits/(player2Hits+player2Misses));
+				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
 			else{
@@ -739,9 +736,11 @@ void Game::p2Turn() {
 		else if(player2Choice == 5){
 			if((player1Hits+player1Misses) != 0){
 				std::cout << "-------------------------------------\n";
-				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
-				std::cout << player1Hits << " " << player1Misses << "	" <<
-				(player1Hits/(player1Hits+player1Misses))*100 << "&\n";
+				std::cout << "HITS: ";
+				std::cout << player1Hits << "\n";
+				std::cout << "MISSES: " << player1Misses << "\n";
+				double hitPercent = (player1Hits/(player1Hits+player1Misses));
+				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
 			else{
@@ -1016,11 +1015,8 @@ void Game::shipPlacementInteraction(int ship, Board* currentPlayerBoard) {
             } else if (m_currentPlayer == 2) {
                 currentPlayerBoard=m_p2ownBoard;
             }
-
             StatusMessages::AskToPlaceShips(m_currentPlayer, shipNum);
-
             printCoordinateInteraction(currentPlayerBoard, shipNum);
-
             if(shipNum > 1) {
                 StatusMessages::ValidDirs();
                 CheckDirections(currentPlayerBoard, shipNum);
