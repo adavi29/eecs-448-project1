@@ -19,6 +19,11 @@ void StatusMessages::PrintBattleship() {
 	std::cout << AsciiArtHandler::printFileContents(file_battleship_text) << std::endl;
 }
 
+void StatusMessages::PrintAIWinner() {
+	std::ifstream file_AIWins_text("ascii/AIWins.txt");
+	std::cout << AsciiArtHandler::printFileContents(file_AIWins_text) << std::endl;
+}
+
 void StatusMessages::PrintPlayerBillboard(int player) {
 	StatusMessages::ClearConsole();
 	if(player == 0) {
@@ -92,7 +97,7 @@ void StatusMessages::ErrorInvalidRow() {
 }
 
 void StatusMessages::ErrorInvalidCol() {
-	std::cout << "Invalid row; must be in range [A,H]. Please try again."
+	std::cout << "Invalid column; must be in range [A,H]. Please try again."
 		  << std::endl;
 }
 
@@ -138,7 +143,7 @@ void StatusMessages::PickedInvalidDir() {
 
 void StatusMessages::HumanOrAI() {
 	std::cout << "Are you playing against a human, or would you like an AI opponent?\n"
-		  << "Enter '1' for a human opponent, or 2 for AI: ";
+		  << "Enter '1' for a human opponent, or '2' for AI: ";
 }
 
 void StatusMessages::AskNumShips() {
@@ -166,4 +171,41 @@ void StatusMessages::UseBigShot() {
 
 void StatusMessages::Cheat() {
 	std::cout << "Use your one opportunity to view opponent's board? (y/N): ";
+}
+
+void StatusMessages::AIMenu() {
+	std::cout << "Please select a level of difficulty for the AI opponent: \n"
+		  << "1. Easy (the AI shoots randomly every turn)\n"
+		  << "2. Realistic (the AI fires randomly until a ship is found)\n"
+		  << "3. Impossible (the AI never misses a shot!)\n";
+}
+
+void StatusMessages::InvalidDifficulty() {
+	std::cout << "Invalid difficulty level selected; please try again.\n";
+}
+
+void StatusMessages::MoveMenu(int player, bool bigShot) {
+	std::cout << (player == 1 ? "\nPlayer 1\n" : "\nPlayer 2\n")
+		  << "Please select from the following options: \n"
+		  << "1. Take a shot\n"
+		  << "2. Take a BIG (3x3) shot (";
+	if(player == 1) {
+		if(!bigShot) {
+			std::cout << "1 remaining)\n";
+		}
+		else{
+			std::cout << "0 remaining)\n";
+		}
+	} else {
+		if(!bigShot) {
+			std::cout << "1 remaining)\n";
+		}
+		else{
+			std::cout << "0 remaining)\n";
+		}
+	}
+	std::cout << "3. View opponents board\n"
+		  << "4. View your scoreboard\n"
+		  << "5. View opponent's scoreboard.\n"
+		  << "6. Exit the game.\n"
 }
