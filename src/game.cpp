@@ -20,6 +20,8 @@
 #include <limits>
 #include <time.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include "game.h"
 #include "board.h"
@@ -33,12 +35,9 @@ Game::Game() {
 
 	// Seed the pseudorandom number generator with the system clock
 	// otherwise the "randomness" would be seeded at compile time.
-	srand(time(0));
+	//srand(time(0));
 
 	m_numShips = 0;
-
-	userRow = 0;
-	userCol = '0';
 
 	arrCol = 0;
 	arrRow = 0;
@@ -74,15 +73,20 @@ Game::~Game() {
 	delete m_p2oppBoard;
 	delete m_p1ownBoard;
 	delete m_p1oppBoard;
-	delete AI_ownBoard;
-	delete AI_oppBoard;
-	delete AI_Ships;
-	delete m_p1Ships;
-	delete m_p2Ships;
+	if(m_opponentType == AI){
+		delete AI_ownBoard;
+		delete AI_oppBoard;
+	}
+	// delete AI_Ships;
+	else{
+		delete m_p1Ships;
+		delete m_p2Ships;
+	}
 }
 
 void Game::setup() {
 
+    Game::ContinuePause();
 	// TODO: Is there a reason this isn't a member variable?
 	Board* currentPlayerBoard = nullptr;
 
@@ -94,7 +98,7 @@ void Game::setup() {
 	this->m_numShips = Game::AskForNumShips();
 
 	if(m_opponentType == HUMAN) {
-		for(int i = 0; i < 2; i++) {
+		for(int i = 1; i < 3; i++) {
 			StatusMessages::PrintPlayerBillboard(i);
 			// Explicit namespaces are good. Now I KNOW this function is
 			// defined elsewhere in this header instead potentially under
@@ -102,12 +106,11 @@ void Game::setup() {
 			Game::ContinuePause();
 			switch (m_numShips) {
 				case 1: {
-					StatusMessages::AskToPlaceShips(i, 1);
-					userRow = Game::AskForPlacementRow();
-					arrRow = userRow - 1;
+					StatusMessages::AskToPlaceShips(m_currentPlayer, 1);
+					arrRow = Game::AskForPlacementRow() - 1;
 					//set userDirection=none because ship of size 1 is only one
 					//point on the array
-					userCol = Game::AskForPlacementCol();
+					arrCol = Game::AskForPlacementCol();
 					userDirection=NONE;
 					if(m_currentPlayer==1) {
 						if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
@@ -127,170 +130,185 @@ void Game::setup() {
 					//TODO: While the game logic is sound, after this point the game displays
 					// "setting player 2's ship x" for both players.
 				case 2: {
-					Game::SetUpShips(i, 2, currentPlayerBoard);
+					Game::SetUpShips(2, currentPlayerBoard);
 					break;
 				}
 				case 3: {
-					Game::SetUpShips(i, 3, currentPlayerBoard);
+					Game::SetUpShips(3, currentPlayerBoard);
 					break;
 				}
 				case 4: {
-					Game::SetUpShips(i, 4, currentPlayerBoard);
+					Game::SetUpShips(4, currentPlayerBoard);
 					break;
 				}
 				case 5: {
-					Game::SetUpShips(i, 5, currentPlayerBoard);
+					Game::SetUpShips(5, currentPlayerBoard);
 					break;
 				}
 			}
 			m_currentPlayer = 2; //change value of current player to 2 for second round of for loop
 		}
-	} else {
+	  }else {
+        Game::ContinuePause();
 		// Only print Player 1's board and only ask player 1 for their ships
-		StatusMessages::PrintPlayerBillboard(1);
+		StatusMessages::PrintPlayerBillboard(0);
 		Game::ContinuePause();
-		Game::SetUpShips(1, m_numShips, currentPlayerBoard);
+		for( int i = 1; i < 3; i++){
+		    switch (m_numShips) {
+                case 1: {
+                    if ( m_currentPlayer == 1){
+                        StatusMessages::AskToPlaceShips(1, i);
+                        arrRow = Game::AskForPlacementRow() - 1;
+                        //set userDirection=none because ship of size 1 is only one
+                        //point on the array
+                        arrCol = Game::AskForPlacementCol();
+                        userDirection=NONE;
 
-		// From here on it's the AI's turn
-		// switch (DIFFICULTY) {
-		// 	case EASY: {
-		// 		break;
-		// 	}
-		// 	case REALISTIC: {
-		// 		break;
-		// 	}
-		// 	case IMPOSSIBLE: {
-		// 		break;
-		// 	}
-		// 	default:
-		// 		break;
-		// }
+                        if (isAvailable(m_p1ownBoard,arrRow, arrCol)) {
+                            addShiptoArray("1", arrRow, arrCol, userDirection, 1);
+                            std::cout<<"Player 1's current Board:\n";
+                            printOwnBoard(m_p1ownBoard);
+                        }
+                    } else{
+                        //AI
+                        arrRow = Game::AskForPlacementRow() - 1;
+                        arrCol = Game::AskForPlacementCol();
+                        if(isAvailable(AI_ownBoard, arrRow, arrCol)){
+                            addShiptoArray("1", arrRow, arrCol, NONE, 0);
+                            //the ship has been added
+                        }
+                    }
+                    break;
+                }
+                case 2: {
+                    Game::SetUpShips(2, currentPlayerBoard);
+                    break;
+                }
+                case 3: {
+                    Game::SetUpShips(3, currentPlayerBoard);
+                    break;
+                }
+                case 4: {
+                    Game::SetUpShips(4, currentPlayerBoard);
+                    break;
+                }
+                case 5: {
+                    Game::SetUpShips(5, currentPlayerBoard);
+                    break;
+                }
+		    }
+		m_currentPlayer = 0; // AI
+        }
+
 		// do different logic if the opponent is an AI
 		// TODO: Method to ask the user how difficult they want it
 		// EASY, REALISTIC, IMPOSSIBLE
 		Game::displayAImenu();
-		AI_Ships = new Ships(m_numShips);
-		if(AIDifficulty == 1){
-			AIEasyShot();
-			if(m_p1Ships->allSunk()) {
-				//StatusMessages::PrintWinner(1);
-				std::cout << "The AI opponent has won!\n";
-			}
-		}
-		else if(AIDifficulty == 2){
-			AIMediumShot();
-			if(m_p1Ships->allSunk()) {
-				//StatusMessages::PrintWinner(1);
-				std::cout << "The AI opponent has won!\n";
-			}
-		}
-		else{
-			AIHardShot();
-			if(m_p1Ships->allSunk()) {
-				//StatusMessages::PrintWinner(1);
-				std::cout << "The AI opponent has won!\n";
-			}
-		}
 	}
 }
-void Game::displayAImenu(){
-	std::cout << "Please select a level of difficulty for the AI opponent: \n";
-	std::cout << "1. Easy (the AI shoots randomly every turn)\n";
-	std::cout << "2. Realistic (the AI fires randomly until a ship is found)\n";
-	std::cout << "3. Impossible (the AI never misses a shot!)\n";
+
+void Game::displayAImenu() {
+	StatusMessages::AIMenu();
 	std::cin >> AIDifficulty;
-	while (std::cin.fail() || AIDifficulty < 1 || AIDifficulty > 3){
+	while (std::cin.fail() ||
+	       (AIDifficulty < DIFFICULTY_MIN || AIDifficulty > DIFFICULTY_MAX))
+	{
 		std::cin.clear();
-		std::cin.ignore(INT8_MAX, '\n');
-		std::cout << "Invalid difficulty level selected. Try again.\n";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::InvalidDifficulty();
 		std::cin >> AIDifficulty;
 	}
 }
-void Game::displayPlayer1Menu(){
+
+void Game::displayPlayer1Menu() {
 	player1Choice = 0;
-	std::cout << "\nPlayer 1\n";
-	std::cout << "Please select from the following options: \n";
-	std::cout << "1. Take a shot\n";
-	std::cout << "2. Use BIG shot(";
-	if(p1_usedBigShot == false){
-		std::cout << "1 remaining)\n";
-	}
-	else{
-		std::cout << "0 remaining)\n";
-	}
-	std::cout << "3. View opponents board\n";
-	std::cout << "4. View your scoreboard\n";
-	std::cout << "5. View opponents scoreboard.\n";	
-	std::cout << "6. Exit the game.\n";	
-	std::cout << "Make a selection: ";
-	std::cin >> player1Choice;
-	while (std::cin.fail() || player1Choice < 1 || player1Choice > 6){
+	StatusMessages::MoveMenu(1, p1_usedBigShot);
+	while (std::cin.fail() || player1Choice < 1 || player1Choice > 6) {
 		std::cin.clear();
-		std::cin.ignore(INT8_MAX, '\n');
-		std::cout << "Invalid selection. Try again.\n";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please make a selection from the menu: ";
 		std::cin >> player1Choice;
 	}
 }
-void Game::displayPlayer2Menu(){
+
+void Game::displayPlayer2Menu() {
 	player2Choice = 0;
-	std::cout << "\nPlayer 2\n";
-	std::cout << "Please select from the following options: \n";
-	std::cout << "1. Take a shot\n";
-	std::cout << "2. Use BIG shot(";
-	if(p2_usedBigShot == false){
-		std::cout << "1 remaining)\n";
-	}
-	else{
-		std::cout << "0 remaining)\n";
-	}
-	std::cout << "3. View opponents board\n";
-	std::cout << "4. View your scoreboard\n";
-	std::cout << "5. View opponents scoreboard.\n";	
-	std::cout << "6. Exit the game.\n";
-	std::cout << "Make a selection: ";
-	std::cin >> player2Choice;
-	while (std::cin.fail() || player2Choice < 1 || player2Choice > 6){
+	StatusMessages::MoveMenu(2, p2_usedBigShot);
+	while (std::cin.fail() || player2Choice < 1 || player2Choice > 6) {
 		std::cin.clear();
-		std::cin.ignore(INT8_MAX, '\n');
-		std::cout << "Invalid selection. Try again.\n";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Please make a selection from the menu: ";
 		std::cin >> player2Choice;
 	}
 }
-void Game::AIEasyShot(){
+void Game::AIEasyShot() {
 	int AIRandomRow = (rand()%8);
 	int AIRandomColumn = (rand()%8);
+	bool shotFired = false;
+	std::string shipNum_string;
+	int shipNum;
 	std::cout << AIRandomRow << " " << AIRandomColumn << "\n";
-	if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
-		StatusMessages::ConfirmHit();
-		m_p1ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
-	}
-	else{
-		StatusMessages::ConfirmMiss();
-		m_p1ownBoard->setEntryAtPosition("M", AIRandomColumn, AIRandomRow);
+	while(!shotFired) {
+		if(AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "H" ||
+			AI_oppBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow) == "M") {
+			shotFired = false;
+		} else if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
+			StatusMessages::ConfirmHit();
+			AIHits++;
+			AI_ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
+
+			//decreases the opponents ship on hit and announce if sunk
+			shipNum_string = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+			shipNum = std::stoi(shipNum_string);
+			m_p1Ships->decreaseSize(shipNum);
+			if(m_p1Ships->allSunk()) {
+				return;
+			}
+			//puts an x on the opponnets board
+			m_p1ownBoard->setEntryAtPosition("X", AIRandomColumn, AIRandomRow);
+
+			shotFired = true;
+		} else {
+			StatusMessages::ConfirmMiss();
+			AIMisses++;
+      m_p1ownBoard->setEntryAtPosition("O", AIRandomColumn, AIRandomRow);
+      AI_ownBoard->setEntryAtPosition("M", AIRandomColumn, AIRandomRow);
+			shotFired = true;
+		}
 	}
 }
-void Game::AIMediumShot(){
+
+void Game::AIMediumShot() {
 	std::string lastShotReminder = " ";
-	if(lastShotReminder != " "){
+	std::string shipNum_string;
+	int shipNum;
+	if(lastShotReminder != " ") {
 		int row = 0;
 		int col = 0;
 		bool found = false;
-		while(!found){
-			if(col == 7 && row == 7){
+		while(!found) {
+			if(col == 7 && row == 7) {
 				lastShotReminder = ' ';
 				found = true;
 			}
 			else{
-				if(m_p1ownBoard->getEntryAtPosition(col, row) == lastShotReminder){
-					m_p1ownBoard->setEntryAtPosition("H", col, row);
+				if(m_p1ownBoard->getEntryAtPosition(col, row) == lastShotReminder) {
+					shipNum_string = m_p1ownBoard->getEntryAtPosition(col, row);
+					m_p1ownBoard->setEntryAtPosition("X", col, row);
 					StatusMessages::ConfirmHit();
+					AIHits++;
+          shipNum = std::stoi(shipNum_string);
+          m_p1Ships->decreaseSize(shipNum);
+          if(m_p1Ships->allSunk()) {
+              return;
+          }
 					found = true;
 				}
 				else{
-					if(row != 7){
+					if(row != 7) {
 						row++;
 					}
-					if(row == 7){
+					if(row == 7) {
 						col++;
 						row = 0;
 					}
@@ -302,68 +320,82 @@ void Game::AIMediumShot(){
 		int AIRandomRow = (rand()%8);
 		int AIRandomColumn = (rand()%8);
 		if(isHit(m_p1ownBoard, AIRandomColumn, AIRandomRow)) {
-			StatusMessages::ConfirmHit();
-			m_p1ownBoard->setEntryAtPosition("H", AIRandomColumn, AIRandomRow);
 			lastShotReminder = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+			StatusMessages::ConfirmHit();
+			AIHits++;
+			shipNum_string = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+			m_p1ownBoard->setEntryAtPosition("X", AIRandomColumn, AIRandomRow);
+			shipNum = std::stoi(shipNum_string);
+			m_p1Ships->decreaseSize(shipNum);
+			if(m_p1Ships->allSunk()) {
+				return;
+			}
 		}
 		else{
 			StatusMessages::ConfirmMiss();
-			m_p1ownBoard->setEntryAtPosition("M", AIRandomColumn, AIRandomRow);
+			AIMisses++;
 			lastShotReminder = m_p1ownBoard->getEntryAtPosition(AIRandomColumn, AIRandomRow);
+			m_p1ownBoard->setEntryAtPosition("O", AIRandomColumn, AIRandomRow);
 		}
 	}
 }
-void Game::AIHardShot(){
-	int row = 0;
-	int col = 0;
+
+void Game::AIHardShot() {
 	bool shotFired = false;
-	while(!shotFired){
-		if(isHit(m_p1ownBoard, col, row)){
-			m_p1ownBoard->setEntryAtPosition("H", col, row);
-			StatusMessages::ConfirmHit();
-			shotFired = true;
-		}
-		else{
-			if(row != 7){
-				row++;
-			}
-			if(row == 7){
-				col++;
-				row = 0;
+  std::string shipNum_string = " ";
+  int shipNum = 0;
+	while(!shotFired) {
+		for(int i = 0;i < 7;i++){
+			for(int j = 0;j < 7;j++){
+				if(m_p1ownBoard->getEntryAtPosition(i, j) == "1" ||
+				 	 m_p1ownBoard->getEntryAtPosition(i, j) == "2" ||
+					 m_p1ownBoard->getEntryAtPosition(i, j) == "3" ||
+					 m_p1ownBoard->getEntryAtPosition(i, j) == "4" ||
+					 m_p1ownBoard->getEntryAtPosition(i, j) == "5"){
+							shipNum_string = m_p1ownBoard->getEntryAtPosition(i, j);
+							shipNum = std::stoi(shipNum_string);
+							m_p1Ships->decreaseSize(shipNum);
+							StatusMessages::ConfirmHit();
+							AIHits++;
+							m_p1ownBoard->setEntryAtPosition("X", i, j);
+							return;
+				}
 			}
 		}
 	}
 }
+
 int Game::run() {
 	m_p1Ships = new Ships(m_numShips);
-	m_p2Ships = new Ships(m_numShips);
-
+    Ships* opponent_ships = nullptr;
+    if (m_opponentType == HUMAN){
+        m_p2Ships = new Ships(m_numShips);
+        opponent_ships = m_p2Ships;
+    }else{
+		AI_Ships = new Ships(m_numShips);
+        opponent_ships = AI_Ships;
+    }
 	system("clear");
-
 	StatusMessages::PrintLetsPlay();
 	Game::ContinuePause();
-
 	//loop section
 	bool endGame = true;
-
 	while(endGame) {
-
 		//player 1 turn
 		StatusMessages::PrintPlayerBillboard(0);
+        m_currentPlayer = 1;
 		p1Turn();
-
 		//checks if player 1 has won
-		if(m_p2Ships->allSunk()) {
+		if(opponent_ships->allSunk()) {
 			StatusMessages::PrintWinner(1);
 			endGame = false;
 			break;
 		}
-
 		if(m_opponentType == HUMAN) {
 			//player 2 turn
 			StatusMessages::PrintPlayerBillboard(1);
+      m_currentPlayer = 2;
 			p2Turn();
-
 			//checks if player 2 has won
 			if(m_p1Ships->allSunk()) {
 				StatusMessages::PrintWinner(2);
@@ -371,28 +403,64 @@ int Game::run() {
 				break;
 			}
 		} else {
-			// For now if this is fucked up we'll just immediately end
 			// TODO: AI run method -- possibly switch(difficulty)?
-			StatusMessages::PrintWinner(2);
-			endGame = false;
-			break;
+			//AI turn
+      m_currentPlayer = 0;
+			AITurn();
+      if(m_p1Ships->allSunk()) {
+        StatusMessages::PrintAIWinner();
+      	std::cout << "The AI opponent has won!\n";
+        endGame = false;
+        break;
+      }
 		}
 	}
 	return 0;
 }
 
+void Game::AITurn(){
+		std::cout << "It is now the AI players turn!\n";
+    if(AIDifficulty == 1){
+        AIEasyShot();
+				printOwnBoard(m_p1ownBoard);
+    }
+    else if(AIDifficulty == 2){
+        AIMediumShot();
+				printOwnBoard(m_p1ownBoard);
+    }
+    else{
+        AIHardShot();
+				printOwnBoard(m_p1ownBoard);
+    }
+}
 //run() helper methods
 // TODO: Just have a Turn(player) method.
 void Game::p1Turn() {
-
 	int p1_attack_row = 0;
 	int p1_attack_col = 0;
-
 	std::string shipNum_string;
 	int shipNum;
+  Board* opponent_own_board = nullptr;
+  Ships* opponent_ships = nullptr;
+  double opponent_hits;
+  double opponent_misses;
+  // this if statement sets the opponent's own board
+  //depending on whether it is human or AI
+  if (m_opponentType == HUMAN){
+      opponent_own_board = m_p2ownBoard;
+      opponent_ships = m_p2Ships;
+      opponent_hits = player2Hits;
+      opponent_misses = player2Misses;
+  } else {
+      //AI
+      opponent_own_board = AI_ownBoard;
+      opponent_ships = AI_Ships;
+      opponent_hits = AIHits;
+      opponent_misses = AIMisses;
+  }
 
 	//print Board
-	printPlayerBoards(m_p1ownBoard, m_p1oppBoard);
+	printPlayerBoardsSBS(m_p1ownBoard, m_p1oppBoard);
 
 	std::cout << "It's time to attack!" << std::endl;
 
@@ -411,8 +479,8 @@ void Game::p1Turn() {
 			//std::cin >> intent_to_use_big_shot;
 		//}
 		displayPlayer1Menu();
-		if(player1Choice == 1){
-			p1_attack_row = AskForPlacementRow();
+		if(player1Choice == 1) {
+			p1_attack_row = AskForPlacementRow() - 1;
 			p1_attack_col = AskForPlacementCol();
 
 		// The logic here doesn't change when the player uses the big shot. They shouldn't
@@ -420,88 +488,105 @@ void Game::p1Turn() {
 		// able to shoot it at an empty square even if there's a status marker already in
 		// one of the boxes in the 3x3 area centered around the shot.
 			if(m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "H" ||
-			   m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
+			 	 m_p1oppBoard->getEntryAtPosition(p1_attack_col, p1_attack_row) == "M") {
 				StatusMessages::AlreadyShotThere();
 			}
-			else if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
+			/* TODO isHit not registering, going straight to the else condition */
+			else if(isHit(opponent_own_board, p1_attack_row, p1_attack_col)) {
 				StatusMessages::ConfirmHit();
+				player1Hits++;
 				m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
 
 				//decreases the opponents ship on hit and announce if sunk
-				shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
-				shipNum = stoi(shipNum_string);
-				m_p2Ships->decreaseSize(shipNum);
-				if(m_p2Ships->allSunk()) {
+				shipNum_string = opponent_own_board->getEntryAtPosition(p1_attack_col, p1_attack_row);
+				std::cout << "Ship number: " << shipNum_string << std::endl;
+				shipNum = std::stoi(shipNum_string);
+				opponent_ships->decreaseSize(std::stoi(shipNum_string));
+				if(opponent_ships->allSunk()) {
 					return;
 				}
 				//puts an x on the opponnets board
-				m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
+        opponent_own_board->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
 			} else {
 				StatusMessages::ConfirmMiss();
+				player1Misses++;
 				m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
+				opponent_own_board->setEntryAtPosition("O", p1_attack_col, p1_attack_row);
 			}
 			return;
 		}
-		else if(player1Choice == 2){
-			StatusMessages::UseBigShot();
-			p1_attack_row = AskForPlacementRow();
-			p1_attack_col = AskForPlacementCol();
-				/* First test fired at 3B
-				    |A|B|C|D|
-				   -|-|-|-|-|-
-				   1| | | | | ...
-		                   -|-|-|-|-|-
-				   2|M| | | | ...
-		                   -|-|-|-|-|-
-				   3|M| | | | ...
-		                   -|-|-|-|-|-
-				   4| | | | |
-				   -|-|-|-|-|-
-				   So we are missing 7 shots
-				 */
-			for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
-				for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; j++) {
-					if(i >= 0 || i <= 7) {
-						if(j >= 0 || j <= 7) {
-							if(isHit(m_p2ownBoard, i, j)) {
-								StatusMessages::ConfirmHit();
-								m_p1oppBoard->setEntryAtPosition("H", j, i);
-								//decreases the opponents ship on hit and announces if sunk
-								shipNum_string = m_p2ownBoard->getEntryAtPosition(j, i);
-								shipNum = stoi(shipNum_string);
-								m_p2Ships->decreaseSize(shipNum);
-								if(m_p2Ships->allSunk()) {
-									return;
+		else if(player1Choice == 2) {
+			if(!(p1_usedBigShot)) {
+				std::string choice;
+				StatusMessages::UseBigShot();
+				std::cin >> choice;
+				if(choice == "y"){
+					p1_attack_row = AskForPlacementRow() - 1;
+					p1_attack_col = AskForPlacementCol();
+					/* First test fired at 3B
+					   |A|B|C|D|
+					   -|-|-|-|-|-
+					   1| | | | | ...
+			                   -|-|-|-|-|-
+					   2|M| | | | ...
+			                   -|-|-|-|-|-
+					   3|M| | | | ...
+			                   -|-|-|-|-|-
+					   4| | | | |
+					   -|-|-|-|-|-
+					   So we are missing 7 shots
+					*/
+					for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
+						for(int j = p1_attack_col - 1; j <= p1_attack_col + 1; j++) {
+							if(i >= 0 && i <= 7) {
+								if(j >= 0 && j <= 7) {
+									if(isHit(opponent_own_board, i, j)) {
+										StatusMessages::ConfirmHit();
+										m_p1oppBoard->setEntryAtPosition("H", j, i);
+										//decreases the opponents ship on hit and announces if sunk
+	                  shipNum_string = opponent_own_board->getEntryAtPosition(j, i);
+										player1Hits++;
+										shipNum = std::stoi(shipNum_string);
+	                  opponent_ships->decreaseSize(shipNum);
+										if(opponent_ships->allSunk()) {
+											return;
+										}
+										//puts an x on the opponnets board
+	                                    opponent_own_board->setEntryAtPosition("X", j, i);
+
+									} else {
+										StatusMessages::ConfirmMiss();
+										player1Misses++;
+										m_p1oppBoard->setEntryAtPosition("M", j, i);
+					                    opponent_own_board->setEntryAtPosition("O", j, i);
+									}
 								}
-								//puts an x on the opponnets board
-								m_p2ownBoard->setEntryAtPosition("X", j, i);
-							} else {
-								StatusMessages::ConfirmMiss();
-								m_p1oppBoard->setEntryAtPosition("M", j, i);
 							}
 						}
 					}
+					p1_usedBigShot = true;
 				}
+				else{
+					displayPlayer1Menu();
+				}
+				return;
+		} else {
+				std::cout << "You've already used your big shot!\n";
 			}
-			p1_usedBigShot = true;
-			break;
 		}
-		else if(player1Choice == 3){
+		else if(player1Choice == 3) {
 			//Display the opponents Board
-			if(AIDifficulty == 0){
-				m_p2ownBoard->printBoard();
-			}
-			else{
-				AI_ownBoard->printBoard();
-			}
+      opponent_own_board->printBoard();
 			displayPlayer1Menu();
 		}
-		else if(player1Choice == 4){
-			if(player1Misses != 0){
+		else if(player1Choice == 4) {
+			if(player1Misses != 0) {
 				std::cout << "-------------------------------------\n";
-				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
-				std::cout << player1Hits << " " << player1Misses << "	" <<
-				(player1Hits/(player1Hits+player1Misses))*100 << "&\n";
+				std::cout << "HITS: ";
+				std::cout << player1Hits << "\n";
+				std::cout << "MISSES: " << player1Misses << "\n";
+				double hitPercent = (player1Hits/(player1Hits+player1Misses));
+				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
 			else{
@@ -510,21 +595,17 @@ void Game::p1Turn() {
 			displayPlayer1Menu();
 		}
 		else if(player1Choice == 5){
-			if((AIHits+AIMisses) == 0 && (player2Hits+player2Misses) == 0){
+			if((opponent_hits+opponent_misses) == 0){
 				std::cout << "Your opponent has not fired yet!\n";
 			}
-			else if(AIDifficulty != 0 && (AIHits+AIMisses) != 0){
+			else{
 				std::cout << "-------------------------------------\n";
-				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
-				std::cout << AIHits << " " << AIMisses << "	" <<
-				(AIHits/(AIHits+AIMisses))*100 << "&\n";
-				std::cout << "-------------------------------------\n";
-			}
-			else if(AIDifficulty == 0 && (player2Hits+player2Misses) != 0){
-				std::cout << "-------------------------------------\n";
-				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
-				std::cout << player2Hits << " " << player2Misses << "	" <<
-				(player2Hits/(player2Hits+player2Misses))*100 << "&\n";
+				std::cout << "HITS: ";
+				std::cout << opponent_hits << "\n";
+				std::cout << "MISSES: " << opponent_misses << "\n";
+				double hitPercent = (opponent_hits/(opponent_hits+opponent_misses))*100;
+
+				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
 		}
@@ -533,69 +614,6 @@ void Game::p1Turn() {
 			exit(0);
 		}
 	}
-
-	//checks if isHit() or not
-	//if(intent_to_use_big_shot) {
-		/* First test fired at 3B
-		    |A|B|C|D|
-		   -|-|-|-|-|-
-		   1| | | | | ...
-                   -|-|-|-|-|-
-		   2|M| | | | ...
-                   -|-|-|-|-|-
-		   3|M| | | | ...
-                   -|-|-|-|-|-
-		   4| | | | |
-		   -|-|-|-|-|-
-		   So we are missing 7 shots
-		 */
-		/*for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
-			for(int j = p1_attack_col - 1; i <= p1_attack_col + 1; j++) {
-				if(i >= 0 || i <= 7) {
-					if(j >= 0 || j <= 7) {
-						if(isHit(m_p2ownBoard, i, j)) {
-							StatusMessages::ConfirmHit();
-							m_p1oppBoard->setEntryAtPosition("H", j, i);
-
-							//decreases the opponents ship on hit and announces if sunk
-							shipNum_string = m_p2ownBoard->getEntryAtPosition(j, i);
-							shipNum = stoi(shipNum_string);
-							m_p2Ships->decreaseSize(shipNum);
-							if(m_p2Ships->allSunk()) {
-								return;
-							}
-
-							//puts an x on the opponnets board
-							m_p2ownBoard->setEntryAtPosition("X", j, i);
-						} else {
-							StatusMessages::ConfirmMiss();
-							m_p1oppBoard->setEntryAtPosition("M", j, i);
-						}
-					}
-				}
-			}
-		}
-		p1_usedBigShot = true;
-	} else {
-		if(isHit(m_p2ownBoard, p1_attack_row, p1_attack_col)) {
-			StatusMessages::ConfirmHit();
-			m_p1oppBoard->setEntryAtPosition("H", p1_attack_col, p1_attack_row);
-
-			//decreases the opponents ship on hit and announce if sunk
-			shipNum_string = m_p2ownBoard->getEntryAtPosition(p1_attack_col, p1_attack_row);
-			shipNum = stoi(shipNum_string);
-			m_p2Ships->decreaseSize(shipNum);
-			if(m_p2Ships->allSunk()) {
-				return;
-			}
-
-			//puts an x on the opponnets board
-			m_p2ownBoard->setEntryAtPosition("X", p1_attack_col, p1_attack_row );
-		} else {
-			StatusMessages::ConfirmMiss();
-			m_p1oppBoard->setEntryAtPosition("M", p1_attack_col, p1_attack_row);
-		}
-	}*/
 	StatusMessages::NextPlayer();
 	Game::ContinuePause();
 }
@@ -608,33 +626,31 @@ void Game::p2Turn() {
 	int shipNum;
 
 	//print Board
-	printPlayerBoards(m_p2ownBoard, m_p2oppBoard);
+	printPlayerBoardsSBS(m_p2ownBoard, m_p2oppBoard);
 
 	while(1) {
 		// TODO: Ensure the player can only do this once, even if they
 		// manage to somehow screw up their shot anyway after having
 		// seen the other board.
-
 		displayPlayer2Menu();
-		if(player2Choice == 1){
-			p2_attack_row = AskForPlacementRow();
+		if(player2Choice == 1) {
+			p2_attack_row = AskForPlacementRow() - 1;
 			p2_attack_col = AskForPlacementCol();
-
 		// The logic here doesn't change when the player uses the big shot. They shouldn't
 		// be able to shoot it at a square that's already marked, true, but they should be
 		// able to shoot it at an empty square even if there's a status marker already in
 		// one of the boxes in the 3x3 area centered around the shot.
-			if(m_p1oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
-			   m_p1oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M") {
+			if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
+				 m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M") {
 				StatusMessages::AlreadyShotThere();
 			}
 			else if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
 				StatusMessages::ConfirmHit();
 				m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
-
+				player2Hits++;
 				//decreases the opponents ship on hit and announces if sunk
 				shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
-				shipNum = stoi(shipNum_string);
+				shipNum = std::stoi(shipNum_string);
 				m_p1Ships->decreaseSize(shipNum);
 				if(m_p1Ships->allSunk()) {
 					return;
@@ -642,18 +658,21 @@ void Game::p2Turn() {
 
 				//puts an x on the opponnets board
 				m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
-				} else {
-					StatusMessages::ConfirmMiss();
-					m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
-				}
-				return;
+			} else {
+				StatusMessages::ConfirmMiss();
+				player2Misses++;
+				m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
+				m_p1ownBoard->setEntryAtPosition("O", p2_attack_col, p2_attack_row);
+			}
+			return;
 		}
-		else if(player2Choice == 2){
-			StatusMessages::UseBigShot();
-			p2_attack_row = AskForPlacementRow();
-			p2_attack_col = AskForPlacementCol();
+		else if(player2Choice == 2) {
+			if(!p2_usedBigShot) {
+				StatusMessages::UseBigShot();
+				p2_attack_row = AskForPlacementRow();
+				p2_attack_col = AskForPlacementCol();
 				/* First test fired at 3B
-				    |A|B|C|D|
+				   |A|B|C|D|
 				   -|-|-|-|-|-
 				   1| | | | | ...
 		                   -|-|-|-|-|-
@@ -664,18 +683,18 @@ void Game::p2Turn() {
 				   4| | | | |
 				   -|-|-|-|-|-
 				   So we are missing 7 shots
-				 */
-				 for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
-	 				for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; j++) {
-	 					if(i >= 0 || i <= 7) {
-	 						if(j >= 0 || j <= 7) {
+				*/
+				for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
+	 				for(int j = p2_attack_col - 1; j <= p2_attack_col + 1; j++) {
+	 					if(i >= 0 && i <= 7) {
+	 						if(j >= 0 && j <= 7) {
 	 							if(isHit(m_p1ownBoard, i, j)) {
 	 								StatusMessages::ConfirmHit();
 	 								m_p2oppBoard->setEntryAtPosition("H", j, i);
-
+									player2Hits++;
 	 								//decreases the opponents ship on hit and announces if sunk
 	 								shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
-	 								shipNum = stoi(shipNum_string);
+	 								shipNum = std::stoi(shipNum_string);
 	 								m_p1Ships->decreaseSize(shipNum);
 	 								if(m_p1Ships->allSunk()) {
 	 									return;
@@ -685,21 +704,27 @@ void Game::p2Turn() {
 	 								m_p1ownBoard->setEntryAtPosition("X", j, i);
 	 							} else {
 	 								StatusMessages::ConfirmMiss();
+									player2Misses++;
 	 								m_p2oppBoard->setEntryAtPosition("M", j, i);
+	 								m_p1ownBoard->setEntryAtPosition("O", j, i);
 	 							}
 	 						}
 	 					}
 	 				}
 	 			}
 	 			p2_usedBigShot = true;
+				return;
+			} else {
+				std::cout << "You've already used your big shot!\n";
+			}
 		}
-		else if(player2Choice == 3){
+		else if(player2Choice == 3) {
 			//Display the opponents Board
 			m_p1ownBoard->printBoard();
-			displayPlayer2Menu();
+			//displayPlayer2Menu();
 		}
-		else if(player2Choice == 4){
-			if(player2Misses != 0){
+		else if(player2Choice == 4) {
+			if(player2Misses != 0) {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS	MISSES	HIT	PERCENT	 \n";
 				std::cout << player2Hits << " " << player2Misses << "	" <<
@@ -720,7 +745,7 @@ void Game::p2Turn() {
 				std::cout << "-------------------------------------\n";
 			}
 			else{
-				std::cout << "Your opponent has not fired yet!\n";	
+				std::cout << "Your opponent has not fired yet!\n";
 			}
 		}
 		else{
@@ -728,91 +753,10 @@ void Game::p2Turn() {
 			exit(0);
 		}
 	}
-		/*if(!p1_cheatedAlready) {
-
-			//StatusMessages::Cheat();
-			//std::cin >> intent_to_cheat;
-		}
-		if(!p2_usedBigShot) {
-			StatusMessages::UseBigShot();
-			// TODO: Sanitize this input
-			std::cin >> intent_to_use_big_shot;
-		}
-		p2_attack_row = AskForPlacementRow();
-		p2_attack_col = AskForPlacementCol();
-
-		if(m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "H" ||
-		   m_p2oppBoard->getEntryAtPosition(p2_attack_col, p2_attack_row) == "M")
-		{
-			StatusMessages::AlreadyShotThere();
-		} else {
-			break;
-		}
-	}*/
-
-	//hit or miss,
-
-	/*TODO:
-	  Infinite loop on Linux might be caused by stoi -- should convert ships to use
-	  enumerated type.
-	  On MacOS: Method hit ship at 1A when called on 3C -- 3x3 box centered on 3C
-	            should only extend from 2B to 4D.
-	  Linux: Infinite Loop
-	  MacOS: libc++abi.dylib: terminating with uncaught exception of type
-	         std::invalid_argument: stoi: no conversion
-	         [1]    3252 abort      ./battleship
-
-	if(intent_to_use_big_shot) {
-		for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
-			for(int j = p2_attack_col - 1; i <= p2_attack_col + 1; j++) {
-				if(i >= 0 || i <= 7) {
-					if(j >= 0 || j <= 7) {
-						if(isHit(m_p1ownBoard, i, j)) {
-							StatusMessages::ConfirmHit();
-							m_p2oppBoard->setEntryAtPosition("H", j, i);
-
-							//decreases the opponents ship on hit and announces if sunk
-							shipNum_string = m_p1ownBoard->getEntryAtPosition(j, i);
-							shipNum = stoi(shipNum_string);
-							m_p1Ships->decreaseSize(shipNum);
-							if(m_p1Ships->allSunk()) {
-								return;
-							}
-
-							//puts an x on the opponnets board
-							m_p1ownBoard->setEntryAtPosition("X", j, i);
-						} else {
-							StatusMessages::ConfirmMiss();
-							m_p2oppBoard->setEntryAtPosition("M", j, i);
-						}
-					}
-				}
-			}
-		}
-		p2_usedBigShot = true;
-	} else {
-		if(isHit(m_p1ownBoard, p2_attack_row, p2_attack_col)) {
-			StatusMessages::ConfirmHit();
-			m_p2oppBoard->setEntryAtPosition("H", p2_attack_col, p2_attack_row);
-
-			//decreases the opponents ship on hit and announces if sunk
-			shipNum_string = m_p1ownBoard->getEntryAtPosition(p2_attack_col, p2_attack_row);
-			shipNum = stoi(shipNum_string);
-			m_p1Ships->decreaseSize(shipNum);
-			if(m_p1Ships->allSunk()) {
-				return;
-			}
-
-			//puts an x on the opponnets board
-			m_p1ownBoard->setEntryAtPosition("X", p2_attack_col, p2_attack_row );
-		} else {
-			StatusMessages::ConfirmMiss();
-			m_p2oppBoard->setEntryAtPosition("M", p2_attack_col, p2_attack_row);
-		}
-	}*/
 	StatusMessages::NextPlayer();
 	Game::ContinuePause();
 }
+
 int Game::getUserRow() {
 	int input;
 	while(1) {
@@ -823,6 +767,7 @@ int Game::getUserRow() {
 		}
 	}
 }
+
 int Game::getUserCol() {
 	char input;
 	int input_num = 0;
@@ -851,6 +796,25 @@ void Game::printPlayerBoards(Board* ownBoard, Board* oppBoard) {
 	ownBoard->printBoard();
 }
 
+void Game::printPlayerBoardsSBS(Board* ownBoard, Board* oppBoard) {
+	std:: cout << "---------------------YOUR-BOARD--------------------- | "
+		   << "--------------------THEIR-BOARD---------------------\n";
+	for(int i = -1; i < 8; ++i) {
+		ownBoard->printBoard(i);
+		std::cout << "  | ";
+		oppBoard->printBoard(i);
+		std::cout << std::endl;
+		std::cout << "  -------------------------------------------------";
+		std::cout << "  | ";
+		std::cout << "  -------------------------------------------------\n";
+		if(i < 7) {
+			std::cout << "  |     |     |     |     |     |     |     |     |";
+			std::cout << "  | ";
+			std::cout << "  |     |     |     |     |     |     |     |     |\n";
+		}
+	}
+}
+
 void Game::printOwnBoard(Board* ownBoard) {
 	ownBoard->printBoard();
 }
@@ -858,8 +822,13 @@ void Game::printOwnBoard(Board* ownBoard) {
 void Game::setEntryWrapper(int player, std::string ship, int col, int row) {
 	if(player == 1) {
 		m_p1ownBoard->setEntryAtPosition(ship, col, row);
-	} else {
+	}
+	else if(player == 2)	{
 		m_p2ownBoard->setEntryAtPosition(ship, col, row);
+	}
+	else{
+		//AI
+		AI_ownBoard->setEntryAtPosition(ship, col, row);
 	}
 }
 
@@ -1018,30 +987,11 @@ bool Game::CheckDirection(Board* board, int row, int col, int shipNum, Direction
 }
 
 void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
-	int userRowChoice = 0;
 	bool keepAsking = false;
-
 	do {
 		keepAsking = false;
-		do {
-			std::cout << "Row (1-8):  ";
-			std::cin>>userRowChoice;
-			if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
-				StatusMessages::ErrorInvalidRow();
-			}
-		} while((userRowChoice < 1) || (userRowChoice > 8));
-		userRow = userRowChoice;
-		arrRow = userRow - 1;
-
-		do {
-			std::cout << "Col (A-H): ";
-			std::cin >> userCol;
-			arrCol = static_cast<int>(userCol) - CHARSET_A;
-			if(arrCol < 0 || arrCol > 7) {
-				StatusMessages::ErrorInvalidCol();
-			}
-		} while(arrCol < 0 || arrCol > 7);
-
+		arrRow = Game::AskForPlacementRow() - 1;
+		arrCol = Game::AskForPlacementCol();
 		if(!isAvailable(currentPlayerBoard, arrRow, arrCol)) {
 			std::cout<< "This coordinate has already been taken. Enter new coordinates:\n";
 			keepAsking = true;
@@ -1051,46 +1001,61 @@ void Game::printCoordinateInteraction(Board* currentPlayerBoard, int shipNum) {
 			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, DOWN))) &&
 			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, LEFT))) &&
 			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, RIGHT))) &&
-			(!keepAsking))
-		{
+			(!keepAsking)){
 			std::cout<< "Ship cannot be placed here because it will not fit on the board due to other ships.\n";
 			keepAsking = true;
 		}
-
 	} while(keepAsking == true);
 }
 
-void Game::shipPlacementInteraction(int ship, int player, Board* currentPlayerBoard) {
+void Game::shipPlacementInteraction(int ship, Board* currentPlayerBoard) {
 	int shipNum = ship;
+        if (m_currentPlayer){
+            if(m_currentPlayer == 1) {
+                currentPlayerBoard=m_p1ownBoard;
+            } else if (m_currentPlayer == 2) {
+                currentPlayerBoard=m_p2ownBoard;
+            }
 
-	if(m_currentPlayer == 1) {
-		currentPlayerBoard=m_p1ownBoard;
-	} else {
-		currentPlayerBoard=m_p2ownBoard;
-	}
+            StatusMessages::AskToPlaceShips(m_currentPlayer, shipNum);
 
-	StatusMessages::AskToPlaceShips(m_currentPlayer, shipNum);
+            printCoordinateInteraction(currentPlayerBoard, shipNum);
 
-	printCoordinateInteraction(currentPlayerBoard, shipNum);
-
-	if(shipNum > 1) {
-		StatusMessages::ValidDirs();
-		CheckDirections(currentPlayerBoard, shipNum);
-		do {
-			int dirChoice = 0;
-			StatusMessages::AskDirs();
-			// TODO: Sanitize this input
-			std::cin >> dirChoice;
-			userDirection = (Directions)dirChoice;
-			if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
-				StatusMessages::PickedInvalidDir();
-			}
-		} while((userDirection != UP && userDirection != DOWN &&
-			 userDirection != LEFT && userDirection != RIGHT) ||
-			(!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
-	} else if(shipNum < 2) {
-		userDirection=NONE;
-	}
+            if(shipNum > 1) {
+                StatusMessages::ValidDirs();
+                CheckDirections(currentPlayerBoard, shipNum);
+								int dirChoice = 0;
+								StatusMessages::AskDirs();
+								std::cin >> dirChoice;
+                do {
+                    // TODO: Sanitize this input
+                    userDirection = (Directions)dirChoice;
+                    if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection) == false) {
+                        StatusMessages::PickedInvalidDir();
+												StatusMessages::AskDirs();
+												std::cin >> dirChoice;
+                    }
+                } while((userDirection != UP && userDirection != DOWN &&
+                     userDirection != LEFT && userDirection != RIGHT) ||
+                            (!(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection))));
+            } else if(shipNum < 2) {
+            userDirection=NONE;
+            }
+        } else{
+            //when AI opponent
+            currentPlayerBoard=AI_ownBoard;
+            printCoordinateInteraction(currentPlayerBoard, shipNum);
+            if (shipNum > 1){
+                for (int i = 1; i <= 4; i++){
+                    userDirection = (Directions)i;
+                    if(CheckDirection(currentPlayerBoard, arrRow, arrCol, shipNum, userDirection)) {
+                        break;
+                    }
+                }
+	    }else{
+            userDirection=NONE;
+            }
+        }
 }
 
 void Game::CheckDirections(Board* currentPlayerBoard, int shipNum) {
@@ -1111,7 +1076,7 @@ void Game::ContinuePause() {
 #elif defined __linux__ || defined __APPLE__
 	// -s silent don't echo chars -n # chars to read before return
 	StatusMessages::PressAnyContinue();
-	system("read -sn 1");
+    system("read -sn 1");
 #else
 #warning "Unknown platform, falling back to C++ workarounds."
 	StatusMessages::PressToContinue();
@@ -1119,12 +1084,11 @@ void Game::ContinuePause() {
 #endif
 }
 
-void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
+void Game::SetUpShips(int ships, Board* currentPlayerBoard) {
 	for(int i = 0; i < ships; i++) {
-
 		std::string shipString=std::to_string(i+1);
 		int shipNum=i+1;
-		shipPlacementInteraction(i+1, player, currentPlayerBoard);
+		shipPlacementInteraction(i+1, currentPlayerBoard);
 		if(m_currentPlayer==1) {
 			if (isAvailable(m_p1ownBoard, arrRow, arrCol) &&
 			    CheckDirection(m_p1ownBoard, arrRow, arrCol, shipNum, userDirection)) {
@@ -1132,12 +1096,18 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 				std::cout<<"Player 1's current Board:\n";
 				printOwnBoard(m_p1ownBoard);
 			}
-		} else {
+		} else if (m_currentPlayer == 2) {
 			if (isAvailable(m_p2ownBoard, arrRow, arrCol) &&
-			    CheckDirection(m_p2oppBoard, arrRow, arrCol, shipNum, userDirection)) {
-				addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
-				std::cout<<"Player 2's current Board:\n";
-				printOwnBoard(m_p2ownBoard);
+			  CheckDirection(m_p2ownBoard, arrRow, arrCol, shipNum, userDirection)) {
+					addShiptoArray(shipString, arrRow, arrCol, userDirection, 2);
+					std::cout<<"Player 2's current Board:\n";
+					printOwnBoard(m_p2ownBoard);
+				}
+		} else{
+			//AI
+			if(isAvailable(AI_ownBoard, arrRow, arrCol) &&
+			  CheckDirection(AI_ownBoard, arrRow, arrCol, shipNum, userDirection)){
+				addShiptoArray(shipString, arrRow, arrCol, userDirection, 0);
 			}
 		}
 	}
@@ -1145,94 +1115,61 @@ void Game::SetUpShips(int player, int ships, Board* currentPlayerBoard) {
 
 int Game::AskForPlacementRow() {
 	int userRowChoice = 0;
-	std::cout << "Enter a row number(1-8):  ";
-	std::cin >> userRowChoice;
-	while (std::cin.fail() || userRowChoice > 8 || userRowChoice < 1){
-		std::cin.clear();
-		std::cin.ignore(INT8_MAX, '\n');
-		StatusMessages::ErrorInvalidRow();
-		std::cin >> userRowChoice;
+	if (m_currentPlayer == 1 or m_currentPlayer == 2){
+	    std::cout << "Enter a row number(1-8):  ";
+	    std::cin >> userRowChoice;
+        while (std::cin.fail() || userRowChoice > ROW_MAX || userRowChoice < ROW_MIN) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            StatusMessages::ErrorInvalidRow();
+            std::cin >> userRowChoice;
+        }
 	}
-	/*do {
-		std::cout << "Row (1-8):  ";
-		// TODO: Sanitize this input
-		std::cin >> userRowChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			StatusMessages::ErrorInvalidRow();
-			std::cin >> userRowChoice;
-		}
-		if((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX)) {
-			StatusMessages::ErrorInvalidRow();
-		}
-	} while((userRowChoice < ROW_MIN) || (userRowChoice > ROW_MAX));*/
+	else{
+	    //current player is AI
+	    userRowChoice = (rand()%8)+1;
+	}
 	return userRowChoice;
 }
 
-char Game::AskForPlacementCol() {
-	char userCol;
-	int input_num;
-	while(1) {
-		std::cout << "Enter Column(A-H): ";
-		std::cin >> userCol;
-		input_num = static_cast<int>(userCol) - CHARSET_A;
-		if((input_num >= 0) || (input_num <= 7)) {
-			return userCol;
-		}
-	}
-	/*char userCol;
-	do {
-
-		std::cout << "Enter a column letter(A-H): ";
-		std::cin >> userCol;
+int Game::AskForPlacementCol() {
+	char userColChoice;
+	int input_col = -1;
+	if(m_currentPlayer == 1 or m_currentPlayer == 2){
+	do{
+		std::cout << "Enter a column letter (A-H): ";
+		std::cin >> userColChoice;
 		if(std::cin.fail()) {
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			StatusMessages::ErrorInvalidCol();
-			std::cin >> userCol;
+			std::cin >> userColChoice;
 		}
-		arrCol = static_cast<int>(userCol) - CHARSET_A;
-		if(arrCol < 0 || arrCol > 7) {
-			StatusMessages::ErrorInvalidCol();
-		}
-	} while(arrCol < 0 || arrCol > 7);*/
-	return userCol;
+		input_col = static_cast<int>(userColChoice) - CHARSET_A;
+	    } while(input_col < COL_MIN || input_col > COL_MAX);
+	}
+	else{
+	    //current player is AI
+	    input_col = (rand()%8);
+  }
+	return input_col;
 }
 
 int Game::AskForNumShips() {
-
 	int numShipsChoice = 0;
-
 	StatusMessages::AskNumShips();
 	std::cin >> numShipsChoice;
-	while (std::cin.fail() || numShipsChoice < 1 || numShipsChoice > 5){
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				StatusMessages::ErrorNumShips();
-				std::cin >> numShipsChoice;
-	}
-	/*do {
-		StatusMessages::AskNumShips();
-		// TODO: Sanitize this input
+	while(std::cin.fail() || numShipsChoice < SHIPS_MIN || numShipsChoice > SHIPS_MAX) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		StatusMessages::ErrorNumShips();
 		std::cin >> numShipsChoice;
-		if(std::cin.fail()) {
-			std::cin.clear();
-			numShipsChoice = 0;
-		} else {
-			if((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX)) {
-				StatusMessages::ErrorNumShips();
-			}
-		}
-	} while((numShipsChoice < SHIPS_MIN) || (numShipsChoice > SHIPS_MAX));*/
-
+	}
 	return numShipsChoice;
 }
 
 int Game::AskPlayerType() {
-
 	int playerChoice = 0;
-
 	StatusMessages::HumanOrAI();
 	std::cin >> playerChoice;
 	while (std::cin.fail() || (playerChoice > 2 || playerChoice < 1)) {
@@ -1241,6 +1178,5 @@ int Game::AskPlayerType() {
 		StatusMessages::HumanOrAI();
 		std::cin >> playerChoice;
 	}
-
 	return playerChoice - 1;
 }
