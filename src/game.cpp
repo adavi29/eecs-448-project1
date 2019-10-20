@@ -5,7 +5,7 @@
  *             Jacob Swearingen, Chongzhi Gao
  *         git-merge:
  *             Zach Pearson
- *	       Brian Clark
+ *	       		 Brian Clark
  * @date 15 October 2019
  * @file game.cpp
  * @brief implemented methods needed for game play from header file
@@ -476,18 +476,6 @@ void Game::p1Turn() {
 
 	// Get input from the user.
 	while(1) {
-		// TODO: Ensure the player can only do this once, even if they
-		// manage to somehow screw up their shot anyway after having
-		// seen the other board.
-		//if(!p1_cheatedAlready) {
-			//StatusMessages::Cheat();
-			//std::cin >> intent_to_cheat;
-		//}
-		//if(!p1_usedBigShot) {
-			//StatusMessages::UseBigShot();
-			// TODO: Sanitize this input
-			//std::cin >> intent_to_use_big_shot;
-		//}
 		displayPlayer1Menu();
 		if(player1Choice == 1) {
 			p1_attack_row = AskForPlacementRow() - 1;
@@ -527,26 +515,24 @@ void Game::p1Turn() {
 		}
 		else if(player1Choice == 2) {
 			if(!(p1_usedBigShot)) {
-				std::string choice;
-				StatusMessages::UseBigShot();
-				std::cin >> choice;
-				if(choice == "y"){
 					p1_attack_row = AskForPlacementRow() - 1;
 					p1_attack_col = AskForPlacementCol();
 					for(int i = p1_attack_row - 1; i <= p1_attack_row + 1; i++) {
 						for(int j = p1_attack_col - 1; j <= p1_attack_col + 1; j++) {
 							if(i >= 0 && i <= 7) {
 								if(j >= 0 && j <= 7) {
-									if((opponent_own_board->getEntryAtPosition(i, j) != "M" ||
-									 	opponent_own_board->getEntryAtPosition(i, j) != "H" ||
-										opponent_own_board->getEntryAtPosition(i, j) != " ")) {
+									if(opponent_own_board->getEntryAtPosition(j, i) != "M" &&
+											opponent_own_board->getEntryAtPosition(j, i) != "H" &&
+											opponent_own_board->getEntryAtPosition(j, i) != " ") {
 										StatusMessages::ConfirmHit();
+										shipNum_string = opponent_own_board->getEntryAtPosition(j, i);
 										m_p1oppBoard->setEntryAtPosition("H", j, i);
 										//decreases the opponents ship on hit and announces if sunk
-	                  shipNum_string = opponent_own_board->getEntryAtPosition(j, i);
 										player1Hits++;
-										shipNum = std::stoi(shipNum_string);
-	                  opponent_ships->decreaseSize(shipNum);
+										if(shipNum_string != "M" && shipNum_string != "H" && shipNum_string != ""){
+											shipNum = std::stoi(shipNum_string);
+	                  	opponent_ships->decreaseSize(shipNum);
+										}
 										if(opponent_ships->allSunk()) {
 											return;
 										}
@@ -565,13 +551,7 @@ void Game::p1Turn() {
 					}
 					p1_usedBigShot = true;
 				}
-				else{
-					displayPlayer1Menu();
-				}
 				return;
-		} else {
-				std::cout << "You've already used your big shot!\n";
-			}
 		}
 		else if(player1Choice == 3) {
 			//Display the opponents Board
@@ -584,12 +564,13 @@ void Game::p1Turn() {
 			}
 		}
 		else if(player1Choice == 4) {
+			//Displays player 1's scoreboard
 			if((player1Hits+player1Misses) != 0) {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS: ";
 				std::cout << player1Hits << "\n";
 				std::cout << "MISSES: " << player1Misses << "\n";
-				double hitPercent = (player1Hits/(player1Hits+player1Misses));
+				double hitPercent = (player1Hits/(player1Hits+player1Misses))*100;
 				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
@@ -599,6 +580,7 @@ void Game::p1Turn() {
 			//displayPlayer1Menu();
 		}
 		else if(player1Choice == 5){
+			//Displays player 2 or AI's scoreboard
 			if((opponent_hits+opponent_misses) == 0){
 				std::cout << "Your opponent has not fired yet!\n";
 			}
@@ -627,14 +609,8 @@ void Game::p2Turn() {
 
 	std::string shipNum_string;
 	int shipNum;
-
-	//print Board
 	printPlayerBoardsSBS(m_p2ownBoard, m_p2oppBoard);
-
 	while(1) {
-		// TODO: Ensure the player can only do this once, even if they
-		// manage to somehow screw up their shot anyway after having
-		// seen the other board.
 		displayPlayer2Menu();
 		if(player2Choice == 1) {
 			p2_attack_row = AskForPlacementRow() - 1;
@@ -674,24 +650,13 @@ void Game::p2Turn() {
 				StatusMessages::UseBigShot();
 				p2_attack_row = AskForPlacementRow();
 				p2_attack_col = AskForPlacementCol();
-				/* First test fired at 3B
-				   |A|B|C|D|
-				   -|-|-|-|-|-
-				   1| | | | | ...
-		                   -|-|-|-|-|-
-				   2|M| | | | ...
-		                   -|-|-|-|-|-
-				   3|M| | | | ...
-		                   -|-|-|-|-|-
-				   4| | | | |
-				   -|-|-|-|-|-
-				   So we are missing 7 shots
-				*/
 				for(int i = p2_attack_row - 1; i <= p2_attack_row + 1; i++) {
 	 				for(int j = p2_attack_col - 1; j <= p2_attack_col + 1; j++) {
 	 					if(i >= 0 && i <= 7) {
 	 						if(j >= 0 && j <= 7) {
-	 							if(isHit(m_p1ownBoard, i, j)) {
+	 							if(m_p1ownBoard->getEntryAtPosition(j, i) != "M" &&
+										m_p1ownBoard->getEntryAtPosition(j, i) != "H" &&
+										m_p1ownBoard->getEntryAtPosition(j, i) != " ") ) {
 	 								StatusMessages::ConfirmHit();
 	 								m_p2oppBoard->setEntryAtPosition("H", j, i);
 									player2Hits++;
@@ -732,12 +697,13 @@ void Game::p2Turn() {
 			}
 		}
 		else if(player2Choice == 4) {
+			//Displays player 2's scoreboard
 			if((player2Hits+player2Misses) != 0) {
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS: ";
 				std::cout << player2Hits << "\n";
 				std::cout << "MISSES: " << player2Misses << "\n";
-				double hitPercent = (player2Hits/(player2Hits+player2Misses));
+				double hitPercent = (player2Hits/(player2Hits+player2Misses))*100;
 				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
@@ -746,12 +712,13 @@ void Game::p2Turn() {
 			}
 		}
 		else if(player2Choice == 5){
+			//Displays player 1's scoreboard
 			if((player1Hits+player1Misses) != 0){
 				std::cout << "-------------------------------------\n";
 				std::cout << "HITS: ";
 				std::cout << player1Hits << "\n";
 				std::cout << "MISSES: " << player1Misses << "\n";
-				double hitPercent = (player1Hits/(player1Hits+player1Misses));
+				double hitPercent = (player1Hits/(player1Hits+player1Misses))*100;
 				std::cout << "HIT PERCENT: " <<	hitPercent << "%\n";
 				std::cout << "-------------------------------------\n";
 			}
