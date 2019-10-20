@@ -117,52 +117,52 @@ class StatusMessages {
 		static void NextPlayer();
 
 		/**
-		 * @brief
+		 * @brief Notifies players of which directions are valid.
 		 */
 		static void ValidDirs();
 
 		/**
-		 * @brief
+		 * @brief Notifies players of an inappropriate selection.
 		 */
 		static void PickedInvalidDir();
 
 		/**
-		 * @brief
+		 * @brief Notifies player to press a key to continue
 		 */
 		static void PressAnyContinue();
 
 		/**
-		 * @brief
+		 * @brief Asks the player which kind of opponent they'd like to face
 		 */
 		static void HumanOrAI();
 
 		/**
-		 * @brief
+		 * @brief Prints the winner of the game, either player 1 or player 2
 		 */
 		static void PrintWinner();
 
 		/**
-		 * @brief
+		 * @brief Asks the user if they would like to use their bigShot
 		 */
 		static void UseBigShot();
 
 		/**
-		 * @brief
+		 * @brief Asks the user if they would like to view the other players board
 		 */
 		static void Cheat();
 
 		/**
-		 *
+		 *@brief Asks the user for the level of AI difficulty
 		 */
 		static void AIMenu();
 
 		/**
-		 *
+		 *@brief Notifies players of an inappropriate selection.
 		 */
 		static void InvalidDifficulty();
 
 		/**
-		 *
+		 *@brief Displays a menu of options for the users to interact with 
 		 */
 		static void MoveMenu(int player, bool bigShot, bool cheated);
 
