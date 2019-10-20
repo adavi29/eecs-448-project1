@@ -1,4 +1,3 @@
-// -*- C++ -*-
 /**
  * @author git-merge:
  *             Zach Pearson
@@ -23,6 +22,11 @@ class StatusMessages {
 		 * @brief Prints a notification of whose turn it is to the terminal
 		 */
 		static void PrintPlayerBillboard(int player);
+
+		/**
+		 * @brief Prints a notification that the AI player has won
+		 */
+		static void PrintAIWinner();
 
 		/**
 		 * @brief Congratulates the winning player before program exit
@@ -145,6 +149,21 @@ class StatusMessages {
 		 * @brief
 		 */
 		static void Cheat();
+
+		/**
+		 *
+		 */
+		static void AIMenu();
+
+		/**
+		 *
+		 */
+		static void InvalidDifficulty();
+
+		/**
+		 *
+		 */
+		static void MoveMenu(int player, bool bigShot);
 
 };
 
