@@ -731,7 +731,6 @@ void Game::p2Turn() {
 			else{
 				std::cout << "You have not taken a shot yet!\n";
 			}
-			displayPlayer2Menu();
 		}
 		else if(player2Choice == 5){
 			if((player1Hits+player1Misses) != 0){
