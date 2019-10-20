@@ -207,5 +207,5 @@ void StatusMessages::MoveMenu(int player, bool bigShot) {
 	std::cout << "3. View opponents board\n"
 		  << "4. View your scoreboard\n"
 		  << "5. View opponent's scoreboard.\n"
-		  << "6. Exit the game.\n"
+		  << "6. Exit the game.\n";
 }
