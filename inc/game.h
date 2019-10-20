@@ -44,29 +44,36 @@ class Game{
 
 		int m_numShips;
 
-		int userRow;
-		char userCol;
 		Directions userDirection;
 
 		int arrCol;
 		int arrRow;
+
 		int AIDifficulty;
-		int player1Hits, player1Misses;
-		int player2Hits, player2Misses;
-		int AIHits, AIMisses;
+
+		double AIHits;
+		double AIMisses;
+
+		double player1Hits;
+		double player1Misses;
+
+		double player2Hits;
+		double player2Misses;
 
 		Ships* m_p1Ships;
 		Ships* m_p2Ships;
 		Ships* AI_Ships;
+
 		Board* m_p1ownBoard;
 		Board* m_p1oppBoard;
 		Board* m_p2ownBoard;
 		Board* m_p2oppBoard;
 		Board* AI_ownBoard;
 		Board* AI_oppBoard;
-		
+
 		int m_currentPlayer;
 		OpponentType m_opponentType;
+
 		int player1Choice;
 		int player2Choice;
 
@@ -75,10 +82,6 @@ class Game{
 
 		bool p1_cheatedAlready;
 		bool p2_cheatedAlready;
-
-		std::string letsPlay;
-		std::string p1Text;
-		std::string p2Text;
 
 #if !defined(__APPLE__) && !defined(__linux__) && !defined (_WIN32)
 		// Variable to control continue screen on unknown system types.
@@ -184,6 +187,15 @@ class Game{
 		 * @brief helper method for run()
 		 * @pre board object exist
 		 * @post prints board to the screen and handles user input when its
+		 *       player AI's turn
+		 * @return nothing
+		 */
+		void AITurn();
+
+		/**
+		 * @brief helper method for run()
+		 * @pre board object exist
+		 * @post prints board to the screen and handles user input when its
 		 *       player 2's turn
 		 * @return nothing
 		 */
@@ -237,11 +249,10 @@ class Game{
 		/**
 		 * @pre a board object exists
 		 * @post places ships on the board through the addShipToArray function
-		 * @param i: denotes ship number
-		 * @param j: denotes player number
+		 * @param ship: denotes ship number
 		 * @param currentPlayerBoard: denotes the current player
 		 */
-		void shipPlacementInteraction(int i, int j, Board* currentPlayerBoard);
+		void shipPlacementInteraction(int ship, Board* currentPlayerBoard);
 
 		/**
 		 * @post prints to screen which player's turn it is
@@ -261,23 +272,25 @@ class Game{
 		 */
 		void ContinuePause();
 
-		void SetUpShips(int player, int ships, Board* currentPlayerBoard);
+		void SetUpShips(int ships, Board* currentPlayerBoard);
 
 		int AskForPlacementRow();
 
-		char AskForPlacementCol();
+		int AskForPlacementCol();
 
 		int AskForNumShips();
 
 		void setEntryWrapper(int player, std::string ship, int col, int row);
+
+		void printPlayerBoardsSBS(Board* ownBoard, Board* oppBoard);
 
 		int AskPlayerType();
 		void displayAImenu();
 		void AIEasyShot();
 		void AIMediumShot();
 		void AIHardShot();
-		void displayPlayer1Menu();		
+		void displayPlayer1Menu();
 		void displayPlayer2Menu();
 };
+#endif
 
-#endif // GAME_H_
