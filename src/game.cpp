@@ -222,7 +222,7 @@ void Game::displayAImenu() {
 
 void Game::displayPlayer1Menu() {
 	player1Choice = 0;
-	StatusMessages::MoveMenu(1, p1_usedBigShot);
+	StatusMessages::MoveMenu(1, p1_usedBigShot, p1_cheatedAlready);
 	std::cout << "Please make a selection from the menu: ";
 	std::cin >> player1Choice;
 	while (std::cin.fail() || player1Choice < 1 || player1Choice > 6) {
@@ -235,7 +235,7 @@ void Game::displayPlayer1Menu() {
 
 void Game::displayPlayer2Menu() {
 	player2Choice = 0;
-	StatusMessages::MoveMenu(2, p2_usedBigShot);
+	StatusMessages::MoveMenu(2, p2_usedBigShot, p2_cheatedAlready);
 	std::cout << "Please make a selection from the menu: ";
 	std::cin >> player2Choice;
 	while (std::cin.fail() || player2Choice < 1 || player2Choice > 6) {
@@ -537,8 +537,7 @@ void Game::p1Turn() {
 						for(int j = p1_attack_col - 1; j <= p1_attack_col + 1; j++) {
 							if(i >= 0 && i <= 7) {
 								if(j >= 0 && j <= 7) {
-									if(isHit(opponent_own_board, i, j) &&
-										(opponent_own_board->getEntryAtPosition(i, j) != "M" ||
+									if((opponent_own_board->getEntryAtPosition(i, j) != "M" ||
 									 	opponent_own_board->getEntryAtPosition(i, j) != "H" ||
 										opponent_own_board->getEntryAtPosition(i, j) != " ")) {
 										StatusMessages::ConfirmHit();
@@ -576,7 +575,13 @@ void Game::p1Turn() {
 		}
 		else if(player1Choice == 3) {
 			//Display the opponents Board
-      opponent_own_board->printBoard();
+			if(!p1_cheatedAlready){
+      	opponent_own_board->printBoard();
+				p1_cheatedAlready = true;
+			}
+			else{
+				std::cout << "Only 1 view of the other player's board is allowed.\n";
+			}
 		}
 		else if(player1Choice == 4) {
 			if((player1Hits+player1Misses) != 0) {
@@ -718,8 +723,13 @@ void Game::p2Turn() {
 		}
 		else if(player2Choice == 3) {
 			//Display the opponents Board
-			m_p1ownBoard->printBoard();
-			//displayPlayer2Menu();
+			if(!p2_cheatedAlready){
+      	m_p1ownBoard->printBoard();
+				p2_cheatedAlready = true;
+			}
+			else{
+				std::cout << "Only 1 view of the other player's board is allowed.\n";
+			}
 		}
 		else if(player2Choice == 4) {
 			if((player2Hits+player2Misses) != 0) {
