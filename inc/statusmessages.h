@@ -1,3 +1,4 @@
+// -*- C++ -*-
 /**
  * @author git-merge:
  *             Zach Pearson
@@ -163,7 +164,7 @@ class StatusMessages {
 		/**
 		 *
 		 */
-		static void MoveMenu(int player, bool bigShot);
+		static void MoveMenu(int player, bool bigShot, bool cheated);
 
 };
 
