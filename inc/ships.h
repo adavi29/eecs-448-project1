@@ -5,6 +5,9 @@
  *             Jacob Swearingen, Chongzhi Gao
  *         git-merge:
  *             Zach Pearson
+ *	       Brian Clark
+ *	       Finn Dobbs
+ *	       Dalton Yoder
  * @date 06 October 2019
  * @file ships.h
  * @brief Creates the "fleet" for the game;
