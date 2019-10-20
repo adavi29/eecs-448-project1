@@ -3,6 +3,8 @@
  * @author git-merge:
  *             Zach Pearson
  *	       Brian Clark
+ *	       Finn Dobbs
+ *	       Dalton Yoder
  * @file   statusmessages.h
  * @date   29 September 2019
  * @brief
