@@ -1,0 +1,26 @@
+# -*- mode: gitignore; -*-
+
+# macOS Directory Layout Files & other strange things
+*.DS_Store
+*.dSYM
+
+# Valgrind Dumps
+*vgdump
+
+# The Program Name
+BattleShip
+battleship
+
+# Object Files
+*.o
+
+# Vi pollution
+.#*
+*.swp
+
+# Emacs Pollution
+*~
+\#*\#
+*.org
+flycheck*.elc
+*.projectile
